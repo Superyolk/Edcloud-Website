@@ -90,6 +90,5 @@ its caption; confirm usage rights with Wayfinder). The other six are AI-generate
 
 ## Media
 
-Client and partner logos are in `assets/media/logos/` (49 PNGs, trimmed and sized for a 3:2 box)
-and appear in full colour on the home page wall. The Outschool logo was not in the Wix export and
-is a text wordmark until a file is supplied. `assets/og-image.jpg` is a crop of the hero photo.
+Client and partner logos are in `assets/media/logos/` (50 PNGs, trimmed and sized for a 3:2 box)
+and appear in full colour on the home page wall. `assets/og-image.jpg` is a crop of the hero photo.
