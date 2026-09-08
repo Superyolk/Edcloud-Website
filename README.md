@@ -8,13 +8,15 @@ fast, modern static site. Plain **HTML / CSS / JS at the repo root — no build 
 
 | Page | File | Old Wix URL |
 |---|---|---|
-| Home | `index.html` | `/` |
+| Home (Our Promise, Services & Results, Featured Projects, Select Clients, Capabilities, Press, Contact) | `index.html` | `/` |
 | About | `about.html` | `/about` |
 | Services & Results | `services.html` | `/research-and-technology` (301 → `/services`) |
-| Contact | `contact.html` | contact section / Wix form |
 | Privacy Policy | `privacy-policy.html` | `/privacy-policy` |
 | Accessibility Statement | `accessibility-statement.html` | `/accessibility-statement` |
 | Not found | `404.html` | — |
+
+Copy is the live edcloud.org copy, verbatim; only the design changed. `/contact` redirects to the
+contact section on the home page (`/#contact`), as on the original site.
 
 URLs are extensionless (`/about`, `/services`, …). Cloudflare serves `about.html` for `/about`
 (`html_handling: auto-trailing-slash`) and `404.html` for unknown paths.
@@ -75,18 +77,19 @@ Manual deploy from a machine with `wrangler login`: `npx wrangler deploy`.
 - **Copy** — plain HTML in each page.
 - **Nav / footer** — identical markup in every page; edit all seven (a project-wide find/replace).
 - **Colors / fonts / spacing** — `assets/tokens.css`.
-- **Contact address** — `src/worker.js` (`DEFAULT_TO`) or the `CONTACT_TO` variable; the visible
-  address appears in the footer, `contact.html`, `about.html`, and `accessibility-statement.html`.
+- **Contact details** — the Worker emails form submissions to `info@edcloud.org` (`DEFAULT_TO` in
+  `src/worker.js`, or the `CONTACT_TO` variable). Newsletter sign-ups (`/api/subscribe`) go to the
+  same inbox. The visible address, phone, and email are in the footer and the home contact section.
 - **Client results** — the four case cards live in `index.html` and `services.html` (same content).
 
 ## Photography
 
 Photos live in `assets/media/photos/` as `<slot>-1600.jpg` and `<slot>-900.jpg` (the page uses
-`srcset`). Slots: `hero`, `home-who`, `home-results`, `about-hero`, `about-story`, `services-top`,
-`contact`. The hero is a Wayfinder teacher-training photograph by Patrick Beaudouin (credited in
-its caption; confirm usage rights with Wayfinder). The other six are AI-generated illustrations
-(Gemini) and carry no caption; swap any of them by replacing both files, keeping the aspect ratio
-(16:7 for the wide openers, 3:2 landscape, 4:5 portrait).
+`srcset`). They are the photographs from the original Wix site (classroom, science lab, stairwell,
+robotics lab, students at a laptop) plus the Wayfinder teacher-training photograph by Patrick
+Beaudouin on the home page (credited in its caption). Slots: `hero`, `promise`, `projects`, `press`,
+`contact`, `about-hero`, `about-mid`, `services-hero`, `services-mid`. Swap any of them by
+replacing both files at the same aspect ratio (16:7 wide openers, 3:2 landscape, 4:5 portrait).
 
 ## Media
 

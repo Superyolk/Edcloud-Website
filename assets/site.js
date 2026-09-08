@@ -4,9 +4,8 @@
    ============================================================ */
 (function () {
   'use strict';
-  document.documentElement.classList.remove('no-js');
 
-  /* --- Sticky header shadow --- */
+  /* --- Sticky header rule --- */
   var header = document.querySelector('.site-header');
   if (header) {
     var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
@@ -33,62 +32,57 @@
   var path = location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
   if (path.length > 1) path = path.replace(/\/$/, '');
   document.querySelectorAll('.nav__links a[href]').forEach(function (a) {
-    var href = a.getAttribute('href').replace(/\.html$/, '');
+    var href = a.getAttribute('href').split('#')[0].replace(/\.html$/, '');
     if (href.length > 1) href = href.replace(/\/$/, '');
-    if (href === path) a.setAttribute('aria-current', 'page');
+    if (href && href === path) a.setAttribute('aria-current', 'page');
   });
 
-  /* --- Reveal on scroll --- */
-  var reveals = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && reveals.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add('is-visible'); });
-  }
-
-  /* --- Contact form (POSTs JSON to /api/contact; falls back to a plain form post) --- */
-  var form = document.getElementById('contact-form');
-  if (form) {
-    var status = form.querySelector('.form__status');
+  /* --- Forms: POST JSON to the Worker; fall back to a plain form post without JS --- */
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  function wire(form, defaults) {
+    if (!form) return;
+    var status = form.querySelector('[data-status]');
     var submit = form.querySelector('button[type="submit"]');
     var show = function (ok, msg) {
+      if (!status) return;
       status.textContent = msg;
-      status.className = 'form__status ' + (ok ? 'is-ok' : 'is-err');
-      status.focus && status.focus();
+      status.className = status.getAttribute('data-status') + ' ' + (ok ? 'is-ok' : 'is-err');
+      if (status.focus) status.focus();
     };
     var validate = function () {
       var ok = true;
       form.querySelectorAll('[required]').forEach(function (el) {
         var err = el.parentElement.querySelector('.field__error');
-        var bad = !el.value.trim() || (el.type === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value));
+        var bad = el.type === 'checkbox' ? !el.checked : (!el.value.trim() || (el.type === 'email' && !EMAIL_RE.test(el.value)));
         el.setAttribute('aria-invalid', bad ? 'true' : 'false');
-        if (err) err.textContent = bad ? (el.type === 'email' ? 'Please enter a valid email address.' : 'This field is required.') : '';
+        if (err) err.textContent = bad ? (el.type === 'email' ? 'Please enter a valid email address.' : el.type === 'checkbox' ? 'Please confirm.' : 'This field is required.') : '';
         if (bad) ok = false;
       });
       return ok;
     };
-    // No-JS fallback: the Worker redirects back here with ?sent=1 or ?error=…
+    // No-JS fallback: the Worker redirects back with ?sent=1 or ?error=… and a hash naming the form
     var q = new URLSearchParams(location.search);
-    if (q.get('sent')) show(true, 'Thanks — we got your message and will be in touch shortly.');
-    else if (q.get('error')) show(false, q.get('error'));
+    if (location.hash === '#' + form.id || (form.id === 'contact-form' && location.hash === '#contact')) {
+      if (q.get('sent')) show(true, defaults.ok);
+      else if (q.get('error')) show(false, q.get('error'));
+    }
     form.addEventListener('submit', function (e) {
-      if (!window.fetch) return; // plain post fallback
+      if (!window.fetch) return;
       e.preventDefault();
-      status.className = 'form__status';
+      if (status) status.className = status.getAttribute('data-status');
       if (!validate()) { show(false, 'Please fix the highlighted fields.'); return; }
       var data = {};
       new FormData(form).forEach(function (v, k) { data[k] = v; });
       submit.disabled = true; var label = submit.textContent; submit.textContent = 'Sending…';
       fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok, msg: j.message }; }); })
-        .then(function (r) { show(r.ok, r.msg || (r.ok ? 'Thanks — we got your message and will be in touch shortly.' : 'Something went wrong. Please try again or email us directly.')); if (r.ok) form.reset(); })
-        .catch(function () { show(false, 'We couldn’t send that. Please try again, or email us directly.'); })
+        .then(function (r) { show(r.ok, r.msg || (r.ok ? defaults.ok : defaults.err)); if (r.ok) form.reset(); })
+        .catch(function () { show(false, defaults.err); })
         .then(function () { submit.disabled = false; submit.textContent = label; });
     });
   }
+  wire(document.getElementById('contact-form'), { ok: 'Thanks — we got your message and will be in touch shortly.', err: 'We couldn’t send that. Please try again, or email info@edcloud.org.' });
+  wire(document.getElementById('subscribe-form'), { ok: 'Thanks — you’re on the list.', err: 'We couldn’t save that right now. Please try again later.' });
 
   /* --- Footer year --- */
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
