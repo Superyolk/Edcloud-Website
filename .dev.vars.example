@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local `npx wrangler dev`. Never commit real values.
+RESEND_API_KEY=
+CONTACT_TO=aaron@edcloud.org
+CONTACT_FROM=EdCloud Website <website@edcloud.org>

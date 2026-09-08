@@ -1,0 +1,13 @@
+# EdCloud Venture Partners
+
+> Operator-led growth consulting for post-traction education technology companies scaling across K-12 and higher education.
+
+EdCloud Venture Partners (EdCloud, LLC) helps education technology companies scale from foothold to national ubiquity with buyer-centric positioning, sales systems, procurement support, pricing optimization, partnerships, and RevOps infrastructure. Trusted by teams at Handshake, Clever, Outschool, and Wayfinder.
+
+## Pages
+- [Home](https://www.edcloud.org/): overview, client results, how we work
+- [About](https://www.edcloud.org/about): team, areas of expertise, who we serve
+- [Services & Results](https://www.edcloud.org/services): six services with deliverables, outcomes, timelines; client case results
+- [Contact](https://www.edcloud.org/contact): contact form and email
+- [Privacy Policy](https://www.edcloud.org/privacy-policy)
+- [Accessibility Statement](https://www.edcloud.org/accessibility-statement)

@@ -1,0 +1,15 @@
+# Cloudflare Workers static assets — exclude everything the live site never serves.
+# CRITICAL: .git must stay excluded — wrangler sweeps the whole assets directory (".")
+# and a fresh CI clone's packfile can exceed the 25 MiB per-asset limit, failing every build.
+.git
+.gitignore
+.assetsignore
+.claude
+.wrangler
+node_modules
+src
+docs
+README.md
+wrangler.jsonc
+package.json
+package-lock.json

@@ -1,0 +1,24 @@
+{
+  // Cloudflare Worker + static assets — same hosting model as the EBO and License Ladder sites.
+  // Deploys via Workers Builds on push to main (connect the repo in the Cloudflare dashboard),
+  // or manually with `npx wrangler deploy`.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "edcloud-website",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  }
+  // Secrets (set in the dashboard: Workers & Pages → edcloud-website → Settings → Variables and Secrets):
+  //   RESEND_API_KEY  — required for the contact form (resend.com; verify the edcloud.org domain there)
+  // Optional plain-text vars:
+  //   CONTACT_TO      — inbox that receives contact-form messages   (default aaron@edcloud.org)
+  //   CONTACT_FROM    — verified sender                             (default "EdCloud Website <website@edcloud.org>")
+  //   CANONICAL_HOST  — host to redirect to                         (default www.edcloud.org)
+}
