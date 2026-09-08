@@ -152,8 +152,8 @@ table { border-collapse: collapse; width: 100%; }
 .logos { padding-block: var(--s-6); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .logos__row { display: flex; align-items: center; gap: var(--s-5) var(--s-7); flex-wrap: wrap; }
 .logos__label { font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); margin-right: var(--s-3); }
-.logos__row img { height: 1.5rem; width: auto; max-width: 7.5rem; object-fit: contain; filter: grayscale(1); opacity: 0.62; }
-.logos__row .wordmark { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; color: var(--ink); opacity: 0.62; }
+.logos__row img { height: 1.5rem; width: auto; max-width: 7.5rem; object-fit: contain; }
+.logos__row .wordmark { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; color: var(--ink); }
 
 /* ---------- Ledger (results) ---------- */
 .ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
@@ -216,14 +216,13 @@ table { border-collapse: collapse; width: 100%; }
 .person__meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin-top: var(--s-4); font-size: var(--t-sm); }
 @media (max-width: 52rem) { .person { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- Logo wall ---------- */
-.wall { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-5) var(--s-6); list-style: none; margin: 0; padding: var(--s-6) 0 0; border-top: 1px solid var(--rule); }
-.wall li { display: grid; place-items: center; min-height: 4rem; }
-.wall img { max-height: 2.4rem; max-width: 100%; width: auto; height: auto; object-fit: contain; filter: grayscale(1); opacity: 0.7; transition: filter var(--base), opacity var(--base); }
-.wall li:hover img { filter: none; opacity: 1; }
-.wall .wordmark { font-family: var(--serif); font-weight: 600; font-size: 1.2rem; color: var(--ink); opacity: 0.7; }
+/* ---------- Logo wall — every box identical, logos in full colour ---------- */
+.wall { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-3); list-style: none; margin: 0; padding: 0; }
+.wall li { position: relative; aspect-ratio: 3 / 2; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r); overflow: hidden; }
+.wall img { position: absolute; inset: 14%; width: 72%; height: 72%; object-fit: contain; }
+.wall .wordmark { font-family: var(--serif); font-weight: 600; font-size: clamp(1rem, 1.4vw, 1.35rem); color: var(--ink); }
 @media (max-width: 64rem) { .wall { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 40rem) { .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); } .wall img { max-height: 1.9rem; } }
+@media (max-width: 40rem) { .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); } }
 
 /* ---------- Callout ---------- */
 .callout { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--s-6); align-items: end; padding-top: var(--s-6); border-top: 1px solid var(--ink); }

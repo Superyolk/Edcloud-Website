@@ -79,12 +79,17 @@ Manual deploy from a machine with `wrangler login`: `npx wrangler deploy`.
   address appears in the footer, `contact.html`, `about.html`, and `accessibility-statement.html`.
 - **Client results** — the four case cards live in `index.html` and `services.html` (same content).
 
+## Photography
+
+Photos live in `assets/media/photos/` as `<slot>-1600.jpg` and `<slot>-900.jpg` (the page uses
+`srcset`). Slots: `hero`, `home-who`, `home-results`, `about-hero`, `about-story`, `services-top`,
+`contact`. The hero is a Wayfinder teacher-training photograph by Patrick Beaudouin (credited in
+its caption; confirm usage rights with Wayfinder). The other six are AI-generated illustrations
+(Gemini) and carry no caption; swap any of them by replacing both files, keeping the aspect ratio
+(16:7 for the wide openers, 3:2 landscape, 4:5 portrait).
+
 ## Media
 
-The Wix site's images could not be pulled into this repo automatically. Every spot that wants a
-photo or logo currently uses a designed gradient block (`.visual`) or initials (`.person__photo`).
-To fill one, drop the file in `assets/media/` and replace the block with an `<img>` — e.g. the
-team photo comment in `about.html`. Client logos in the "Trusted by" strip are wordmarks; swap the
-`<li>` text for `<img>` tags (SVG preferred, ~28px tall) once you have logo files.
-
-`assets/og-image.png`, `apple-touch-icon.png`, and `favicon.ico` are generated from the SVG mark.
+Client and partner logos are in `assets/media/logos/` (49 PNGs, trimmed and sized for a 3:2 box)
+and appear in full colour on the home page wall. The Outschool logo was not in the Wix export and
+is a text wordmark until a file is supplied. `assets/og-image.jpg` is a crop of the hero photo.
