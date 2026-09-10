@@ -1,0 +1,41 @@
+/* Numbered section: container + "72px | content" header row + offset content row.
+   Every line, card, image and form in a section starts flush with the title word, never the number. */
+
+.white {
+  background: var(--white);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--section-pad) var(--gutter);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: var(--counter-col) minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+}
+
+.counter {
+  font-size: var(--t-index);
+  color: var(--slate);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--t-section);
+  line-height: 1.5;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: var(--counter-col) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: var(--head-gap);
+}

@@ -1,0 +1,60 @@
+/* Global base styles. These mirror what the reference prototype applies globally: the page-level
+   <style> in each .dc.html plus the design-system base.css it links (body 17px/1.6, heading rule).
+   Every other rule lives next to its component in a CSS Module. */
+
+html {
+  /* Instrument Sans is loaded with next/font (see app/layout.tsx), which exposes --font-instrument.
+     tokens.css defines --font with the family name; this points it at the self-hosted face. */
+  --font: var(--font-instrument), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-2);
+  font-family: var(--font);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: var(--ls-display);
+}
+
+a {
+  color: var(--growth);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--growth-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--growth);
+  outline-offset: 2px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    animation: none !important;
+  }
+}

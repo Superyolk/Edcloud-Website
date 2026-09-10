@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/base.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/styles.css">
+  <script src="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/_ds_bundle.js"></script>
+  <style>body{margin:0;font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#17916B}a:hover{color:#0F6B4F}</style>
+</helmet>
+<header style="position:sticky;top:0;z-index:10;background:#FFFFFF;border-bottom:1px solid #C5DCCB">
+  <nav aria-label="Primary" style="max-width:1200px;margin:0 auto;padding:0 24px;box-sizing:content-box;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="EdCloud Home.dc.html" style="display:flex;align-items:center;gap:12px;color:#1B2431;text-decoration:none;font-weight:600;font-size:14px;letter-spacing:0.08em;white-space:nowrap">
+      <img src="https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png" alt="EdCloud mark" width="22" height="22" style="display:block;width:22px;height:22px">
+      EDCLOUD VENTURE PARTNERS
+    </a>
+    <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+      <ul style="display:flex;gap:32px;list-style:none;margin:0;padding:0;font-size:14px">
+        <li><a href="EdCloud About.dc.html" style="color:#1B2431;text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">About</a></li>
+        <li><a href="EdCloud Services.dc.html" style="color:#1B2431;text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">Services &amp; Results</a></li>
+        <li><a href="EdCloud Home.dc.html" style="color:#1B2431;text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">Contact</a></li>
+      </ul>
+    </sc-if>
+    <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+      <button type="button" onClick="{{ toggleMenu }}" aria-expanded="{{ menuOpen }}" aria-controls="mobile-menu" style="font-family:inherit;font-size:14px;font-weight:600;letter-spacing:0.02em;color:#1B2431;background:transparent;border:1.5px solid #1B2431;border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer">{{ menuLabel }}</button>
+    </sc-if>
+  </nav>
+  <sc-if value="{{ menuVisible }}" hint-placeholder-val="{{ false }}">
+    <ul id="mobile-menu" style="list-style:none;margin:0;padding:8px 24px 24px;border-top:1px solid #C5DCCB;background:#FFFFFF;display:grid;gap:0;font-size:17px">
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud Home.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Home</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud About.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">About</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud Services.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Services &amp; Results</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="https://www.edcloud.org/privacy-policy" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Privacy Policy</a></li>
+      <li><a href="https://www.edcloud.org/accessibility-statement" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Accessibility Statement</a></li>
+    </ul>
+  </sc-if>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false, mobile: typeof window !== 'undefined' && window.innerWidth < 820 };
+  componentDidMount() {
+    this._mq = window.matchMedia('(max-width: 819px)');
+    this._on = e => this.setState({ mobile: e.matches, menuOpen: false });
+    this._mq.addEventListener('change', this._on);
+  }
+  componentWillUnmount() { this._mq && this._mq.removeEventListener('change', this._on); }
+  renderVals() {
+    const { mobile, menuOpen } = this.state;
+    return { mobile, desktop: !mobile, menuOpen, menuVisible: mobile && menuOpen, menuLabel: menuOpen ? 'Close' : 'Menu',
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), true: true, false: false };
+  }
+}
+</script>
+</body>
+</html>

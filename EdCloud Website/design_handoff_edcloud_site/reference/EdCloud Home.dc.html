@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <title>EdCloud Venture Partners | Growth Consulting</title>
+  <meta name="description" content="Trusted by Handshake, Clever, Outschool, &amp; Wayfinder - EdCloud Venture Partners helps scale education technology companies from foothold to national ubiquity with field-proven marketing and sales expertise.">
+  <link rel="icon" href="https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/base.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/styles.css">
+  <script src="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:#F2F9F4;color:#4B5563;font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:#17916B;text-decoration:underline;text-underline-offset:3px}
+    a:hover{color:#0F6B4F}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    @media (prefers-reduced-motion:reduce){[data-reveal]{animation:none !important}}
+  </style>
+</helmet>
+
+<header style="position:sticky;top:0;z-index:10;background:{{ navBg }};border-bottom:1px solid {{ navLine }};transition:background 180ms cubic-bezier(.2,.7,.2,1),border-color 180ms cubic-bezier(.2,.7,.2,1)">
+  <nav aria-label="Primary" style="max-width:1200px;margin:0 auto;padding:0 24px;box-sizing:content-box;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="EdCloud Home.dc.html" style="display:flex;align-items:center;gap:12px;color:{{ navInk }};text-decoration:none;font-weight:600;font-size:14px;letter-spacing:0.08em;white-space:nowrap">
+      <img src="https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png" alt="EdCloud mark" width="22" height="22" style="display:block;width:22px;height:22px">
+      EDCLOUD VENTURE PARTNERS
+    </a>
+    <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+      <ul style="display:flex;gap:32px;list-style:none;margin:0;padding:0;font-size:14px">
+        <li><a href="EdCloud About.dc.html" style="color:{{ navInk }};text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">About</a></li>
+        <li><a href="EdCloud Services.dc.html" style="color:{{ navInk }};text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">Services &amp; Results</a></li>
+        <li><a href="EdCloud Home.dc.html" style="color:{{ navInk }};text-decoration:none;text-underline-offset:4px" style-hover="text-decoration:underline">Contact</a></li>
+      </ul>
+    </sc-if>
+    <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+      <button type="button" onClick="{{ toggleMenu }}" aria-expanded="{{ menuOpen }}" aria-controls="mobile-menu" style="font-family:inherit;font-size:14px;font-weight:600;letter-spacing:0.02em;color:{{ navInk }};background:transparent;border:1.5px solid {{ navInk }};border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer">{{ menuLabel }}</button>
+    </sc-if>
+  </nav>
+  <sc-if value="{{ menuVisible }}" hint-placeholder-val="{{ false }}">
+    <ul id="mobile-menu" style="list-style:none;margin:0;padding:8px 24px 24px;border-top:1px solid #C5DCCB;background:#FFFFFF;display:grid;gap:0;font-size:17px">
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud Home.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Home</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud About.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">About</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="EdCloud Services.dc.html" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Services &amp; Results</a></li>
+      <li style="border-bottom:1px solid #C5DCCB"><a href="https://www.edcloud.org/privacy-policy" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Privacy Policy</a></li>
+      <li><a href="https://www.edcloud.org/accessibility-statement" style="display:block;padding:14px 0;color:#1B2431;text-decoration:none">Accessibility Statement</a></li>
+    </ul>
+  </sc-if>
+</header>
+
+<main>
+  <section data-screen-label="Hero" style="position:relative;min-height:100vh;display:grid;align-items:center;background:#1B2431;margin-top:-64px">
+    <img src="https://static.wixstatic.com/media/11062b_aa9be95a5d7c43ca974ea1c773b8803df000.jpg/v1/fill/w_1920,h_1080,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_aa9be95a5d7c43ca974ea1c773b8803df000.jpg" alt="Students working together on a campus" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:{{ photoFilter }}">
+    <sc-if value="{{ showVideo }}" hint-placeholder-val="{{ true }}">
+      <video ref="{{ videoRef }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="auto" aria-hidden="true" tabIndex="-1" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:{{ photoFilter }};opacity:{{ videoOpacity }};transition:opacity 900ms ease">
+        <source src="https://video.wixstatic.com/video/11062b_aa9be95a5d7c43ca974ea1c773b8803d/1080p/mp4/file.mp4" type="video/mp4">
+      </video>
+    </sc-if>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(27,36,49,0.42)"></div>
+    <div style="position:relative;width:100%;max-width:1248px;margin:0 auto;padding:128px 24px 96px;box-sizing:border-box">
+      <div data-reveal="" style="display:grid;grid-template-columns:minmax(0,1fr);animation:rise 600ms cubic-bezier(.2,.7,.2,1) both">
+        <div>
+          <h1 style="margin:0 0 32px;font-size:clamp(2.75rem,6.5vw,5rem);line-height:1.08;letter-spacing:-0.01em;font-weight:600;color:#FFFFFF;text-wrap:balance">We Bring Great<br>Education Companies<br>to National Scale.</h1>
+          <p style="margin: 0; font-size: 1.25rem; line-height: 1.5; color: #FFFFFF; max-width: 78ch; text-wrap: pretty; width: 810px; height: 92px">EdCloud Venture Partners supercharges post-traction education innovation&nbsp;teams that are actively reinventing instruction, administration, and the student experience - delivering dramatic impact through rapid, sustainable growth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="01 Our Promise">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">01</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Our Promise</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="max-width:62ch;display:grid;gap:24px">
+          <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#1B2431;text-wrap:pretty">Our core team has led hyperspeed expansion efforts at some of the most successful K12 and higher education technology companies in the world - and helped dozens of startups, corporations, nonprofit organizations, school districts, and universities build replicable solutions for long-term growth.</p>
+          <p style="margin:0;font-size:17px;line-height:1.6;color:#4B5563;text-wrap:pretty">With decades of proven experience, our expert advisers can help you fundraise, expand into new markets, build and organize a growth strategy, pressure test a tactical playbook, and execute swiftly - expanding your reach with maximum efficiency. We build industry and consumer-side engagement strategies, marketing programs, and sales pipelines - the vital elements of any successful growth effort.</p>
+          <p style="margin:0;font-size:17px;line-height:1.6;color:#4B5563;text-wrap:pretty">Our partnerships focus on strategic planning, go-to-market expansion, tactical execution, team development and training, sales operations, and intelligent pipeline automation. If this strikes a chord, we'd love to get in touch.</p>
+          <div><x-import component-from-global-scope="EdCloudDesignSystem_4b0af7.Button" variant="link" href="EdCloud About.dc.html" hint-size="auto,24px">Read More</x-import></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Services &amp; Results">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">02</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Services &amp; Results</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px 48px;align-items:stretch">
+        <ol style="list-style:none;margin:0;padding:0;display:grid;align-content:start;border-top:1px solid #C5DCCB">
+          <sc-for list="{{ serviceTabs }}" as="t" hint-placeholder-count="3">
+            <li>
+              <button type="button" onClick="{{ t.select }}" onMouseEnter="{{ t.select }}" aria-pressed="{{ t.active }}" style="display:grid;grid-template-columns:minmax(0,1fr) 24px;gap:16px;align-items:center;width:100%;text-align:left;padding:28px 0;background:transparent;border:0;border-bottom:1px solid #C5DCCB;font-family:inherit;cursor:pointer;color:{{ t.color }};transition:color 180ms cubic-bezier(.2,.7,.2,1)" style-focus="outline:2px solid #17916B;outline-offset:2px">
+                <span style="font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:400;text-wrap:balance">{{ t.title }}</span>
+                <span aria-hidden="true" style="width:10px;height:10px;background:#17916B;justify-self:end;opacity:{{ t.dot }};transition:opacity 180ms cubic-bezier(.2,.7,.2,1)"></span>
+              </button>
+            </li>
+          </sc-for>
+        </ol>
+        <div style="background:#FFFFFF;box-shadow:0 0 18px rgba(27,36,49,0.16);padding:40px;display:grid;gap:24px;align-content:space-between;min-height:360px">
+          <p style="margin:0;font-size:clamp(1.5rem,2.6vw,2.125rem);line-height:1.2;letter-spacing:-0.01em;font-weight:600;color:#17916B;text-wrap:balance">{{ activeService.lead }}</p>
+          <p style="margin:0;font-size:17px;line-height:1.6;color:#4B5563;text-wrap:pretty">{{ activeService.rest }}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid #C5DCCB;padding-top:20px">
+            <x-import component-from-global-scope="EdCloudDesignSystem_4b0af7.Button" variant="link" href="EdCloud Services.dc.html" hint-size="auto,24px">Services &amp; Results</x-import>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Featured Projects">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">03</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Featured Projects</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px">
+        <sc-for list="{{ cases }}" as="c" hint-placeholder-count="4">
+          <article style="position:relative;background:#FFFFFF;padding:32px;display:grid;gap:20px;align-content:start;box-shadow:0 0 18px rgba(27,36,49,0.16)">
+            <div style="display:grid;gap:12px">
+              <h3 style="margin:0;font-size:1.25rem;line-height:1.25;letter-spacing:-0.01em;font-weight:600;color:#1B2431;text-wrap:balance">{{ c.title }}</h3>
+              <p style="margin:0;font-size:15px;line-height:1.55;color:#4B5563;text-wrap:pretty">{{ c.body }}</p>
+            </div>
+            <div style="height:1px;background:#C5DCCB"></div>
+            <div style="display:grid;gap:6px">
+              <span style="font-size:48px;line-height:1;letter-spacing:-0.02em;font-weight:600;color:#17916B;font-variant-numeric:tabular-nums">{{ c.stat }}</span>
+              <span style="font-size:14px;line-height:1.4;color:#4B5563">{{ c.statLabel }}</span>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Deliverables">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">04</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Deliverables</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:48px 64px;align-items:start">
+        <div style="display:grid;gap:24px;align-content:start">
+          <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#1B2431;text-wrap:pretty">EdCloud can help with everything it takes to move from founder-led sales to a momentum growth engine that never stops working.</p>
+          <div style="overflow:hidden;box-shadow:0 0 18px rgba(27,36,49,0.16)">
+            <img src="uploads/IMG_20170605_093530.jpg" alt="Educators at a district conference" style="display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 30%;filter:{{ photoFilter }}">
+          </div>
+        </div>
+        <ol style="list-style:none;margin:0;padding:0;border-top:1px solid #C5DCCB">
+          <sc-for list="{{ capabilities }}" as="c" hint-placeholder-count="6">
+            <li style="display:grid;grid-template-columns:56px minmax(0,1fr);gap:16px;padding:28px 0;border-bottom:1px solid #C5DCCB">
+              <span style="font-size:15px;color:#17916B;font-weight:600;font-variant-numeric:tabular-nums;padding-top:6px">{{ c.n }}</span>
+              <div style="display:grid;gap:8px">
+                <h3 style="margin:0;font-size:1.25rem;line-height:1.25;letter-spacing:-0.01em;font-weight:600;color:#1B2431;text-wrap:balance">{{ c.label }}</h3>
+                <p style="margin:0;font-size:15px;line-height:1.55;color:#4B5563;text-wrap:pretty">{{ c.desc }}</p>
+              </div>
+            </li>
+          </sc-for>
+        </ol>
+      </div>
+      </div>
+    </div>
+  
+  </section>
+
+  <section data-screen-label="05 Press">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">05</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Press</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <ul style="list-style:none;margin:0;padding:0;border-top:1px solid #C5DCCB">
+        <sc-for list="{{ press }}" as="p" hint-placeholder-count="4">
+          <li style="display:grid;grid-template-columns:minmax(120px,200px) minmax(0,1fr);gap:16px;padding:24px 0;border-bottom:1px solid #C5DCCB">
+            <div style="font-size:14px;color:#7A8494;line-height:1.5;display:grid;align-content:start"><span>{{ p.source }}</span><span>{{ p.date }}</span></div>
+            <div style="display:grid;gap:8px">
+              <h3 style="margin:0;font-size:1.25rem;line-height:1.25;font-weight:600;color:#1B2431;letter-spacing:-0.01em;text-wrap:pretty">{{ p.title }}</h3>
+              <a href="{{ p.href }}" style="font-size:15px;color:#17916B;text-underline-offset:3px;justify-self:start" style-hover="color:#0F6B4F">Read The Full Article</a>
+            </div>
+          </li>
+        </sc-for>
+      </ul>
+      </div>
+    </div>
+    <figure style="margin:0">
+      <img src="https://static.wixstatic.com/media/11062b_51f3741c03264d3ebb42126cfb510510~mv2.jpg/v1/fill/w_1450,h_700,q_90,enc_avif,quality_auto/11062b_51f3741c03264d3ebb42126cfb510510~mv2.jpg" alt="University campus building" style="display:block;width:100%;height:clamp(220px,36vw,480px);object-fit:cover;filter:{{ photoFilter }}">
+    </figure>
+  </section>
+
+  <section data-screen-label="06 Select Clients" style="background:#FFFFFF">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline">
+        <span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">06</span>
+        <h1 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Select Clients</h1>
+      </div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%/3 - 16px,220px),1fr));gap:24px">
+        <sc-for list="{{ logos }}" as="l" hint-placeholder-count="46">
+          <li style="background:#FFFFFF;height:132px;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
+            <img src="{{ l.src }}" alt="{{ l.alt }}" loading="lazy" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain">
+          </li>
+        </sc-for>
+      </ul>
+    
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="07 Contact Us">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">07</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Contact Us</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:stretch">
+        <div style="overflow:hidden;min-height:420px">
+          <img src="https://static.wixstatic.com/media/31d0a93857b149b5ab12ec952dde0516.jpg/v1/fill/w_980,h_653,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Classroom%20Lecture.jpg" alt="Classroom Lecture" style="display:block;width:100%;height:100%;object-fit:cover;object-position:62% 50%;transform:scale(1.35);transform-origin:62% 50%;filter:{{ photoFilter }}">
+        </div>
+        <div style="display:grid;align-content:center;gap:24px;padding:28px 32px;background:#FFFFFF;box-shadow:0 0 18px rgba(27,36,49,0.16);align-self:center">
+          <h2 style="margin:0;font-size:clamp(1.75rem,2.8vw,2.25rem);line-height:1.15;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Ready to get going?<br>Contact us today.</h2>
+          <form onSubmit="{{ prevent }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 24px">
+            <label style="display:grid;gap:4px;font-size:14px;color:#4B5563">First name*<input id="c-first" name="c-first" type="text" required="" style="font-family:inherit;font-size:17px;color:#1B2431;background:#FFFFFF;border:1px solid #C5DCCB;border-radius:0;padding:9px 12px;width:100%;box-sizing:border-box;outline:none" style-focus="border-color:#17916B;box-shadow:0 0 0 2px rgba(23,145,107,0.25)"></label>
+            <label style="display:grid;gap:4px;font-size:14px;color:#4B5563">Last name*<input id="c-last" name="c-last" type="text" required="" style="font-family:inherit;font-size:17px;color:#1B2431;background:#FFFFFF;border:1px solid #C5DCCB;border-radius:0;padding:9px 12px;width:100%;box-sizing:border-box;outline:none" style-focus="border-color:#17916B;box-shadow:0 0 0 2px rgba(23,145,107,0.25)"></label>
+            <label style="display:grid;gap:4px;font-size:14px;color:#4B5563">Email*<input id="c-email" name="c-email" type="email" required="" style="font-family:inherit;font-size:17px;color:#1B2431;background:#FFFFFF;border:1px solid #C5DCCB;border-radius:0;padding:9px 12px;width:100%;box-sizing:border-box;outline:none" style-focus="border-color:#17916B;box-shadow:0 0 0 2px rgba(23,145,107,0.25)"></label>
+            <label style="display:grid;gap:4px;font-size:14px;color:#4B5563">Phone<input id="c-phone" name="c-phone" type="tel" style="font-family:inherit;font-size:17px;color:#1B2431;background:#FFFFFF;border:1px solid #C5DCCB;border-radius:0;padding:9px 12px;width:100%;box-sizing:border-box;outline:none" style-focus="border-color:#17916B;box-shadow:0 0 0 2px rgba(23,145,107,0.25)"></label>
+            <label style="display:grid;gap:4px;font-size:14px;color:#4B5563;grid-column:1/-1">Message<textarea id="c-message" name="c-message" rows="2" style="font-family:inherit;font-size:17px;color:#1B2431;background:#FFFFFF;border:1px solid #C5DCCB;border-radius:0;padding:9px 12px;width:100%;box-sizing:border-box;outline:none;resize:vertical;min-height:64px" style-focus="border-color:#17916B;box-shadow:0 0 0 2px rgba(23,145,107,0.25)"></textarea></label>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end"><button type="submit" style="font-family:inherit;font-size:14px;font-weight:600;letter-spacing:0.08em;color:#FFFFFF;background:#1B2431;border:0;border-radius:999px;padding:11px 28px;min-height:40px;cursor:pointer" style-hover="background:#17916B" style-focus="outline:2px solid #17916B;outline-offset:2px">SUBMIT</button></div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<footer data-screen-label="Footer" style="background:#000000;color:#C8CDD5;font-size:14px;line-height:1.6">
+  <div style="max-width:1200px;margin:0 auto;padding:48px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px">
+    <div style="display:grid;gap:4px;align-content:start">
+      <a href="EdCloud Home.dc.html" style="color:#FFFFFF;font-weight:600;font-size:17px;text-decoration:none;justify-self:start" style-hover="text-decoration:underline">Contact</a>
+      <a href="https://calendly.com/aaronsokol/15" style="color:#FFFFFF;justify-self:start;margin-bottom:12px">Book a Meeting</a>
+      <a href="mailto:info@edcloud.org" style="color:#FFFFFF;justify-self:start">info@edcloud.org</a>
+      <span>28 Geary St. Ste 650</span>
+      <span>San Francisco, CA 94108</span>
+      <span>Tel: 510-306-2403</span>
+      <span>Fax: 510-306-2403</span>
+      <a href="https://www.linkedin.com/company/edcloud-llc" aria-label="LinkedIn" style="display:inline-flex;margin-top:16px;color:#FFFFFF;text-decoration:none;justify-self:start" style-hover="color:#17916B"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45z"/></svg></a>
+    </div>
+    
+    <div style="display:grid;gap:8px;align-content:start">
+      <a href="EdCloud Home.dc.html" style="color:#FFFFFF;font-weight:600;font-size:17px;text-decoration:none;justify-self:start;margin-bottom:4px" style-hover="text-decoration:underline">Navigate</a>
+      <a href="EdCloud About.dc.html" style="color:#FFFFFF;justify-self:start">About</a>
+      <a href="EdCloud Services.dc.html" style="color:#FFFFFF;justify-self:start">Services &amp; Results</a>
+      <a href="https://www.edcloud.org/privacy-policy" style="color:#FFFFFF;justify-self:start">Privacy Policy</a>
+      <a href="https://www.edcloud.org/accessibility-statement" style="color:#FFFFFF;justify-self:start">Accessibility Statement</a>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.16)">
+    <div style="max-width:1200px;margin:0 auto;padding:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+      <a href="EdCloud Home.dc.html" style="display:flex;align-items:center;gap:12px;color:#FFFFFF;text-decoration:none;font-weight:600">
+        <img src="https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png" alt="" width="22" height="22" style="display:block;width:22px;height:22px;mix-blend-mode:screen">
+        EdCloud Venture Partners
+      </a>
+      <span>© 2026 by EdCloud, LLC</span>
+    </div>
+  </div>
+</footer>
+
+<section data-screen-label="Newsletter">
+  <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:start">
+    <div style="max-width:52ch">
+      <a href="EdCloud Home.dc.html" style="display:inline-block;margin:0 0 16px;font-size:1.75rem;line-height:1.25;letter-spacing:-0.01em;font-weight:600;color:#1B2431;text-decoration:none" style-hover="text-decoration:underline">Subscribe</a>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:#4B5563;text-wrap:pretty;max-width:38ch">Stay at the forefront of innovation. Sign up for our newsletter and receive exclusive insights, project updates, and industry news delivered straight to your inbox.</p>
+    </div>
+    <div>
+      <form onSubmit="{{ prevent }}" style="display:grid;gap:16px;max-width:480px">
+        <x-import component-from-global-scope="EdCloudDesignSystem_4b0af7.Input" label="Email*" id="n-email" type="email" hint-size="100%,72px"></x-import>
+        <x-import component-from-global-scope="EdCloudDesignSystem_4b0af7.Checkbox" label="Yes, subscribe me to your newsletter." id="n-consent" hint-size="100%,24px"></x-import>
+        <div><x-import component-from-global-scope="EdCloudDesignSystem_4b0af7.Button" hint-size="auto,48px">SUBMIT</x-import></div>
+      </form>
+      <div style="display:flex;gap:24px;margin-top:32px;font-size:14px">
+        <a href="EdCloud About.dc.html" style="color:#1B2431">About</a>
+        <a href="EdCloud Services.dc.html" style="color:#1B2431">Services &amp; Results</a>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;photoMono&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Imagery&quot;}}">
+class Component extends DCLogic {
+  state = { scrolled: false, videoOpacity: 1, activeService: 0, menuOpen: false, mobile: typeof window !== 'undefined' && window.innerWidth < 820 };
+  componentDidMount() {
+    this._mq = window.matchMedia('(max-width: 819px)');
+    this._on = e => this.setState({ mobile: e.matches, menuOpen: false });
+    this._mq.addEventListener('change', this._on);
+    this._onScroll = () => { const sc = window.scrollY > 40; if (sc !== this.state.scrolled) this.setState({ scrolled: sc }); };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+  videoRef = el => {
+    if (!el || this._video === el) return;
+    this._video = el;
+    el.playbackRate = 0.85;
+    const p = el.play(); if (p && p.catch) p.catch(() => {});
+    el.addEventListener('timeupdate', () => {
+      const left = el.duration - el.currentTime;
+      if (!isFinite(left)) return;
+      const want = left < 0.8 ? 0 : 1;
+      if (want !== this.state.videoOpacity) this.setState({ videoOpacity: want });
+    });
+  };
+  componentWillUnmount() { this._mq && this._mq.removeEventListener('change', this._on); window.removeEventListener('scroll', this._onScroll); }
+  renderVals() {
+    const W = 'https://static.wixstatic.com/media/';
+    const logos = [
+      ['c8e843_d6c0201a0d0a4178ad663394b776cf4e~mv2.png/v1/fill/w_740,h_212,al_c,q_85,enc_avif,quality_auto/Screenshot%202024-12-27%20161404_edited.png', 'Client logo'],
+      ['c8e843_ce8f775c12cf431f92bbc790d5b4dfe3~mv2.png/v1/fill/w_382,h_102,al_c,q_85,enc_avif,quality_auto/logo.png', 'Client logo'],
+      ['c8e843_0566d8b1fc3742ef90611d25215ba451~mv2.png/v1/fill/w_584,h_584,al_c,q_85,enc_avif,quality_auto/download_edited.png', 'Client logo'],
+      ['c8e843_a963f965f80046eea51c16ad291b7f7f~mv2.png/v1/fill/w_980,h_285,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/LAUSD_combo_seal_wordmark.png', 'LAUSD'],
+      ['c8e843_a1336967a7344a058b8bbdae5a90c76f~mv2.avif/v1/fill/w_348,h_113,al_c,q_80,enc_avif,quality_auto/Project-Wayfinder-Logo-1.avif', 'Project Wayfinder'],
+      ['c8e843_e4964622324c40229182df7904941e8e~mv2.png/v1/fill/w_980,h_348,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Reach-Capital_edited.png', 'Reach Capital'],
+      ['c8e843_cd8c28e0a6f24089875ad90fda41a7f5~mv2.png/v1/fill/w_980,h_262,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/tutor-me-logo_edited.png', 'TutorMe'],
+      ['c8e843_92f833045ba14bf5b558c019ae349612~mv2.avif/v1/fill/w_310,h_138,al_c,q_80,enc_avif,quality_auto/Green_Dot_Logo_colored_large-3.avif', 'Green Dot'],
+      ['c8e843_eebf78d2b6d9470e8343187c4689b8ac~mv2.avif/v1/fill/w_203,h_158,al_c,q_80,enc_avif,quality_auto/edthena%20logo.avif', 'Edthena'],
+      ['c8e843_ccb3315878e8419fa26407c6147f1a67~mv2.avif/v1/fill/w_354,h_158,al_c,q_80,enc_avif,quality_auto/amplify.avif', 'Amplify'],
+      ['c8e843_66676ff8948944618ed8135687192ec0~mv2.avif/v1/fill/w_599,h_88,al_c,q_80,enc_avif,quality_auto/d7cdce1fa9e5ffa5cb7e803595de075f.avif', 'Client logo'],
+      ['c8e843_8e6c314576bf41aaaa36dddaeb2da4ed~mv2.avif/v1/fill/w_204,h_123,al_c,q_80,enc_avif,quality_auto/4ea681199fe7a2a4c3a151e84238202c.avif', 'Client logo'],
+      ['c8e843_370e2a74460146d8a65295a7e7a1fcf9~mv2.avif/v1/fill/w_405,h_291,al_c,q_80,enc_avif,quality_auto/BookNook%2BLogo%2BTransparent%2BBackground.avif', 'BookNook'],
+      ['c8e843_d23e2096934b4c289547d8fef3cb287b~mv2.avif/v1/fill/w_283,h_48,al_c,q_80,enc_avif,quality_auto/everfi-logo_2x.avif', 'EVERFI'],
+      ['c8e843_114bbe75281646f19dd7af699c10646e~mv2.avif/v1/fill/w_214,h_75,al_c,q_80,enc_avif,quality_auto/5a7dd28e77769600019cc8c7_CoverLogo-V3_pn.avif', 'Client logo'],
+      ['c8e843_fe8bd6454d844c8fb495fdaa8e36c68a~mv2.png/v1/fill/w_980,h_708,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/TCSA_Logo_edited.png', 'TCSA'],
+      ['c8e843_6b79bd3b42f84732b24d4d9b6a69666e~mv2.avif/v1/fill/w_550,h_88,al_c,q_80,enc_avif,quality_auto/logo.avif', 'Client logo'],
+      ['c8e843_06f1a41a5bc841f78bb1e1c545b0b604~mv2.avif/v1/fill/w_309,h_168,al_c,q_80,enc_avif,quality_auto/Berkeley-City-College-Logo-tagline-est-d.avif', 'Berkeley City College'],
+      ['c8e843_774f92403ed34bbfa10d6ae250e91fd0~mv2.png/v1/fill/w_980,h_325,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5b9694cf6708aa306ce38e4e_Untitled-2-13_p_edited.png', 'Client logo'],
+      ['c8e843_dfd8566405d643b5a312bad8f1fb581b~mv2.png/v1/fill/w_980,h_507,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/emerson-collective-preview_edited.png', 'Emerson Collective'],
+      ['c8e843_6d283bf0f693456ab7a4a51646d4282a~mv2.png/v1/fill/w_980,h_487,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Bullseye-logo.png', 'Bullseye'],
+      ['c8e843_8c54e93f92c14c2aa7a291a510e6834e~mv2.png/v1/fill/w_738,h_216,al_c,q_85,enc_avif,quality_auto/isukn9-Lindsay_Leads_logo_edited.png', 'Lindsay Leads'],
+      ['c8e843_98e482ddd8e74b89a8e587f5cfc3240d~mv2.avif/v1/fill/w_278,h_100,al_c,q_80,enc_avif,quality_auto/Classavo-LogoWordmark-Flat-1-300x110.avif', 'Classavo'],
+      ['c8e843_dcbef49290954f28b394aad9067a9df3~mv2.png/v1/fill/w_980,h_542,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/youth-radio-logo_edited.png', 'Youth Radio'],
+      ['c8e843_7944459448ee4dbcad73ab8e1ee52019~mv2.png/v1/fill/w_480,h_129,al_c,q_85,enc_avif,quality_auto/brand_logo.png', 'Client logo'],
+      ['c8e843_0551cc18ac034e0ea88a92cae312d00e~mv2.avif/v1/fill/w_286,h_178,al_c,q_80,enc_avif,quality_auto/HGPAssets_SecondaryLogo_Black-1-e1515176.avif', 'HGP'],
+      ['c8e843_460ed75c7154449d805790eb02fcabae~mv2.avif/v1/fill/w_213,h_123,al_c,q_80,enc_avif,quality_auto/static1_squarespace.avif', 'Client logo'],
+      ['c8e843_d9541cb143ce4578abde62ad6f148afc~mv2.png/v1/fill/w_716,h_716,al_c,q_90,enc_avif,quality_auto/SFUSDBlueCroppedSM_400x400_edited.png', 'SFUSD'],
+      ['c8e843_bf23bf045f534aa59a798839169a9fcc~mv2.avif/v1/fill/w_316,h_83,al_c,q_80,enc_avif,quality_auto/4_%20OUSD_header_logo_web.avif', 'OUSD'],
+      ['c8e843_33eb8d8e6757490cb1411ccc84874f22~mv2.jpg/v1/fill/w_760,h_272,al_c,q_80,enc_avif,quality_auto/download%20(1)_edited.jpg', 'Client logo'],
+      ['c8e843_8b403ec61ec541f59d083e9d440e9203~mv2.png/v1/fill/w_980,h_245,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/nyu_edited.png', 'NYU'],
+      ['c8e843_62edd59963a1484c80b14c04de8c8b35~mv2.avif/v1/fill/w_205,h_205,al_c,q_80,enc_avif,quality_auto/9860f78c6c05046836be258e396238eb.avif', 'Client logo'],
+      ['c8e843_55480af8a6624e0ea4f0c0e25efff8f5~mv2.png/v1/fill/w_431,h_139,al_c,q_85,enc_avif,quality_auto/pearson-00_edited.png', 'Pearson'],
+      ['c8e843_12948341fdbe468b8d39666ba4073892~mv2.png/v1/fill/w_980,h_457,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/CFund_Logo_Wide_Navy.png', 'CFund'],
+      ['c8e843_bf750abd66b94774929105cfb4ac8625~mv2.png/v1/fill/w_310,h_61,al_c,q_85,enc_avif,quality_auto/Screenshot%202024-12-27%20160226.png', 'Client logo'],
+      ['c8e843_07a4a6c1fbed4b7b85667b5b33aac3d1~mv2.png/v1/fill/w_608,h_224,al_c,q_85,enc_avif,quality_auto/Screenshot%202024-12-27%20160252.png', 'Client logo'],
+      ['c8e843_0cf8f6dae4e9412bb5afe670fbd9d93b~mv2.png/v1/fill/w_980,h_335,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_png.png', 'Client logo'],
+      ['c8e843_9850528afc434c6baa4ce464e5983e40~mv2.png/v1/fill/w_512,h_512,al_c,q_85,enc_avif,quality_auto/favicon-1.png', 'Client logo'],
+      ['c8e843_d638ac655b91444f859a257f754008be~mv2.png/v1/fill/w_848,h_284,al_c,q_85,enc_avif,quality_auto/Screenshot%202024-12-27%20160148.png', 'Client logo'],
+      ['c8e843_6bae1e34dd7f42909c6b8f14d04dd8f8~mv2.png/v1/fill/w_980,h_185,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/EdVisorly_Logo_RGB-3.png', 'EdVisorly'],
+      ['c8e843_c6785abb73cd4f1fb7dac12e2805af68~mv2.jpg/v1/fill/w_980,h_187,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/2809451f-cff3-4a68-a60f-fc1e97ba843e_Instagram-post---2_edited.jpg', 'Client logo'],
+      ['c8e843_57c4521d21db44ee98d03e706348bc4b~mv2.png/v1/fill/w_980,h_220,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Copy%2Bof%2Bteachfx-logo.png', 'TeachFX'],
+      ['c8e843_bc85731df97b41b496c35d6232d3add5~mv2.png/v1/fill/w_980,h_490,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/EC_Logo_Horiz_Color.png', 'Client logo'],
+      ['c8e843_6cd2c642c12d41c0a3463969189bbb8e~mv2.png/v1/crop/x_0,y_46,w_536,h_209/fill/w_536,h_209,al_c,q_85,enc_avif,quality_auto/new-schools-venture-fund-logo-2_0.png', 'NewSchools Venture Fund'],
+      ['c8e843_9aa6465d4fa54ae2931985fc4163b27c~mv2.png/v1/fill/w_224,h_147,al_c,q_85,enc_avif,quality_auto/lumi_logo_edited.png', 'Lumi'],
+      ['c8e843_433525c7a6604815863e8debf72e3a05~mv2.png/v1/fill/w_980,h_259,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/marble.png', 'Marble']
+    ].map(([p, alt]) => ({ src: W + p, alt }));
+    logos.push({ src: 'https://static.wixstatic.com/media/cea5d3_4c57df8f6bb54f278b60be197b04ed6f~mv2.png/v1/fill/w_600,h_600,al_c,q_85,enc_avif,quality_auto/cea5d3_4c57df8f6bb54f278b60be197b04ed6f~mv2.png', alt: 'Worksheets AI' });
+    logos.push({ src: 'uploads/uc_san_diego_tritons_logo_secondary_2002_sportslogosnet-3714.png', alt: 'UC San Diego' });
+    const press = [
+      { source: 'Built in SF', date: 'Jan 2020', title: "Now Valued at $3.5B, Handshake is Poised to Be Gen Z's Linkedin", href: 'https://www.builtinsf.com/articles/handshake-raises-200m-3b-valuation-hiring' },
+      { source: 'The Times', date: 'Aug 2022', title: 'Long Unicorn Status in the Pipeline for Virtual Internships', href: 'https://www.thetimes.com/article/long-unicorn-status-in-the-pipeline-for-virtual-internships-xdrlk75v2' },
+      { source: 'Higher Ed Dive', date: 'May 2022', title: 'Zovio Sells Tutoring Services Business Tutor Me for $55M', href: 'https://www.highereddive.com/news/zovio-sells-tutoring-services-business-for-55m/624320/' },
+      { source: 'CISION', date: 'Jan 2022', title: 'Social Emotional and Life Readiness Provider Wayfinder Closes $6.6M Series A Round', href: 'https://www.prweb.com/releases/social-emotional-and-life-readiness-provider-wayfinder-closes-6-6-million-series-a-round-868041674.html' }
+    ];
+    const capabilities = [
+      ['Rapid Product Development and Validation', 'Find the parts of your product that K12 and higher ed buyers actually pay for, and prove it in market fast.'],
+      ['Sales, Marketing, Operations, and Customer Success Transformation', 'Rebuild the revenue team end to end, from first outreach to renewal, so every handoff is clean.'],
+      ['Hypergrowth Strategy, Tactics, and Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
+      ['Scaling Outreach from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
+      ['Growth Team Training and Evaluation', 'Hire, coach, and measure the people who will own the motion after we step back.'],
+      ['Fundraising and Capital Performance', 'Raise on the strength of a repeatable engine, and put the capital where it compounds.']
+    ].map(([label, desc], i) => ({ n: String(i + 1).padStart(2, '0'), label, desc }));
+    const services = [
+      { n: '01', title: 'Nationwide Hypergrowth', body: 'From tiny foothold to total ubiquity, our team can help plan and navigate your fastest path to national scale. Dramatically shortcut your sales and marketing learning curve while avoiding costly mistakes, and cut out years of wasted effort by putting our market-proven growth strategies to work.' },
+      { n: '02', title: 'Ubiquitous Market Awareness', body: 'Don\'t just adopt the gold standard. Become one. We have helped build some of the best-known education technology brands ever, from inception to ubiquity - and we can help your company go from "virtually unknown" to "virtually everywhere" faster and more reliably than anybody else.' },
+      { n: '03', title: 'Supercharged Product Market Fit', body: 'We can\'t help you work harder - you\'re going to have to do that on your own. But we can help you work smarter and move faster by supercharging the core components of your value prop and PMF that resonate best with K12 and higher education decision makers - focusing on the parts of your product that truly sell.' }
+    ];
+    const cases = [
+      { n: '01', stat: '$3.5B', statLabel: 'Handshake was last valued at over $3.5B.', title: 'Join Handshake. 520 Times', body: 'We helped the team at Handshake expand from an initial foothold of 30 universities to over 550 - building and executing one of the fastest and most successful higher education growth campaigns of all time.' },
+      { n: '02', stat: '$3B', statLabel: 'Outschool was last valued at over $3B.', title: 'Outschool, Pandemic Mode', body: 'We started working with Outschool during the first month of the pandemic lockdowns, quickly helping their team build an enterprise sales operation and successfully adapt to a dramatically different K12 landscape.' },
+      { n: '03', stat: '$100M', statLabel: 'Wayfinder was last valued at over $100M.', title: 'Wayfinding from $0 to $15M ARR', body: 'We started working with the team at Wayfinder when they were doing less than $50k in sales. Today they are used by over a million students, and are the fastest growing SEL company in the United States.' },
+      { n: '04', stat: '$500M', statLabel: 'Clever was acquired by Kahoot for $500M.', title: 'Get Clever. To 90% Market Share', body: 'We helped build the Clever K12 sales and marketing teams from the ground up, guiding the company from 10% to 90% market share in just under 2 years - the fastest K12 technology takeover ever.' }
+    ];
+    const split = body => { const i = body.indexOf('. ') + 2; return { lead: body.slice(0, i - 1), rest: body.slice(i) }; };
+    const ai = this.state.activeService;
+    const serviceTabs = services.map((sv, i) => ({ n: sv.n, title: sv.title, active: i === ai, color: i === ai ? '#1B2431' : '#7A8494', counterColor: i === ai ? '#17916B' : '#7A8494', dot: i === ai ? 1 : 0, select: () => { if (this.state.activeService !== i) this.setState({ activeService: i }); } }));
+    const activeService = Object.assign({ n: services[ai].n }, split(services[ai].body));
+    const { mobile, menuOpen, scrolled } = this.state;
+    const solid = scrolled || (mobile && menuOpen);
+    const photoMono = this.props.photoMono ?? false;
+    return {
+      logos, press, capabilities, services, cases, serviceTabs, activeService,
+      mobile, desktop: !mobile, menuOpen, menuVisible: mobile && menuOpen,
+      menuLabel: menuOpen ? 'Close' : 'Menu',
+      navBg: solid ? '#FFFFFF' : 'transparent', navLine: solid ? '#C5DCCB' : 'transparent', navInk: solid ? '#1B2431' : '#FFFFFF',
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      prevent: e => e.preventDefault(),
+      caseStyle: { padding: '40px', minHeight: '280px', boxSizing: 'border-box', boxShadow: '0 0 16px rgba(27,36,49,0.14)' },
+      cardStyle: { boxShadow: '0 0 16px rgba(27,36,49,0.14)' },
+      photoFilter: photoMono ? 'grayscale(1)' : 'none',
+      showVideo: !(typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches),
+      videoRef: this.videoRef, videoOpacity: this.state.videoOpacity,
+      true: true, false: false
+    };
+  }
+}
+</script>
+</body>
+</html>

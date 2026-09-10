@@ -1,0 +1,501 @@
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  background: var(--ink);
+  margin-top: calc(-1 * var(--nav-h)); /* sits under the transparent nav */
+}
+
+.heroLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroVideo {
+  transition: opacity 900ms ease; /* softens the loop seam */
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--hero-overlay);
+}
+
+.heroInner {
+  position: relative;
+  width: 100%;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 128px var(--gutter) 96px;
+  box-sizing: border-box;
+}
+
+.heroReveal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  animation: rise 600ms var(--ease) both;
+}
+
+.heroTitle {
+  margin: 0 0 32px;
+  font-size: var(--t-hero);
+  line-height: 1.08;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--white);
+  text-wrap: balance;
+}
+
+.heroLead {
+  margin: 0;
+  font-size: var(--t-section);
+  line-height: 1.5;
+  color: var(--white);
+  max-width: 78ch;
+  text-wrap: pretty;
+  /* The reference paragraph carries a fixed 810x92 box (inline in the prototype). Reproduced for
+     pixel parity; it is what makes the paragraph render as three lines at 1440. */
+  width: 810px;
+  height: 92px;
+}
+
+/* ---------- Shared text styles ---------- */
+
+.lead {
+  margin: 0;
+  font-size: var(--t-section);
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.body {
+  margin: 0;
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: var(--t-h3);
+  line-height: 1.25;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cardBody {
+  margin: 0;
+  font-size: var(--t-body-sm);
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.rule {
+  height: 1px;
+  background: var(--line);
+}
+
+.stat {
+  font-size: var(--t-stat);
+  line-height: 1;
+  letter-spacing: var(--ls-stat);
+  font-weight: 600;
+  color: var(--growth);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 01 Our Promise ---------- */
+
+.promise {
+  max-width: 62ch;
+  display: grid;
+  gap: 24px;
+}
+
+/* ---------- 02 Services & Results ---------- */
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 24px 48px;
+  align-items: stretch;
+}
+
+.tabs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  align-content: start;
+  border-top: 1px solid var(--line);
+}
+
+.tab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 28px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--slate);
+  transition: color var(--dur) var(--ease);
+}
+
+.tabActive {
+  color: var(--ink);
+}
+
+.tabTitle {
+  font-size: var(--t-section);
+  line-height: 1.5;
+  letter-spacing: var(--ls-display);
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.tabDot {
+  width: 10px;
+  height: 10px;
+  background: var(--growth);
+  justify-self: end;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.tabActive .tabDot {
+  opacity: 1;
+}
+
+.panel {
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  padding: 40px;
+  display: grid;
+  gap: 24px;
+  align-content: space-between;
+  min-height: 360px;
+}
+
+.panelLead {
+  margin: 0;
+  font-size: var(--t-display);
+  line-height: 1.2;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--growth);
+  text-wrap: balance;
+}
+
+.panelFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+/* ---------- 03 Featured Projects ---------- */
+
+.cases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 24px;
+}
+
+.case {
+  position: relative;
+  background: var(--white);
+  padding: 32px;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  box-shadow: var(--shadow-card);
+}
+
+.caseTop {
+  display: grid;
+  gap: 12px;
+}
+
+.caseStat {
+  display: grid;
+  gap: 6px;
+}
+
+.statLabel {
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+/* ---------- 04 Deliverables ---------- */
+
+.deliverables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  gap: 48px 64px;
+  align-items: start;
+}
+
+.deliverablesIntro {
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+
+.photoCard {
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+.capabilities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.capability {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 16px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.capabilityIndex {
+  font-size: var(--t-index);
+  color: var(--growth);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding-top: 6px;
+}
+
+.capabilityText {
+  display: grid;
+  gap: 8px;
+}
+
+/* ---------- 05 Press ---------- */
+
+.press {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.pressRow {
+  display: grid;
+  grid-template-columns: minmax(120px, 200px) minmax(0, 1fr);
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pressMeta {
+  font-size: var(--t-small);
+  color: var(--slate);
+  line-height: 1.5;
+  display: grid;
+  align-content: start;
+}
+
+.pressText {
+  display: grid;
+  gap: 8px;
+}
+
+.pressTitle {
+  margin: 0;
+  font-size: var(--t-h3);
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: var(--ls-display);
+  text-wrap: pretty;
+}
+
+.pressLink {
+  font-size: var(--t-body-sm);
+  color: var(--growth);
+  text-underline-offset: 3px;
+  justify-self: start;
+}
+
+.pressLink:hover {
+  color: var(--growth-ink);
+}
+
+.figure {
+  margin: 0;
+}
+
+.figureImg {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 36vw, 480px);
+  object-fit: cover;
+}
+
+/* ---------- 06 Select Clients ---------- */
+
+.logos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100% / 3 - 16px, 220px), 1fr));
+  gap: 24px;
+}
+
+.logoTile {
+  background: var(--white);
+  height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ---------- 07 Contact Us ---------- */
+
+.contact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 48px;
+  align-items: stretch;
+}
+
+.contactPhotoWrap {
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.contactPhoto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 50%;
+  transform: scale(1.35); /* crops out the soft right edge of the source photo */
+  transform-origin: 62% 50%;
+}
+
+.contactCard {
+  display: grid;
+  align-content: center;
+  gap: 24px;
+  padding: 28px 32px;
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  align-self: center;
+}
+
+.contactTitle {
+  margin: 0;
+  font-size: var(--t-contact);
+  line-height: 1.15;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 24px;
+}
+
+.label {
+  display: grid;
+  gap: 4px;
+  font-size: var(--t-small);
+  color: var(--ink-2);
+}
+
+.labelWide {
+  grid-column: 1 / -1;
+}
+
+.input {
+  font-family: inherit;
+  font-size: var(--t-body);
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.input:focus {
+  border-color: var(--growth);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+.submitRow {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit {
+  font-family: inherit;
+  font-size: var(--t-small);
+  font-weight: 600;
+  letter-spacing: var(--ls-wordmark);
+  color: var(--white);
+  background: var(--ink);
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 11px 28px;
+  min-height: 40px;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--growth);
+}

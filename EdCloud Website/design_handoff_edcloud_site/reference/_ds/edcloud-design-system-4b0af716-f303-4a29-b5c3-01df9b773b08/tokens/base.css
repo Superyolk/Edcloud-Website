@@ -1,0 +1,5 @@
+body{margin:0;font-family:var(--font);font-size:var(--t-body);line-height:var(--lh-body);color:var(--text-body);background:var(--surface-page)}
+h1,h2,h3,h4{color:var(--text-heading);font-weight:600;letter-spacing:var(--track-display)}
+a{color:var(--accent-interactive);text-decoration:underline;text-underline-offset:3px}
+a:hover{color:var(--accent-interactive-hover)}
+:focus-visible{outline:2px solid var(--accent-interactive);outline-offset:3px}
