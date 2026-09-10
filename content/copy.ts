@@ -225,7 +225,7 @@ export const HOME_COPY = {
     "imgAlt": "Classroom Lecture",
     "h2Lines": [
       "Ready to get going?",
-      "Contact us today."
+      "Get in touch."
     ],
     "fields": [
       {
@@ -444,7 +444,7 @@ export const ABOUT_COPY = {
     },
     {
       "stat": "8",
-      "title": "Talented Employees",
+      "title": "Dedicated Professionals",
       "body": "A team of passionate and skilled operators, experts, and engineers."
     }
   ]

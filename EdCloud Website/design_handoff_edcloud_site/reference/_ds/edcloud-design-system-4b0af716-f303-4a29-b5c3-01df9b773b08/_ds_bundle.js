@@ -786,7 +786,7 @@ function AboutScreen() {
       detail: 'For groundbreaking technological advancements.'
     }, {
       value: '8',
-      label: 'Talented Employees',
+      label: 'Dedicated Professionals',
       detail: 'Passionate and skilled operators, experts, and engineers.'
     }]
   })));
