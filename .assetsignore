@@ -13,3 +13,13 @@ README.md
 wrangler.jsonc
 package.json
 package-lock.json
+scripts
+out
+EdCloud Website
+app
+components
+content
+public
+node_modules
+package.json
+package-lock.json

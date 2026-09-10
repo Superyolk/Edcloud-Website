@@ -49,6 +49,7 @@ npm run build            # static export to ./out
 npm run serve:reference  # the design reference on http://localhost:4174 (used by the tests)
 npm run test:visual      # pixel + layout parity (starts both servers itself)
 npm run test:interactions
+python3 scripts/single-file-preview.py   # after `npm run build`: one self-contained HTML file to open from disk
 ```
 
 ### Verification results
