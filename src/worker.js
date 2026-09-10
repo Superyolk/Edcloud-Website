@@ -8,6 +8,7 @@
 
 const DEFAULT_TO = 'info@edcloud.org';
 const DEFAULT_FROM = 'EdCloud Website <website@edcloud.org>';
+const DEFAULT_BACK = '/#contact';
 const DEFAULT_HOST = 'www.edcloud.org';
 
 const str = (v) => (v == null ? '' : String(v)).trim();
@@ -47,13 +48,13 @@ async function handleContact(request, env) {
     return respond(wantsJson, false, 400, "We couldn't read that submission. Please try again.");
   }
 
-  const first = str(data.firstName).slice(0, 100);
-  const last = str(data.lastName).slice(0, 100);
+  const first = str(data.firstName || data['c-first']).slice(0, 100);
+  const last = str(data.lastName || data['c-last']).slice(0, 100);
   const name = (first + ' ' + last).trim() || str(data.name).slice(0, 200);
-  const email = str(data.email).slice(0, 200);
-  const phone = str(data.phone).slice(0, 60);
+  const email = str(data.email || data['c-email']).slice(0, 200);
+  const phone = str(data.phone || data['c-phone']).slice(0, 60);
   const subject = str(data.subject).slice(0, 200);
-  const message = str(data.message).slice(0, 5000);
+  const message = str(data.message || data['c-message']).slice(0, 5000);
   const trap = str(data.company); // honeypot — real visitors never see this field
 
   if (trap) return respond(wantsJson, true, 200, 'Thanks!'); // accept silently so bots don't retry
@@ -117,7 +118,8 @@ async function handleSubscribe(request, env) {
   } catch {
     return respond(wantsJson, false, 400, "We couldn't read that. Please try again.", '/#subscribe');
   }
-  const email = str(data.email).slice(0, 200);
+  const email = str(data.email || data['n-email']).slice(0, 200);
+  if (data['n-consent'] && !data.consent) data.consent = 'yes';
   if (str(data.company)) return respond(wantsJson, true, 200, 'Thanks!', '/#subscribe');
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return respond(wantsJson, false, 400, "That email address doesn't look right.", '/#subscribe');
   if (!data.consent) return respond(wantsJson, false, 400, 'Please tick the box to confirm you want the newsletter.', '/#subscribe');

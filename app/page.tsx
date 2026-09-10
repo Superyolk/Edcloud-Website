@@ -138,7 +138,7 @@ export default function HomePage() {
           </ul>
         </SectionShell>
 
-        <SectionShell n={contact.n} title={contact.title}>
+        <SectionShell n={contact.n} title={contact.title} id="contact">
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
               <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} />

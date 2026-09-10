@@ -1,0 +1,9 @@
+# Cloudflare static-asset redirects — keeps the old Wix URLs and earlier routes working.
+/research-and-technology    /services-and-results   301
+/research-and-technology/   /services-and-results   301
+/services                   /services-and-results   301
+/services.html              /services-and-results   301
+/contact                    /#contact               301
+/contact.html               /#contact               301
+/about.html                 /about                  301
+/index.html                 /                       301

@@ -4,6 +4,7 @@ import styles from './SectionShell.module.css';
 type Props = {
   n: string;
   title: string;
+  id?: string;
   /** The Select Clients header is an <h1> in the reference; everything else is an <h2>. */
   as?: 'h1' | 'h2';
   white?: boolean;
@@ -21,6 +22,7 @@ type Props = {
 export default function SectionShell({
   n,
   title,
+  id,
   as: Tag = 'h2',
   white,
   className,
@@ -32,7 +34,7 @@ export default function SectionShell({
 }: Props) {
   const sectionClass = [white ? styles.white : '', className ?? ''].filter(Boolean).join(' ') || undefined;
   return (
-    <section data-screen-label={`${n} ${title}`} className={sectionClass}>
+    <section id={id} data-screen-label={`${n} ${title}`} className={sectionClass}>
       <div className={styles.container}>
         <div className={styles.head}>
           <span className={styles.counter}>{n}</span>

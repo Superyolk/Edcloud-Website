@@ -1,14 +1,50 @@
 'use client';
 
+import { useState, type FormEvent } from 'react';
 import { HOME_COPY } from '@/content/copy';
 import styles from '@/app/home.module.css';
 
-// Native `required` validation runs in the browser; the submit itself is a placeholder to wire to
-// the contact backend (the repo's Cloudflare Worker exposes POST /api/contact).
+type Status = { ok: boolean; message: string } | null;
+
+// Native `required` validation runs in the browser; the submit posts to the Cloudflare Worker
+// (POST /api/contact), which emails the message via Resend. A plain form post is the no-JS fallback.
 export default function ContactForm() {
   const { contact } = HOME_COPY;
+  const [status, setStatus] = useState<Status>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      firstName: fd.get('c-first'),
+      lastName: fd.get('c-last'),
+      email: fd.get('c-email'),
+      phone: fd.get('c-phone'),
+      message: fd.get('c-message'),
+    };
+    setBusy(true);
+    setStatus(null);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as { ok?: boolean; message?: string };
+      const ok = res.ok && !!data.ok;
+      setStatus({ ok, message: data.message ?? (ok ? 'Thanks — we got your message and will be in touch shortly.' : 'We couldn’t send that. Please try again, or email info@edcloud.org.') });
+      if (ok) form.reset();
+    } catch {
+      setStatus({ ok: false, message: 'We couldn’t send that. Please try again, or email info@edcloud.org.' });
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+    <form className={styles.form} method="post" action="/api/contact" onSubmit={onSubmit}>
       {contact.fields.map((f) => {
         const isTextarea = f.type === 'textarea';
         return (
@@ -23,10 +59,15 @@ export default function ContactForm() {
         );
       })}
       <div className={styles.submitRow}>
-        <button type="submit" className={styles.submit}>
-          {contact.submit}
+        <button type="submit" className={styles.submit} disabled={busy}>
+          {busy ? 'Sending…' : contact.submit}
         </button>
       </div>
+      {status && (
+        <p role="status" className={status.ok ? styles.formStatusOk : styles.formStatusErr}>
+          {status.message}
+        </p>
+      )}
     </form>
   );
 }
