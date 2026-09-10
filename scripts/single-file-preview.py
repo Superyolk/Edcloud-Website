@@ -14,9 +14,26 @@ import sys
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT=f"{R}/out"
 DEST=sys.argv[1] if len(sys.argv)>1 else f"{R}/edcloud-preview.html"
 def read(p, mode="r"): return open(p, mode, encoding=None if "b" in mode else "utf-8").read()
+_cache={}
 def data_uri(path):
+    """Inline a file. Large JPEG/PNG photos are downscaled for the preview only (max 1600px, JPEG q80)
+    because each one is embedded several times per page."""
+    if path in _cache: return _cache[path]
     mt=mimetypes.guess_type(path)[0] or ("font/woff2" if path.endswith(".woff2") else "application/octet-stream")
-    return f"data:{mt};base64,"+base64.b64encode(read(path,"rb")).decode()
+    data=read(path,"rb")
+    if mt in ("image/jpeg","image/png") and len(data) > 300_000:
+        try:
+            from PIL import Image
+            import io
+            im=Image.open(io.BytesIO(data)); im.thumbnail((1600,1600))
+            buf=io.BytesIO()
+            if mt=="image/jpeg": im.convert("RGB").save(buf, "JPEG", quality=80, optimize=True, progressive=True)
+            else: im.save(buf, "PNG", optimize=True)
+            data=buf.getvalue()
+        except ImportError:
+            pass
+    _cache[path]=f"data:{mt};base64,"+base64.b64encode(data).decode()
+    return _cache[path]
 PAGES=[("home","index.html","EdCloud Venture Partners"),("about","about.html","About"),("services-and-results","services-and-results.html","Services & Results")]
 ROUTES={"/":"home","/about":"about","/services-and-results":"services-and-results"}
 def inline_page(fn):
@@ -39,7 +56,7 @@ def inline_page(fn):
         return f'<script data-src="{m.group(1)}">'+js+"</script>"
     html=re.sub(r'<script src="(/_next/static/chunks/[^"]+\.js)"[^>]*></script>', js_repl, html)
     # local public images → data URIs
-    html=re.sub(r'(src|href)="(/images/[^"]+)"', lambda m: f'{m.group(1)}="{data_uri(OUT+m.group(2))}"', html)
+    html=re.sub(r'/images/[A-Za-z0-9._-]+', lambda m: data_uri(OUT+m.group(0)), html)
     # internal links → top-window hash routes (target=_top makes Next's Link skip client routing)
     def link_repl(m):
         href=m.group(1); path,_,anchor=href.partition("#")
