@@ -1,0 +1,57 @@
+/* The two design-system Button variants used by the reference (rendered markup of
+   EdCloudDesignSystem.Button). Hover colours follow the site spec (green), not the
+   design system's generic blue. */
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: var(--t-small);
+  letter-spacing: 0;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+  opacity: 1;
+  background: none;
+  color: var(--ink);
+  border: 0;
+}
+
+.linkButton:hover {
+  color: var(--growth);
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: var(--t-small);
+  letter-spacing: 0.02em;
+  padding: 14px 26px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+  opacity: 1;
+  background: var(--ink);
+  color: var(--white);
+  border: 1.5px solid var(--ink);
+}
+
+.primary:hover {
+  background: var(--growth);
+  border-color: var(--growth);
+}

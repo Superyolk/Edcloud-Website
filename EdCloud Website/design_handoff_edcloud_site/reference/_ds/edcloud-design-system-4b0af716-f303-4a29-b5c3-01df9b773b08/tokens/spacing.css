@@ -1,0 +1,8 @@
+:root{
+--s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;--s-9:96px;--s-10:144px;
+--max:1200px;--gutter:24px;--counter-col:72px;
+--radius-0:0;--radius-pill:999px;--shadow:none;
+--ease:cubic-bezier(.2,.7,.2,1); /* @kind other */
+--dur:180ms; /* @kind other */
+}
+@media (prefers-reduced-motion:reduce){:root{--dur:0ms /* @kind other */}}

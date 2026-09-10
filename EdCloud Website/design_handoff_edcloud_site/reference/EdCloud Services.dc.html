@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <title>Services &amp; Results | EdCloud Venture Partners</title>
+  <meta name="description" content="EdCloud helps post-traction education technology companies scale with research-driven go-to-market strategy, buyer insights, pricing and packaging, sales engine design, channel partnerships, smarter procurement paths, and RevOps systems that accelerate adoption in K-12 and higher education markets.">
+  <link rel="icon" href="https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/tokens/base.css">
+  <link rel="stylesheet" href="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/styles.css">
+  <script src="_ds/edcloud-design-system-4b0af716-f303-4a29-b5c3-01df9b773b08/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:#F2F9F4;color:#4B5563;font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:#17916B;text-decoration:underline;text-underline-offset:3px}
+    a:hover{color:#0F6B4F}
+  </style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,64px"></dc-import>
+
+<main>
+  <section data-screen-label="Services hero" style="position:relative;min-height:min(72vh,640px);display:grid;align-items:end;background:#1B2431">
+    <img src="https://static.wixstatic.com/media/11062b_73e69c0bfc9b49ce8e001cc70aeeb043~mv2.jpeg/v1/fill/w_1920,h_1080,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_73e69c0bfc9b49ce8e001cc70aeeb043~mv2.jpeg" alt="Modern Classroom" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(27,36,49,0.5)"></div>
+    <div style="position:relative;width:100%;max-width:1248px;margin:0 auto;padding:112px 24px 64px;box-sizing:border-box;display:grid;gap:24px">
+      <h1 style="margin:0;font-size:clamp(2.75rem,6vw,4.5rem);line-height:1.05;letter-spacing:-0.01em;font-weight:600;color:#FFFFFF;max-width:16ch;text-wrap:balance">Services &amp; Results</h1>
+      <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#FFFFFF;max-width:60ch;text-wrap:pretty">Six operator-run services that take an education company from early traction to national scale. Every one is measured the way your board measures it: pipeline, ARR, ASP, cycle time, NRR.</p>
+    </div>
+  </section>
+
+  <section data-screen-label="Proof strip" style="background:#FFFFFF;border-bottom:1px solid #C5DCCB">
+    <div style="max-width:1200px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px">
+      <sc-for list="{{ proof }}" as="p" hint-placeholder-count="4">
+        <div style="display:grid;gap:6px;border-left:1px solid #C5DCCB;padding-left:20px">
+          <span style="font-size:clamp(2rem,3.4vw,3rem);line-height:1;letter-spacing:-0.02em;font-weight:600;color:#17916B;font-variant-numeric:tabular-nums">{{ p.stat }}</span>
+          <span style="font-size:15px;line-height:1.4;color:#1B2431;font-weight:500">{{ p.label }}</span>
+          <span style="font-size:14px;color:#7A8494">{{ p.client }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="01 How an engagement works">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">01</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">How an engagement works</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;gap:40px">
+          <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#1B2431;max-width:62ch;text-wrap:pretty">We are operators, not advisers. We design the system, build it, turn it on, and then train your team to run it without us. Three phases, each with a named owner and a weekly metric.</p>
+          <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+            <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+              <li style="background:#FFFFFF;padding:28px 28px 32px;box-shadow:0 0 18px rgba(27,36,49,0.16);display:grid;gap:12px;align-content:start;border-top:2px solid #1B2431">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                  <span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">{{ ph.n }}</span>
+                  <span style="font-size:14px;color:#17916B;font-weight:600">{{ ph.duration }}</span>
+                </div>
+                <h3 style="margin:0;font-size:1.5rem;line-height:1.2;letter-spacing:-0.01em;font-weight:600;color:#1B2431">{{ ph.title }}</h3>
+                <p style="margin:0;font-size:16px;line-height:1.55;color:#4B5563;text-wrap:pretty">{{ ph.body }}</p>
+              </li>
+            </sc-for>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 What we do" style="background:#FFFFFF;border-top:1px solid #C5DCCB;border-bottom:1px solid #C5DCCB">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">02</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">What we do</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#1B2431;max-width:62ch;text-wrap:pretty">Most clients start with one or two of these. The engine and the operations layer are where the compounding happens.</p>
+      </div>
+      <ol style="list-style:none;margin:48px 0 0;padding:0;border-top:1px solid #C5DCCB">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="6">
+          <li style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:40px 0;border-bottom:1px solid #C5DCCB">
+            <span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums;padding-top:6px">{{ s.n }}</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 48px;align-items:start">
+              <div style="display:grid;gap:12px">
+                <h3 style="margin:0;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.15;letter-spacing:-0.01em;font-weight:600;color:#1B2431;text-wrap:balance">{{ s.title }}</h3>
+                <p style="margin:0;font-size:17px;line-height:1.6;color:#4B5563;max-width:48ch;text-wrap:pretty">{{ s.pitch }}</p>
+                <p style="margin:4px 0 0;font-size:17px;line-height:1.4;font-weight:600;color:#17916B;max-width:44ch;text-wrap:pretty">{{ s.result }}</p>
+              </div>
+              <dl style="margin:0;display:grid;gap:16px;font-size:15px;line-height:1.55">
+                <div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px">
+                  <dt style="font-weight:600;color:#1B2431">Best for</dt>
+                  <dd style="margin:0;color:#4B5563">{{ s.fit }}</dd>
+                </div>
+                <div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px">
+                  <dt style="font-weight:600;color:#1B2431">You get</dt>
+                  <dd style="margin:0;color:#4B5563">{{ s.deliverables }}</dd>
+                </div>
+                <div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px">
+                  <dt style="font-weight:600;color:#1B2431">Timeline</dt>
+                  <dd style="margin:0;color:#4B5563">{{ s.timeline }}</dd>
+                </div>
+              </dl>
+            </div>
+          </li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Results">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">03</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Results</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;gap:32px">
+          <p style="margin:0;font-size:1.25rem;line-height:1.5;color:#1B2431;max-width:62ch;text-wrap:pretty">Four engagements, four starting points, one pattern: a clearer story, a de-risked purchase path, and a pipeline that no longer depends on the founder being in the room.</p>
+          <div style="background:#FFFFFF;box-shadow:0 0 18px rgba(27,36,49,0.16);overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:16px;line-height:1.5;min-width:640px">
+              <thead>
+                <tr style="text-align:left;color:#7A8494;font-size:14px;font-weight:500">
+                  <th style="padding:16px 24px;border-bottom:1px solid #C5DCCB;font-weight:500">Client</th>
+                  <th style="padding:16px 24px;border-bottom:1px solid #C5DCCB;font-weight:500">Where we started</th>
+                  <th style="padding:16px 24px;border-bottom:1px solid #C5DCCB;font-weight:500">What we built</th>
+                  <th style="padding:16px 24px;border-bottom:1px solid #C5DCCB;font-weight:500">Outcome</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ results }}" as="r" hint-placeholder-count="4">
+                  <tr>
+                    <td style="padding:20px 24px;border-bottom:1px solid #C5DCCB;font-weight:600;color:#1B2431;vertical-align:top;white-space:nowrap">{{ r.client }}</td>
+                    <td style="padding:20px 24px;border-bottom:1px solid #C5DCCB;color:#4B5563;vertical-align:top">{{ r.start }}</td>
+                    <td style="padding:20px 24px;border-bottom:1px solid #C5DCCB;color:#4B5563;vertical-align:top">{{ r.built }}</td>
+                    <td style="padding:20px 24px;border-bottom:1px solid #C5DCCB;color:#17916B;font-weight:600;vertical-align:top">{{ r.outcome }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Is this a fit" style="background:#FFFFFF;border-top:1px solid #C5DCCB;border-bottom:1px solid #C5DCCB">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,64px) 24px">
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:baseline"><span style="font-size:15px;color:#7A8494;font-variant-numeric:tabular-nums">04</span><h2 style="margin:0;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;font-weight:600;color:#1B2431">Is this a fit</h2></div>
+      <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;margin-top:32px">
+        <span aria-hidden="true"></span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:48px">
+          <div style="display:grid;gap:16px;align-content:start">
+            <h3 style="margin:0;font-size:1.25rem;line-height:1.25;font-weight:600;color:#1B2431">We are the right partner when</h3>
+            <ul style="margin:0;padding:0;list-style:none;display:grid;gap:12px;font-size:17px;line-height:1.55;color:#4B5563">
+              <li style="padding-left:20px;border-left:2px solid #17916B">You sell to K12 districts, colleges and universities, or workforce learning programs.</li>
+              <li style="padding-left:20px;border-left:2px solid #17916B">You are seed to Series B, roughly $0 to $1M ARR, with a product real users already rely on.</li>
+              <li style="padding-left:20px;border-left:2px solid #17916B">Sales still runs through the founder and you need it to run through a team.</li>
+              <li style="padding-left:20px;border-left:2px solid #17916B">The next deals are multi-district or campus-wide, and getting them wrong costs an academic year.</li>
+            </ul>
+          </div>
+          <div style="display:grid;gap:16px;align-content:start">
+            <h3 style="margin:0;font-size:1.25rem;line-height:1.25;font-weight:600;color:#1B2431">We are probably not when</h3>
+            <ul style="margin:0;padding:0;list-style:none;display:grid;gap:12px;font-size:17px;line-height:1.55;color:#4B5563">
+              <li style="padding-left:20px;border-left:2px solid #C5DCCB">You are pre-product, or still searching for the first paying customers.</li>
+              <li style="padding-left:20px;border-left:2px solid #C5DCCB">You want a strategy deck rather than a working system with someone accountable for it.</li>
+              <li style="padding-left:20px;border-left:2px solid #C5DCCB">Your buyers are consumers or small businesses rather than institutions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="05 Start" style="background:#1B2431">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(56px,7vw,80px) 24px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px">
+      <span style="font-size:15px;color:#9AA3B0;font-variant-numeric:tabular-nums;padding-top:12px">05</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:32px;align-items:center">
+        <h2 style="margin:0;font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-0.01em;font-weight:600;color:#FFFFFF;text-wrap:balance">Start with a 15 minute call.</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:flex-start">
+          <a href="https://calendly.com/aaronsokol/15" style="display:inline-flex;align-items:center;font-size:14px;font-weight:600;letter-spacing:0.08em;color:#1B2431;background:#FFFFFF;text-decoration:none;border-radius:999px;padding:14px 32px;min-height:48px;box-sizing:border-box" style-hover="background:#17916B;color:#FFFFFF">BOOK A MEETING</a>
+          <a href="mailto:info@edcloud.org" style="font-size:15px;color:#FFFFFF;text-underline-offset:4px" style-hover="color:#C5DCCB">info@edcloud.org</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dc-import name="SiteFooter" hint-size="100%,600px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const proof = [
+      { stat: '30 → 550', label: 'universities in one growth campaign', client: 'Handshake' },
+      { stat: '10% → 90%', label: 'K12 market share in under two years', client: 'Clever' },
+      { stat: '300 → 1.5M', label: 'students using the product', client: 'Wayfinder' },
+      { stat: '$500M', label: 'acquisition by Kahoot', client: 'Clever' }
+    ];
+    const phases = [
+      { n: '01', duration: '2 to 3 weeks', title: 'Discovery sprint', body: 'We align on goals, constraints, and the fastest path to value. You leave with a ranked list of what is actually blocking scale and which services address it.' },
+      { n: '02', duration: '60 to 90 days', title: 'Build', body: 'We craft the narrative, stand up the sales system, and remove the biggest friction in legal and procurement. Where needed we recruit or upskill the first hires who will own the motion.' },
+      { n: '03', duration: 'Ongoing, optional', title: 'Run and hand off', body: 'Your team runs the playbook. Many clients keep us on for major deals, launches, and partner negotiations. The aim is a machine that keeps delivering after we leave.' }
+    ];
+    const services = [
+      ['GTM Strategy & Positioning', 'A buyer-centric narrative, tested in live conversations and backed by the proof your prospects care about. Who you serve, what each stakeholder gets, and why you are the inevitable choice.', 'Higher win rates and shorter cycles from a clear “why now, why us.”', 'Teams whose pitch changes every meeting, or who sell well to one persona and stall with the rest.', 'Positioning brief, messaging matrix, competitive traps, proof library, talk tracks.', '2 to 4 months'],
+      ['Self-Perpetuating Sales Engine', 'A full-funnel K12 or higher ed system from lead generation to signed contract, built to move from founder-led selling to a team that can carry multi-state and multi-system deals.', 'Predictable pipeline that does not depend on the founder.', 'Companies past $500k ARR that need the next $5M to come from a repeatable motion.', 'Territory models, account lists, sequencing, demo flows, objection handling, enablement, hiring profiles.', '6 to 12 months to stand up'],
+      ['Competitive Pricing & Packaging', 'Monetization that matches the value you deliver and the way institutions actually buy. Price points tested in market, tiers that scale, and a negotiation strategy that avoids endless pilots.', 'Higher ACV, clean renewals, standard terms.', 'Teams discounting to close, running unpaid pilots, or renegotiating every renewal.', 'Market-tested price points, bundles and tiers, pilot-avoidance strategy, negotiation playbook.', '3 to 6 months'],
+      ['High-Yield Channel Partnerships', 'Platform integrations, resellers, and alliances that put you inside the stack your buyers already trust, with the partner story and terms to make it worth their while.', 'Net new pipeline from routes already in the buyer’s stack.', 'Products that integrate with an LMS, SIS, or rostering platform and have not yet made that a sales channel.', 'Target list, partner value story, BD outreach kit, term sheets, co-marketing plans.', '3 to 4 months to signed partners'],
+      ['Smarter Procurement Pathways', 'De-risked purchase paths for large districts and universities: how to engage before the RFP, how to answer it, and how to clear security, privacy, and legal without losing a semester.', 'More large contracts closed, fewer stalled in legal.', 'Teams with big deals stuck in procurement, or who have never won a formal RFP.', 'Pre-RFP engagement plan, RFP response kit, sole-source and justification templates, privacy and security responses, contracting playbook.', '3 to 4 weeks to baseline; ongoing per deal'],
+      ['RevOps & Customer Outcomes', 'One integrated system for outreach, engagement, renewals, and expansion, so Sales, Success, and Product hand off cleanly and the forecast is one your board can trust.', 'Forecast accuracy and higher NRR.', 'Companies whose CRM does not match reality, or whose renewals surprise them.', 'GTM engineering plan, CRM architecture, stage definitions, MEDDICC or similar, QBR templates, onboarding and value-proof checklists.', '3 to 6 months']
+    ].map(([title, pitch, result, fit, deliverables, timeline], i) => ({ n: String(i + 1).padStart(2, '0'), title, pitch, result, fit, deliverables, timeline }));
+    const results = [
+      { client: 'Handshake', start: 'A foothold of 30 universities', built: 'One of the fastest higher ed growth campaigns on record', outcome: '550+ universities; last valued at over $3.5B' },
+      { client: 'Clever', start: '10% K12 market share', built: 'Sales and marketing teams from the ground up', outcome: '90% share in under 2 years; acquired by Kahoot for $500M' },
+      { client: 'Wayfinder', start: 'Under $50k in sales', built: 'A national K12 sales motion for SEL', outcome: '$15M ARR; over a million students; last valued at over $100M' },
+      { client: 'Outschool', start: 'Month one of pandemic lockdowns', built: 'An enterprise sales operation for a changed K12 market', outcome: 'Last valued at over $3B' }
+    ];
+    return { proof, phases, services, results };
+  }
+}
+</script>
+</body>
+</html>

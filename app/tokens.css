@@ -1,0 +1,54 @@
+/* tokens.css — EdCloud site design tokens. Every value below is used verbatim in the reference. */
+:root {
+  /* Color */
+  --ink: #1B2431;          /* headings, primary buttons, hero fallback bg */
+  --ink-2: #4B5563;        /* body copy */
+  --slate: #7A8494;        /* counters (01, 02…), captions, inactive tabs */
+  --line: #C5DCCB;         /* hairlines, input borders, sticky-nav border (green-tinted) */
+  --paper: #F2F9F4;        /* page background (light green) */
+  --white: #FFFFFF;        /* cards, Select Clients section, solid nav */
+  --growth: #17916B;       /* the ONE accent: stats, active dot, links, focus, hover */
+  --growth-ink: #0F6B4F;   /* link hover */
+  --black: #000000;        /* footer */
+  --footer-text: #C8CDD5;  /* footer secondary text */
+  --hero-overlay: rgba(27,36,49,0.42);
+  --hero-overlay-subpage: rgba(27,36,49,0.42);   /* About */
+  --hero-overlay-services: rgba(27,36,49,0.5);
+  --focus-ring: rgba(23,145,107,0.25);
+  --footer-rule: rgba(255,255,255,0.16);
+
+  /* Type — one family, weights 400/600 only */
+  --font: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --t-hero: clamp(2.75rem, 6.5vw, 5rem);       /* home H1; lh 1.08; ls -0.01em; 600 */
+  --t-page-title: clamp(2.75rem, 6vw, 4.5rem); /* About/Services H1; lh 1.05 */
+  --t-display: clamp(1.5rem, 2.6vw, 2.125rem); /* services detail lead (green); lh 1.2 */
+  --t-contact: clamp(1.75rem, 2.8vw, 2.25rem); /* contact card H2; lh 1.15 */
+  --t-cta: clamp(2rem, 4vw, 3rem);             /* services page CTA H2; lh 1.1 */
+  --t-section: 1.25rem;                        /* section header (bold) AND lead paragraph (regular); lh 1.5 */
+  --t-h2-footer: 1.75rem;                      /* "Subscribe"; lh 1.25 */
+  --t-h3: 1.25rem;                             /* card titles; lh 1.25 */
+  --t-body: 17px;                              /* lh 1.6 */
+  --t-body-sm: 15px;                           /* card bodies; lh 1.55 */
+  --t-index: 15px;                             /* counters */
+  --t-small: 14px;                             /* labels, footer, nav links */
+  --t-stat: 48px;                              /* lh 1; ls -0.02em; 600; tabular-nums; green */
+  --ls-display: -0.01em;
+  --ls-stat: -0.02em;
+  --ls-wordmark: 0.08em;                       /* also SUBMIT / BOOK A MEETING */
+
+  /* Layout */
+  --container: 1200px;                         /* content width, content-box + 24px side padding */
+  --gutter: 24px;
+  --counter-col: 72px;                         /* first grid column; ALL section content starts after it */
+  --section-pad: clamp(48px, 6vw, 64px);       /* vertical section padding */
+  --head-gap: 32px;                            /* section header → content */
+  --nav-h: 64px;
+  --nav-collapse: 820px;                       /* < 820px: "Menu"/"Close" button */
+
+  /* Shape & effects */
+  --radius: 0;                                 /* cards, inputs, images */
+  --radius-pill: 999px;                        /* buttons only */
+  --shadow-card: 0 0 18px rgba(27,36,49,0.16); /* even, non-offset "360°" shadow */
+  --dur: 180ms;
+  --ease: cubic-bezier(.2,.7,.2,1);
+}

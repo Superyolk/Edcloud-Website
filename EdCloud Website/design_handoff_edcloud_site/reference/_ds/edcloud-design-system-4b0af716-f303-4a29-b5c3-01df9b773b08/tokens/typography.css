@@ -1,0 +1,11 @@
+:root{
+--font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+--font-mono:ui-monospace,Menlo,monospace;
+--t-display:clamp(2.75rem,6vw,4.5rem); /* @kind font */
+--t-h1:clamp(2rem,4vw,3rem); /* @kind font */
+--t-h2:1.75rem;--t-h3:1.25rem;--t-body:1.0625rem;--t-small:0.875rem;--t-index:0.9375rem;--t-stat:3rem;
+--lh-tight:1.05; /* @kind font */
+--lh-snug:1.25; /* @kind font */
+--lh-body:1.6; /* @kind font */
+--track-display:-0.01em;--track-stat:-0.02em;--track-wordmark:0.08em;
+}

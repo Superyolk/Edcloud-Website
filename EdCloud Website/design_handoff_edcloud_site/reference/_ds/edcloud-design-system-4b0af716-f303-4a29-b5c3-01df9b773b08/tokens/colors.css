@@ -1,0 +1,9 @@
+:root{
+--ink:#1B2431;--ink-2:#4B5563;--slate:#7A8494;--line:#DCE0E5;
+--paper:#FAFAF7;--paper-2:#F1F2EE;--white:#FFFFFF;
+--signal:#1F5EFF;--signal-ink:#1541B8;--growth:#17916B;--error:#B42318;
+--text-heading:var(--ink);--text-body:var(--ink-2);--text-caption:var(--slate);
+--surface-page:var(--paper);--surface-card:var(--white);--surface-band:var(--paper-2);--surface-inverse:var(--ink);
+--border-default:var(--line);
+--accent-interactive:var(--signal);--accent-interactive-hover:var(--signal-ink);--accent-result:var(--growth);
+}

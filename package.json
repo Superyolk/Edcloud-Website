@@ -1,0 +1,37 @@
+{
+  "name": "edcloud-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EdCloud Venture Partners marketing site (Home, About, Services & Results) built from the design handoff.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "serve:reference": "serve \"EdCloud Website/design_handoff_edcloud_site/reference\" -l 4174 --no-clipboard --no-clean-urls",
+    "test:visual": "playwright test scripts/visual-diff.spec.ts",
+    "test:interactions": "playwright test scripts/interactions.spec.ts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.3.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^24",
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "chrome-launcher": "^1.2.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "lighthouse": "^13.4.1",
+    "pixelmatch": "7.2.0",
+    "pngjs": "^7.0.0",
+    "serve": "14.2.6",
+    "typescript": "^5"
+  }
+}
