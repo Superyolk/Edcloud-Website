@@ -208,3 +208,13 @@
 .newsLink:hover {
   color: var(--ink);
 }
+
+/* ---------- Newsletter status (only rendered after a submit) ---------- */
+.statusOk,
+.statusErr {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.statusOk { color: #9fd3c0; }
+.statusErr { color: #f1b3ae; }

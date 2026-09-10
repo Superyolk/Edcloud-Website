@@ -499,3 +499,14 @@
 .submit:hover {
   background: var(--growth);
 }
+
+/* ---------- Contact form status (only rendered after a submit) ---------- */
+.formStatusOk,
+.formStatusErr {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.formStatusOk { color: var(--green, #17916b); }
+.formStatusErr { color: #b3261e; }
