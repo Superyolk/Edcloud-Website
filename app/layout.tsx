@@ -36,7 +36,10 @@ export const metadata: Metadata = {
     'edtech revenue operations',
     'growth consulting',
   ],
-  icons: { icon: [{ url: '/favicon.ico', sizes: '32x32' }, { url: SHARED.markSrc, type: 'image/png' }] },
+  icons: {
+    icon: [{ url: '/favicon.ico', sizes: '32x32' }, { url: SHARED.markSrc, type: 'image/png', sizes: '100x100' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
   openGraph: {
     type: 'website',
     siteName: ORG.name,
