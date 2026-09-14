@@ -24,7 +24,7 @@ app/                       pages, tokens.css (verbatim from the handoff), global
 components/                header, footer, section shell, forms, home widgets, LegalPage
 content/                   content.js + copy.ts (from the handoff/reference), legal.ts, site.ts (link → route map)
 public/                    copied into the export as-is: images/, _redirects, _headers, robots.txt, sitemap.xml, favicons
-src/worker.js              Cloudflare Worker: apex→www redirect, POST /api/contact and /api/subscribe (Resend), else serve ./out
+src/worker.js              Cloudflare Worker: apex→www redirect, POST /api/contact (Resend), else serve ./out
 scripts/                   visual-diff + interaction tests, copy extractor, single-file-preview.py
 assets/media/              trimmed client logos, site photos, headshot — not served; for self-hosting the Wix-hot-linked images later
 EdCloud Website/           the design handoff (reference prototypes, tokens, content, brief)
@@ -41,12 +41,39 @@ python3 scripts/single-file-preview.py   # after a build: one self-contained HTM
 npm run test:visual / test:interactions  # parity with the design reference; behaviour checks
 ```
 
-## Forms
+## The contact form
 
-Both forms post to the Worker, which emails via [Resend](https://resend.com): the contact form to
-`POST /api/contact` (first/last name, email, phone, message) and the footer newsletter to
-`POST /api/subscribe` (email + consent). Messages go to `info@edcloud.org` (`CONTACT_TO` overrides).
-Without `RESEND_API_KEY` the forms fail gracefully and tell the visitor to email directly.
+The home page's contact form posts to the Worker at `POST /api/contact` (first/last name, email,
+phone, message), which emails the message via [Resend](https://resend.com) to `info@edcloud.org`
+(`CONTACT_TO` overrides). Without `RESEND_API_KEY` it fails gracefully and tells the visitor to
+email directly. There is no newsletter.
+
+## SEO
+
+Everything is rendered into the static HTML, so search engines and AI answer engines get it without
+running JavaScript.
+
+- **Per-page metadata** — `content/seo.ts` holds the site constants and a `pageMeta()` helper that
+  every page calls. It produces the title, a search-length description (under ~160 characters; the
+  longer reference descriptions stay untouched in `content/copy.ts`), the canonical URL, and a full
+  Open Graph + Twitter card. Next *replaces* rather than merges a page's `openGraph` block, which is
+  why the helper repeats the image, type and site name — do not hand-roll a page's block.
+- **Structured data** — schema.org JSON-LD via `components/JsonLd.tsx`: `ProfessionalService` and
+  `WebSite` on Home, `ItemList` of the six `Service` entries on Services & Results, `Person` for the
+  Managing Partner on About, and a `BreadcrumbList` on every sub-page. The nodes are linked by
+  `@id`, and every fact restates something already visible on the page.
+- **Share card** — `public/images/og-edcloud.jpg` (1200×630). Regenerate it if the headline changes.
+- **Sitemap** — generated at build time by `app/sitemap.ts`, so `lastmod` is the deploy date rather
+  than a stale hand-written value.
+- **robots.txt** — `public/robots.txt` allows search crawlers *and* names the AI crawlers explicitly
+  (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended and the rest). Several of
+  those only read their own user-agent block, so being listed is what makes the site quotable in AI
+  answers. Remove a block to opt out of that engine.
+- **llms.txt** — `public/llms.txt` is a plain-text brief for AI agents: what EdCloud is, the six
+  services with timelines, the four client results, and contact details. Keep it in step with the
+  site when the services or results change.
+- **Semantics** — one `<h1>` per page, headings in order, alt text on every image, and the
+  Worker's apex→www redirect keeps one canonical host.
 
 ## Deploy to Cloudflare (Workers Builds)
 

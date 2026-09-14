@@ -6,7 +6,9 @@
   display: grid;
   align-items: center;
   background: var(--ink);
-  margin-top: calc(-1 * var(--nav-h)); /* sits under the transparent nav */
+  /* Sits under the transparent nav. The nav box is --nav-h plus its 1px bottom border, and both
+     have to be pulled up or a 1px strip of page background shows above the hero. */
+  margin-top: calc(-1 * var(--nav-h) - 1px);
 }
 
 .heroLayer {
@@ -345,8 +347,18 @@
 .pressLink {
   font-size: var(--t-body-sm);
   color: var(--growth);
-  text-underline-offset: 3px;
   justify-self: start;
+}
+
+.pressLink::after {
+  content: ">" / "";
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform var(--dur) var(--ease);
+}
+
+.pressLink:hover::after {
+  transform: translateX(3px);
 }
 
 .pressLink:hover {

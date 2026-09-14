@@ -26,9 +26,9 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
-    if (url.pathname === '/api/contact' || url.pathname === '/api/subscribe') {
+    if (url.pathname === '/api/contact') {
       if (request.method !== 'POST') return json({ ok: false, message: 'Method not allowed' }, 405);
-      return url.pathname === '/api/contact' ? handleContact(request, env) : handleSubscribe(request, env);
+      return handleContact(request, env);
     }
 
     return env.ASSETS.fetch(request);
@@ -108,39 +108,6 @@ async function handleContact(request, env) {
   }
   return respond(wantsJson, true, 200, "Thanks — we got your message and will be in touch shortly.");
 }
-
-async function handleSubscribe(request, env) {
-  const wantsJson = (request.headers.get('accept') || '').includes('application/json');
-  let data;
-  try {
-    const ct = request.headers.get('content-type') || '';
-    data = ct.includes('application/json') ? await request.json() : Object.fromEntries((await request.formData()).entries());
-  } catch {
-    return respond(wantsJson, false, 400, "We couldn't read that. Please try again.", '/#subscribe');
-  }
-  const email = str(data.email || data['n-email']).slice(0, 200);
-  if (data['n-consent'] && !data.consent) data.consent = 'yes';
-  if (str(data.company)) return respond(wantsJson, true, 200, 'Thanks!', '/#subscribe');
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return respond(wantsJson, false, 400, "That email address doesn't look right.", '/#subscribe');
-  if (!data.consent) return respond(wantsJson, false, 400, 'Please tick the box to confirm you want the newsletter.', '/#subscribe');
-  const apiKey = env.RESEND_API_KEY;
-  if (!apiKey) return respond(wantsJson, false, 503, `Subscriptions aren't connected yet. Please email ${env.CONTACT_TO || DEFAULT_TO}.`, '/#subscribe');
-  const to = env.CONTACT_TO || DEFAULT_TO;
-  const from = env.CONTACT_FROM || DEFAULT_FROM;
-  let res;
-  try {
-    res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to: [to], reply_to: email, subject: `Newsletter signup: ${email}`, text: `New newsletter subscriber from edcloud.org\n\nEmail: ${email}\nConsent: yes\n` }),
-    });
-  } catch {
-    return respond(wantsJson, false, 502, "We couldn't save that right now. Please try again later.", '/#subscribe');
-  }
-  if (!res.ok) return respond(wantsJson, false, 502, "We couldn't save that right now. Please try again later.", '/#subscribe');
-  return respond(wantsJson, true, 200, "Thanks — you're on the list.", '/#subscribe');
-}
-
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 }

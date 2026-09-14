@@ -6,8 +6,8 @@
   border-bottom: 1px solid var(--line);
   --nav-ink: var(--ink);
   transition:
-    background var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+    background var(--dur-nav) var(--ease),
+    border-color var(--dur-nav) var(--ease);
 }
 
 /* Home only: over the hero video until scrollY > 40 (or the mobile menu opens). */

@@ -25,7 +25,7 @@
   --t-contact: clamp(1.75rem, 2.8vw, 2.25rem); /* contact card H2; lh 1.15 */
   --t-cta: clamp(2rem, 4vw, 3rem);             /* services page CTA H2; lh 1.1 */
   --t-section: 1.25rem;                        /* section header (bold) AND lead paragraph (regular); lh 1.5 */
-  --t-h2-footer: 1.75rem;                      /* "Subscribe"; lh 1.25 */
+  --t-h2-footer: 1.75rem;                      /* About "Our mission" headings; lh 1.25 */
   --t-h3: 1.25rem;                             /* card titles; lh 1.25 */
   --t-body: 17px;                              /* lh 1.6 */
   --t-body-sm: 15px;                           /* card bodies; lh 1.55 */
@@ -50,5 +50,6 @@
   --radius-pill: 999px;                        /* buttons only */
   --shadow-card: 0 0 18px rgba(27,36,49,0.16); /* even, non-offset "360°" shadow */
   --dur: 180ms;
+  --dur-nav: 540ms;                            /* the sticky nav fading from transparent to solid */
   --ease: cubic-bezier(.2,.7,.2,1);
 }

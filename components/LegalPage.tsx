@@ -15,7 +15,9 @@ export default function LegalPage({ n, title, blocks }: Props) {
         <SectionShell n={n} title={title} as="h1">
           <div className={styles.mission}>
             {blocks.map((b, i) => {
-              if (b.tag === 'h3') return <h3 key={i} className={styles.h3}>{b.text}</h3>;
+              // Top-level sections under the page title, so h2 — styled with the About page's
+              // smaller heading rule to match the design.
+              if (b.tag === 'h3') return <h2 key={i} className={styles.h3}>{b.text}</h2>;
               if (b.tag === 'ul') return <ul key={i} className={styles.list}>{b.items.map((t) => <li key={t}>{t}</li>)}</ul>;
               return <p key={i} className={styles.p}>{b.text}</p>;
             })}

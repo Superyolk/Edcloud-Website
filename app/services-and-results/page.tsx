@@ -5,12 +5,15 @@ import { SERVICES_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbLd, pageMeta, SEO_DESCRIPTION, servicesLd } from '@/content/seo';
 import styles from './services.module.css';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: SERVICES_COPY.meta.title,
-  description: SERVICES_COPY.meta.description,
-};
+  description: SEO_DESCRIPTION.services,
+  path: '/services-and-results',
+});
 
 const [engagement, whatWeDo, results, fit] = SERVICES_COPY.titles;
 const [bestFor, youGet, timeline] = SERVICES_COPY.dlLabels;
@@ -20,6 +23,7 @@ export default function ServicesPage() {
   const { hero, start } = SERVICES_COPY;
   return (
     <>
+      <JsonLd data={[servicesLd, breadcrumbLd('Services & Results', '/services-and-results')]} />
       <SiteHeader />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>

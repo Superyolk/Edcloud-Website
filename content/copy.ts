@@ -4,7 +4,10 @@
 // is NOT duplicated here. Reference hrefs like "EdCloud About.dc.html" are mapped to routes in content/site.ts.
 export const SHARED = {
   "wordmark": "EDCLOUD VENTURE PARTNERS",
-  "markSrc": "https://static.wixstatic.com/media/c8e843_8fd79574ca964055ac18a120887cc9e8~mv2.png/v1/fill/w_32,h_32,al_c,q_85,enc_avif,quality_auto/55b97715067563_5628c905b5051_edited_edited.png",
+  // Hand-edited after generation (like the UC San Diego logo in content.js): the brand mark is
+  // self-hosted from public/ instead of hot-linked from Wix. Source is only 32x32 — replace
+  // public/images/edcloud-mark.png (and public/favicon.ico) when a higher-resolution file exists.
+  "markSrc": "/images/edcloud-mark.png",
   "markAlt": "EdCloud mark",
   "navLinks": [
     {
@@ -130,23 +133,6 @@ export const SHARED = {
     ],
     "brand": "EdCloud Venture Partners",
     "copyright": "© 2026 by EdCloud, LLC"
-  },
-  "newsletter": {
-    "title": "Subscribe",
-    "body": "Stay at the forefront of innovation. Sign up for our newsletter and receive exclusive insights, project updates, and industry news delivered straight to your inbox.",
-    "emailLabel": "Email*",
-    "consentLabel": "Yes, subscribe me to your newsletter.",
-    "submit": "SUBMIT",
-    "links": [
-      {
-        "label": "About",
-        "href": "EdCloud About.dc.html"
-      },
-      {
-        "label": "Services & Results",
-        "href": "EdCloud Services.dc.html"
-      }
-    ]
   }
 } as const;
 
@@ -164,7 +150,7 @@ export const HOME_COPY = {
       "Education Companies",
       "to National Scale."
     ],
-    "p": "EdCloud Venture Partners supercharges post-traction education innovation teams that are actively reinventing instruction, administration, and the student experience - delivering dramatic impact through rapid, sustainable growth."
+    "p": "EdCloud supercharges post-traction education innovation teams that are actively reinventing instruction, administration, and the student experience - delivering dramatic national impact through rapid, sustainable growth."
   },
   "titles": [
     {
@@ -224,8 +210,8 @@ export const HOME_COPY = {
     "imgSrc": "https://static.wixstatic.com/media/31d0a93857b149b5ab12ec952dde0516.jpg/v1/fill/w_980,h_653,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Classroom%20Lecture.jpg",
     "imgAlt": "Classroom Lecture",
     "h2Lines": [
-      "Ready to get going?",
-      "Get in touch."
+      "Ready to get started?",
+      "Let's get in touch."
     ],
     "fields": [
       {

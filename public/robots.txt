@@ -1,5 +1,72 @@
+# edcloud.org — open to search engines and to AI answer engines.
+# The AI crawlers are listed explicitly because several of them (Google-Extended,
+# Applebot-Extended, Claude, GPTBot) are opt-in/opt-out controls that only read their own
+# user-agent block. Being listed and allowed is what makes the site quotable in AI answers.
+
 User-agent: *
 Allow: /
 Disallow: /api/
+
+# --- Search engines -------------------------------------------------------
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# --- AI answer engines and assistants -------------------------------------
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
 
 Sitemap: https://www.edcloud.org/sitemap.xml

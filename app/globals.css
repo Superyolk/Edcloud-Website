@@ -29,8 +29,7 @@ h4 {
 
 a {
   color: var(--growth);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
 }
 
 a:hover {

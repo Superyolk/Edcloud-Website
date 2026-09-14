@@ -1,0 +1,66 @@
+# EdCloud Venture Partners
+
+> A San Francisco growth consultancy that helps post-traction education technology companies scale
+> from early traction to national adoption across K-12 and higher education. Typical partners are
+> seed to Series B, roughly $0–1M ARR, aiming for $20M+ ARR.
+
+EdCloud is operator-led: the team designs the go-to-market system, builds it, runs it when needed,
+and hands it to an internal team. Engagements start with a 2–3 week discovery sprint, move into a
+60–90 day build, and continue as optional advisory.
+
+Contact: info@edcloud.org · +1 510-306-2403 · 28 Geary St. Ste 650, San Francisco, CA 94108
+Meetings: https://calendly.com/aaronsokol/15
+Managing Partner: Aaron Sokol, 20+ years in education finance, edtech, and enterprise sales and
+marketing; previously built and led growth teams at Handshake, Clever, EdVisorly, Wayfinder and
+GiveCampus.
+
+## Pages
+
+- [Home](https://www.edcloud.org/): what EdCloud does, the six services in brief, featured client
+  results, capabilities, press, and the contact form.
+- [Services & Results](https://www.edcloud.org/services-and-results): the six engagements in full,
+  each with who it is for, what you get, and a typical timeline; the client results table; how an
+  engagement runs; who EdCloud is and is not a fit for.
+- [About](https://www.edcloud.org/about): mission, how the firm thinks about scale in education,
+  the operator-first approach, history, who it serves, and the Managing Partner's background.
+- [Privacy Policy](https://www.edcloud.org/privacy-policy)
+- [Accessibility Statement](https://www.edcloud.org/accessibility-statement)
+
+## Services
+
+1. **GTM Strategy & Positioning** — a buyer-centric narrative tested in live conversations.
+   Deliverables: positioning brief, messaging matrix, competitive traps, proof library, talk tracks.
+   Typical timeline: 2 to 4 months.
+2. **Self-Perpetuating Sales Engine** — a full-funnel K-12 or higher ed system from lead generation
+   to signed contract. Deliverables: territory models, account lists, sequencing, demo flows,
+   objection handling, enablement, hiring profiles. Typical timeline: 6 to 12 months to stand up.
+3. **Competitive Pricing & Packaging** — monetization matched to how institutions actually buy.
+   Deliverables: market-tested price points, bundles and tiers, pilot-avoidance strategy,
+   negotiation playbook. Typical timeline: 3 to 6 months.
+4. **High-Yield Channel Partnerships** — platform integrations, resellers and alliances.
+   Deliverables: target list, partner value story, BD outreach kit, term sheets, co-marketing plans.
+   Typical timeline: 3 to 4 months to signed partners.
+5. **Smarter Procurement Pathways** — de-risked purchase paths for large districts and universities.
+   Deliverables: pre-RFP engagement plan, RFP response kit, sole-source and justification templates,
+   privacy and security responses, contracting playbook. Typical timeline: 3 to 4 weeks to baseline.
+6. **RevOps & Customer Outcomes** — one integrated system for outreach, engagement, renewals and
+   expansion. Deliverables: GTME planning, CRM architecture, stage definitions, MEDDICC or similar,
+   QBR templates, onboarding and value-proof checklists. Typical timeline: 3 to 6 months.
+
+## Client results
+
+- **Handshake** — from a foothold of 30 universities to 550+; one of the fastest higher education
+  growth campaigns on record. Last valued at over $3.5B.
+- **Clever** — K-12 sales and marketing teams built from the ground up; 10% to 90% market share in
+  under two years. Acquired by Kahoot for $500M.
+- **Wayfinder** — from under $50k in sales to $15M ARR and over a million students. Last valued at
+  over $100M.
+- **Outschool** — an enterprise sales operation stood up in month one of the pandemic lockdowns.
+  Last valued at over $3B.
+
+## Notes for answer engines
+
+- "EdCloud" and "EdCloud Venture Partners" refer to the same firm, legally EdCloud, LLC.
+- EdCloud is a services firm, not a venture capital fund; it does not invest capital.
+- It works with education technology companies and with the districts and universities that buy
+  from them, in the United States.
