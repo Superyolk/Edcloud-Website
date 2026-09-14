@@ -6,16 +6,19 @@ import { HOME_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import JsonLd from '@/components/JsonLd';
+import { organizationLd, pageMeta, SEO_DESCRIPTION, websiteLd } from '@/content/seo';
 import LinkButton from '@/components/LinkButton';
 import HeroVideo from '@/components/home/HeroVideo';
 import ServicesTabs from '@/components/home/ServicesTabs';
 import ContactForm from '@/components/home/ContactForm';
 import styles from './home.module.css';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: HOME_COPY.meta.title,
-  description: HOME_COPY.meta.description,
-};
+  description: SEO_DESCRIPTION.home,
+  path: '/',
+});
 
 const [promise, services, projects, deliverables, press, clients, contact] = HOME_COPY.titles;
 
@@ -23,6 +26,7 @@ export default function HomePage() {
   const { hero } = HOME_COPY;
   return (
     <>
+      <JsonLd data={[organizationLd, websiteLd]} />
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Hero" className={styles.hero}>
@@ -128,7 +132,7 @@ export default function HomePage() {
           </ul>
         </SectionShell>
 
-        <SectionShell n={clients.n} title={clients.title} as="h1" white>
+        <SectionShell n={clients.n} title={clients.title} white>
           <ul className={styles.logos}>
             {HOME.logos.map((l) => (
               <li key={l.src} className={styles.logoTile}>

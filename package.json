@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "serve:reference": "serve \"EdCloud Website/design_handoff_edcloud_site/reference\" -l 4174 --no-clipboard --no-clean-urls",
+    "//serve:reference": "cleanUrls must stay off (scripts/serve-reference.json) or serve strips the .html from the prototypes' own links.",
+    "serve:reference": "serve \"EdCloud Website/design_handoff_edcloud_site/reference\" -l 4174 --no-clipboard -c ../../../scripts/serve-reference.json",
     "test:visual": "playwright test scripts/visual-diff.spec.ts",
     "test:interactions": "playwright test scripts/interactions.spec.ts",
     "test:e2e": "playwright test"

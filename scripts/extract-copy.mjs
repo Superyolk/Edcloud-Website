@@ -38,7 +38,6 @@ await open('EdCloud%20Home.dc.html');
 const shared = await page.evaluate(`(() => { ${helpers}
   const header = document.querySelector('header');
   const footer = document.querySelector('footer');
-  const news = sec('Newsletter');
   const mobileMenu = [
     ['Home', 'EdCloud Home.dc.html'], ['About', 'EdCloud About.dc.html'], ['Services & Results', 'EdCloud Services.dc.html'],
     ['Privacy Policy', 'https://www.edcloud.org/privacy-policy'], ['Accessibility Statement', 'https://www.edcloud.org/accessibility-statement'],
@@ -54,14 +53,6 @@ const shared = await page.evaluate(`(() => { ${helpers}
       col2: qa(footer, ':scope > div:first-child > div:last-child > *').map(el => ({ tag: el.tagName.toLowerCase(), text: t(el), href: el.getAttribute('href') })),
       brand: t(q(footer, ':scope > div:last-child a')),
       copyright: t(q(footer, ':scope > div:last-child span')),
-    },
-    newsletter: {
-      title: t(q(news, 'a')),
-      body: t(q(news, 'p')),
-      emailLabel: t(q(news, 'form label')),
-      consentLabel: t(q(news, 'form label[for="n-consent"] span')),
-      submit: t(q(news, 'form button')),
-      links: qa(news, 'form ~ div a').map(a => ({ label: t(a), href: a.getAttribute('href') })),
     },
   }; })()`);
 

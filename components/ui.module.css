@@ -14,8 +14,7 @@
   padding: 0;
   border-radius: 0;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
   transition:
     background var(--dur) var(--ease),
     color var(--dur) var(--ease);
@@ -25,8 +24,19 @@
   border: 0;
 }
 
+.linkButton::after {
+  content: ">" / "";
+  font-weight: 600;
+  line-height: 1;
+  transition: transform var(--dur) var(--ease);
+}
+
 .linkButton:hover {
   color: var(--growth);
+}
+
+.linkButton:hover::after {
+  transform: translateX(3px);
 }
 
 .primary {

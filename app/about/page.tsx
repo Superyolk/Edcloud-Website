@@ -4,12 +4,15 @@ import { ABOUT_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbLd, pageMeta, personLd, SEO_DESCRIPTION } from '@/content/seo';
 import styles from './about.module.css';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: ABOUT_COPY.meta.title,
-  description: ABOUT_COPY.meta.description,
-};
+  description: SEO_DESCRIPTION.about,
+  path: '/about',
+});
 
 const [mission, partner, numbers] = ABOUT_COPY.titles;
 
@@ -17,6 +20,7 @@ export default function AboutPage() {
   const { hero } = ABOUT_COPY;
   return (
     <>
+      <JsonLd data={[personLd(ABOUT_COPY.partner.paragraphs[0]), breadcrumbLd('About', '/about')]} />
       <SiteHeader />
       <main>
         <section data-screen-label="About hero" className={styles.hero}>
