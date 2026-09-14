@@ -346,19 +346,9 @@
 
 .pressLink {
   font-size: var(--t-body-sm);
+  font-weight: 600;
   color: var(--growth);
   justify-self: start;
-}
-
-.pressLink::after {
-  content: ">" / "";
-  display: inline-block;
-  margin-left: 6px;
-  transition: transform var(--dur) var(--ease);
-}
-
-.pressLink:hover::after {
-  transform: translateX(3px);
 }
 
 .pressLink:hover {

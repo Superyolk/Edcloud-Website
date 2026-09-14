@@ -24,7 +24,7 @@ export default function ServicesPage() {
   return (
     <>
       <JsonLd data={[servicesLd, breadcrumbLd('Services & Results', '/services-and-results')]} />
-      <SiteHeader />
+      <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>
           <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} />
@@ -135,26 +135,26 @@ export default function ServicesPage() {
 
         <SectionShell n={fit.n} title={fit.title} white className={styles.bordered}>
           <div className={styles.fit}>
-            <div className={styles.fitCol}>
-              <h3 className={styles.fitTitle}>{fitYes.title}</h3>
-              <ul className={styles.fitList}>
-                {fitYes.items.map((item) => (
-                  <li key={item} className={`${styles.fitItem} ${styles.fitItemYes}`}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.fitCol}>
-              <h3 className={styles.fitTitle}>{fitNo.title}</h3>
-              <ul className={styles.fitList}>
-                {fitNo.items.map((item) => (
-                  <li key={item} className={styles.fitItem}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {[fitYes, fitNo].map((col, i) => {
+              const yes = i === 0;
+              return (
+                <div key={col.title} className={styles.fitCol}>
+                  <h3 className={styles.fitTitle}>{col.title}</h3>
+                  <ul className={styles.fitList}>
+                    {col.items.map((item) => (
+                      <li key={item} className={styles.fitItem}>
+                        <span aria-hidden="true" className={yes ? `${styles.fitMark} ${styles.fitMarkYes}` : styles.fitMark}>
+                          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                            {yes ? <path d="M4 10.5l4 4 8-9" /> : <path d="M4.5 10h11" />}
+                          </svg>
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         </SectionShell>
 

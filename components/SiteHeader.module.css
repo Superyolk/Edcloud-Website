@@ -62,13 +62,13 @@
 
 .link {
   color: var(--nav-ink);
+  font-weight: 600;
   text-decoration: none;
-  text-underline-offset: 4px;
 }
 
 .link:hover {
   color: var(--nav-ink);
-  text-decoration: underline;
+  opacity: 0.7;
 }
 
 .menuButton {
@@ -120,6 +120,7 @@
   display: block;
   padding: 14px 0;
   color: var(--ink);
+  font-weight: 600;
   text-decoration: none;
 }
 

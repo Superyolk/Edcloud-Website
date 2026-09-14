@@ -21,6 +21,10 @@ export const metadata: Metadata = pageMeta({
 });
 
 const [promise, services, projects, deliverables, press, clients, contact] = HOME_COPY.titles;
+// Select Clients now runs before Press, so the two sections trade section numbers and the
+// counters still read 01…07 down the page.
+const clientsSection = { ...clients, n: press.n };
+const pressSection = { ...press, n: clients.n };
 
 export default function HomePage() {
   const { hero } = HOME_COPY;
@@ -105,15 +109,21 @@ export default function HomePage() {
           </div>
         </SectionShell>
 
-        <SectionShell
-          n={press.n}
-          title={press.title}
-          sectionExtra={
-            <figure className={styles.figure}>
-              <img src={HOME_COPY.press.figureSrc} alt={HOME_COPY.press.figureAlt} className={styles.figureImg} />
-            </figure>
-          }
-        >
+        <figure className={styles.figure}>
+          <img src={HOME_COPY.press.figureSrc} alt={HOME_COPY.press.figureAlt} className={styles.figureImg} />
+        </figure>
+
+        <SectionShell n={clientsSection.n} title={clientsSection.title} white>
+          <ul className={styles.logos}>
+            {HOME.logos.map((l) => (
+              <li key={l.src} className={styles.logoTile}>
+                <img src={l.src} alt={l.alt} loading="lazy" className={styles.logo} />
+              </li>
+            ))}
+          </ul>
+        </SectionShell>
+
+        <SectionShell n={pressSection.n} title={pressSection.title}>
           <ul className={styles.press}>
             {HOME.press.map((p) => (
               <li key={p.href} className={styles.pressRow}>
@@ -127,16 +137,6 @@ export default function HomePage() {
                     {HOME_COPY.press.linkLabel}
                   </a>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </SectionShell>
-
-        <SectionShell n={clients.n} title={clients.title} white>
-          <ul className={styles.logos}>
-            {HOME.logos.map((l) => (
-              <li key={l.src} className={styles.logoTile}>
-                <img src={l.src} alt={l.alt} loading="lazy" className={styles.logo} />
               </li>
             ))}
           </ul>
