@@ -21,7 +21,7 @@ export default function AboutPage() {
   return (
     <>
       <JsonLd data={[personLd(ABOUT_COPY.partner.paragraphs[0]), breadcrumbLd('About', '/about')]} />
-      <SiteHeader />
+      <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="About hero" className={styles.hero}>
           <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} />

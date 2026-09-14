@@ -2,7 +2,10 @@
 
 .hero {
   position: relative;
-  min-height: min(56vh, 480px);
+  /* Sits under the transparent nav, as on the home page: the nav box is --nav-h plus its 1px
+     border, and both have to be pulled up or a strip of page background shows above the image. */
+  margin-top: calc(-1 * var(--nav-h) - 1px);
+  min-height: calc(min(56vh, 480px) + var(--nav-h));
   display: grid;
   align-items: end;
   background: var(--ink);
@@ -27,7 +30,7 @@
   width: 100%;
   max-width: 1248px;
   margin: 0 auto;
-  padding: 96px var(--gutter) 64px;
+  padding: calc(96px + var(--nav-h)) var(--gutter) 64px;
   box-sizing: border-box;
 }
 

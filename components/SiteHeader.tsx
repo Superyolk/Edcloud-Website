@@ -8,7 +8,7 @@ import { isRoute, route } from '@/content/site';
 import styles from './SiteHeader.module.css';
 
 type Props = {
-  /** Home only: start transparent over the hero and turn solid once scrollY > 40. */
+  /** Pages with a full-bleed hero: start transparent over it, fade to solid once scrollY > 40. */
   transparentOverHero?: boolean;
 };
 

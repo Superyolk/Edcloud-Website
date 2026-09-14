@@ -24,19 +24,8 @@
   border: 0;
 }
 
-.linkButton::after {
-  content: ">" / "";
-  font-weight: 600;
-  line-height: 1;
-  transition: transform var(--dur) var(--ease);
-}
-
 .linkButton:hover {
   color: var(--growth);
-}
-
-.linkButton:hover::after {
-  transform: translateX(3px);
 }
 
 .primary {
