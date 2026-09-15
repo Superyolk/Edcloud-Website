@@ -70,10 +70,10 @@ const logos = [
       { source: 'CISION', date: 'Jan 2022', title: 'Social Emotional and Life Readiness Provider Wayfinder Closes $6.6M Series A Round', href: 'https://www.prweb.com/releases/social-emotional-and-life-readiness-provider-wayfinder-closes-6-6-million-series-a-round-868041674.html' }
     ];
 const capabilities = [
-      ['Rapid Product Development and Validation', 'Find the parts of your product that K12 and higher ed buyers actually pay for, and prove it in market fast.'],
-      ['Sales, Marketing, Operations, and Customer Success Transformation', 'Rebuild the revenue team end to end, from first outreach to renewal, so every handoff is clean.'],
+      ['Rapid Testing and Evolution', 'Find the parts of your product that K12 and higher ed buyers actually pay for, and prove it in market fast.'],
+      ['Sales, Marketing, and Retention Transformation', "Rebuild the revenue team end to end, from first outreach to renewal. Find and fix what's slowing you down."],
       ['Hypergrowth Strategy, Tactics, and Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
-      ['Scaling Outreach from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
+      ['Scaling from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
       ['Growth Team Training and Evaluation', 'Hire, coach, and measure the people who will own the motion after we step back.'],
       ['Fundraising and Capital Performance', 'Raise on the strength of a repeatable engine, and put the capital where it compounds.']
     ].map(([label, desc], i) => ({ n: String(i + 1).padStart(2, '0'), label, desc }));
