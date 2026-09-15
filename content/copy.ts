@@ -20,7 +20,7 @@ export const SHARED = {
     },
     {
       "label": "Contact",
-      "href": "EdCloud Home.dc.html"
+      "href": "#contact"
     }
   ],
   "mobileMenu": [
@@ -50,7 +50,7 @@ export const SHARED = {
       {
         "tag": "a",
         "text": "Contact",
-        "href": "EdCloud Home.dc.html",
+        "href": "#contact",
         "ariaLabel": null,
         "svgPath": null
       },

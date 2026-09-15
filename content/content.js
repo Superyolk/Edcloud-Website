@@ -93,10 +93,10 @@ const cases = [
 })();
 export const SERVICES = (() => {
 const proof = [
-      { stat: '30 → 550', label: 'universities in one growth campaign', client: 'Handshake' },
-      { stat: '10% → 90%', label: 'K12 market share in under two years', client: 'Clever' },
-      { stat: '300 → 1.5M', label: 'students using the product', client: 'Wayfinder' },
-      { stat: '$500M', label: 'acquisition by Kahoot', client: 'Clever' }
+      { stat: '30 → 550', label: 'universities in two years', client: 'Handshake' },
+      { stat: '10% → 90%', label: 'US market share in two years', client: 'Clever' },
+      { stat: '300 → 1.5M', label: 'students using the curriculum', client: 'Wayfinder' },
+      { stat: '500K', label: 'teachers served', client: 'Outschool' }
     ];
 const phases = [
       { n: '01', duration: '2 to 3 weeks', title: 'Discovery sprint', body: 'We align on goals, constraints, and the fastest path to value. You leave with a ranked list of what is actually blocking scale and which services address it.' },

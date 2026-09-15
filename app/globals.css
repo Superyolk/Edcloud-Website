@@ -6,6 +6,17 @@ html {
   /* Instrument Sans is loaded with next/font (see app/layout.tsx), which exposes --font-instrument.
      tokens.css defines --font with the family name; this points it at the self-hosted face. */
   --font: var(--font-instrument), system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* An anchor target would otherwise land underneath the sticky nav, hiding its own heading. The
+     nav box is --nav-h plus its 1px bottom border, and a little air is added on top of that. */
+  scroll-padding-top: calc(var(--nav-h) + 1px + 16px);
+}
+
+/* Someone arriving from another page still wants to see where they landed, so the jump is not
+   animated; within a page, a smooth scroll makes the move legible. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
