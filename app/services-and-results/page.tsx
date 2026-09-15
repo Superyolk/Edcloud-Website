@@ -20,7 +20,7 @@ const [bestFor, youGet, timeline] = SERVICES_COPY.dlLabels;
 const [fitYes, fitNo] = SERVICES_COPY.fit;
 
 export default function ServicesPage() {
-  const { hero, start } = SERVICES_COPY;
+  const { hero } = SERVICES_COPY;
   return (
     <>
       <JsonLd data={[servicesLd, breadcrumbLd('Services & Results', '/services-and-results')]} />
@@ -157,23 +157,6 @@ export default function ServicesPage() {
             })}
           </div>
         </SectionShell>
-
-        <section data-screen-label={`${start.n} Start`} className={styles.start}>
-          <div className={styles.startInner}>
-            <span className={styles.startIndex}>{start.n}</span>
-            <div className={styles.startGrid}>
-              <h2 className={styles.startTitle}>{start.h2}</h2>
-              <div className={styles.startActions}>
-                <a href={start.cta.href} className={styles.cta}>
-                  {start.cta.label}
-                </a>
-                <a href={start.email.href} className={styles.email}>
-                  {start.email.label}
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <SiteFooter />
     </>

@@ -8,7 +8,8 @@
   --paper: #F2F9F4;        /* page background (light green) */
   --white: #FFFFFF;        /* cards, Select Clients section, solid nav */
   --growth: #17916B;       /* the ONE accent: stats, active dot, links, focus, hover */
-  --growth-ink: #0F6B4F;   /* link hover */
+  --growth-ink: #0F6B4F;   /* link hover on light grounds */
+  --white-hover: #D3D9E2;  /* link hover on dark grounds (footer, nav over the hero) */
   --black: #000000;        /* footer */
   --footer-text: #C8CDD5;  /* footer secondary text */
   --hero-overlay: rgba(27,36,49,0.42);
