@@ -96,15 +96,45 @@ running JavaScript.
 - **Semantics** — one `<h1>` per page, headings in order, alt text on every image, and the
   Worker's apex→www redirect keeps one canonical host.
 
-## Deploy to Cloudflare (Workers Builds)
+## Deploy to Cloudflare
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository** → `Superyolk/Edcloud-Website`.
-2. Build settings: production branch `main`; **build command** `npm run build`; **deploy command**
-   `npx wrangler deploy`; root directory `/`.
-3. **Settings → Variables and Secrets** → add secret `RESEND_API_KEY`. In Resend, add and verify the
-   `edcloud.org` domain (it gives you a few DNS records) so mail can be sent from `website@edcloud.org`.
-4. Every push to `main` builds and deploys. The Worker gets a `*.workers.dev` URL you can test before
-   any DNS changes.
+Every merge to `main` deploys automatically through `.github/workflows/deploy.yml`, which lints,
+builds, checks the icons and then runs `wrangler deploy`. It needs two repository secrets, under
+**Settings → Secrets and variables → Actions**:
+
+| secret | where to get it |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens → Create Token → **Edit Cloudflare Workers** template |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare → Workers & Pages → Overview, in the right-hand column |
+
+Until both exist the job stops on its first step and says which one is missing, rather than failing
+later inside wrangler. Add them, then re-run the job from the Actions tab, or push anything to
+`main`.
+
+One more secret lives on the Worker itself, not in GitHub: **Workers & Pages → edcloud-website →
+Settings → Variables and Secrets** → add `RESEND_API_KEY`. In Resend, add and verify the
+`edcloud.org` domain (it gives you a few DNS records) so mail can be sent from
+`website@edcloud.org`. Without it the contact form fails gracefully and tells the visitor to email
+directly.
+
+The Worker gets a `*.workers.dev` URL, so you can check a deploy before any DNS changes.
+
+### Workers Builds instead
+
+Cloudflare can also build from the repo itself, configured in the dashboard rather than here:
+**Workers & Pages → Create → Import a repository** → `Superyolk/Edcloud-Website`, production branch
+`main`, build command `npm run build`, deploy command `npx wrangler deploy`, root directory `/`.
+
+Run one or the other. If Workers Builds is connected *and* the workflow above is active, every merge
+deploys twice. To use Workers Builds, delete `.github/workflows/deploy.yml`.
+
+### Deploying by hand
+
+```
+npx wrangler login
+npm run build
+npx wrangler deploy
+```
 
 ## Moving from Wix to Spaceship + Cloudflare
 
