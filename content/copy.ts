@@ -5,8 +5,8 @@
 export const SHARED = {
   "wordmark": "EDCLOUD VENTURE PARTNERS",
   // Hand-edited after generation (like the UC San Diego logo in content.js): the brand mark is
-  // self-hosted from public/ instead of hot-linked from Wix. Source is only 32x32 — replace
-  // public/images/edcloud-mark.png (and public/favicon.ico) when a higher-resolution file exists.
+  // self-hosted from public/ instead of hot-linked from Wix. The mark, the favicon and the Apple
+  // touch icon are all generated from scripts/icon/source.jpg — see scripts/icon/build-icons.py.
   "markSrc": "/images/edcloud-mark.png",
   "markAlt": "EdCloud mark",
   "navLinks": [
