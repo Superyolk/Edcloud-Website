@@ -88,7 +88,7 @@ export default function AboutPage() {
         </SectionShell>
 
         {/* The reference lays the stat cards out directly in the content row (no 72px offset cell). */}
-        <SectionShell n={numbers.n} title={numbers.title} offset={false} bodyClassName={styles.numbers}>
+        <SectionShell n={numbers.n} title={numbers.title} white offset={false} bodyClassName={styles.numbers}>
           {ABOUT_COPY.numbers.map((c) => (
             <div key={c.title} className={styles.numberCard}>
               <span className={styles.stat}>{c.stat}</span>
