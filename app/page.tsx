@@ -21,6 +21,20 @@ export const metadata: Metadata = pageMeta({
 });
 
 const [promise, services, projects, deliverables, press, clients, contact] = HOME_COPY.titles;
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** "Sep 2026" -> a sortable number. Anything unparseable sorts last rather than landing at random. */
+function pressDateKey(date: string): number {
+  const [month, year] = date.trim().split(/\s+/);
+  const m = MONTHS.indexOf(month);
+  const y = Number(year);
+  return m < 0 || !Number.isFinite(y) ? -Infinity : y * 12 + m;
+}
+
+// Newest first, so a story added to content.js lands in the right place without anyone reordering
+// the array by hand. Sorted on a copy; HOME.press keeps the order it was written in.
+const pressItems = [...HOME.press].sort((a, b) => pressDateKey(b.date) - pressDateKey(a.date));
 // Select Clients now runs before Press, so the two sections trade section numbers and the
 // counters still read 01…07 down the page.
 const clientsSection = { ...clients, n: press.n };
@@ -125,7 +139,7 @@ export default function HomePage() {
 
         <SectionShell n={pressSection.n} title={pressSection.title}>
           <ul className={styles.press}>
-            {HOME.press.map((p) => (
+            {pressItems.map((p) => (
               <li key={p.href} className={styles.pressRow}>
                 <div className={styles.pressMeta}>
                   <span>{p.source}</span>
