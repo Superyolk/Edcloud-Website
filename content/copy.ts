@@ -472,9 +472,9 @@ export const SERVICES_COPY = {
   "engagementLead": "We are operators, not advisers. We design the system, build it, turn it on, and then train your team to run it without us. Three phases, each with a named owner and a weekly metric.",
   "whatWeDoLead": "Most clients start with one or two of these. The engine and the operations layer are where the compounding happens.",
   "dlLabels": [
-    "Best for",
-    "You get",
-    "Timeline"
+    "For:",
+    "How:",
+    "When:"
   ],
   "resultsLead": "Four engagements, four starting points, one pattern: a clearer story, a de-risked purchase path, and a pipeline that no longer depends on the founder being in the room.",
   "tableHead": [
