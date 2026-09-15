@@ -34,11 +34,11 @@
   font-size: var(--t-body);
   text-decoration: none;
   justify-self: start;
+  transition: color var(--dur) var(--ease);
 }
 
 .heading:hover {
-  color: var(--white);
-  text-decoration: underline;
+  color: var(--white-hover);
 }
 
 .headingNav {
@@ -49,10 +49,11 @@
   color: var(--white);
   font-weight: 600;
   justify-self: start;
+  transition: color var(--dur) var(--ease);
 }
 
 .white:hover {
-  color: var(--white);
+  color: var(--white-hover);
 }
 
 .book {
@@ -93,10 +94,11 @@
   color: var(--white);
   text-decoration: none;
   font-weight: 600;
+  transition: color var(--dur) var(--ease);
 }
 
 .brand:hover {
-  color: var(--white);
+  color: var(--white-hover);
 }
 
 .brandMark {

@@ -34,6 +34,7 @@ a {
 
 a:hover {
   color: var(--growth-ink);
+  text-decoration: none;
 }
 
 :focus-visible {

@@ -501,17 +501,7 @@ export const SERVICES_COPY = {
         "Your buyers are consumers or small businesses rather than institutions."
       ]
     }
-  ],
-  "start": {
-    "n": "05",
-    "h2": "Start with a 15 minute call.",
-    "cta": {
-      "label": "BOOK A MEETING",
-      "href": "https://calendly.com/aaronsokol/15"
-    },
-    "email": {
-      "label": "info@edcloud.org",
-      "href": "mailto:info@edcloud.org"
-    }
-  }
+  ]
+  // The "05 Start" band (a Calendly "BOOK A MEETING" button) was removed from this page on request:
+  // no booking from Services & Results. The footer's own Book a Meeting link is untouched.
 } as const;
