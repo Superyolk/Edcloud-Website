@@ -48,6 +48,27 @@ phone, message), which emails the message via [Resend](https://resend.com) to `i
 (`CONTACT_TO` overrides). Without `RESEND_API_KEY` it fails gracefully and tells the visitor to
 email directly. There is no newsletter.
 
+## The icons
+
+The brand mark, the favicon and the Apple touch icon are all generated from one source photograph,
+`scripts/icon/source.jpg`, so they can never drift apart:
+
+```
+cd scripts/icon && python3 build-icons.py ../..   # writes the three assets
+python3 scripts/icon/validate-icons.py .          # run from the repo root
+```
+
+The generator lifts the "e" silhouette out of the photograph and redraws the mark on a flat plate.
+The photograph's own lighting gradient and drop shadow made the glyph read as off-centre and the
+corners as uneven, so masking the photograph directly does not work. Each output size is reduced
+once from a 1600px master with its corner radius rendered at the same reduction, which is what keeps
+the anti-aliasing identical on all four corners at 16px as well as 256px.
+
+The validator fails if any corner inset differs from the other three, if a corner is elliptical
+rather than circular, or if the glyph sits more than half a pixel off centre at any size. The Apple
+touch icon stays square and opaque on purpose: iOS applies its own, larger mask and renders
+transparency poorly.
+
 ## SEO
 
 Everything is rendered into the static HTML, so search engines and AI answer engines get it without
