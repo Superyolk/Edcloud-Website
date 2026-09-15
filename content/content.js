@@ -57,6 +57,9 @@ const logos = [
     logos.push({ src: 'https://static.wixstatic.com/media/cea5d3_4c57df8f6bb54f278b60be197b04ed6f~mv2.png/v1/fill/w_600,h_600,al_c,q_85,enc_avif,quality_auto/cea5d3_4c57df8f6bb54f278b60be197b04ed6f~mv2.png', alt: 'Worksheets AI' });
     logos.push({ src: '/images/ucsd-logo.png', alt: 'UC San Diego' });
     const press = [
+      // Added after the handoff. Source, headline and date are taken from the article's own metadata
+      // (og:title and article:published_time), not retyped from the page.
+      { source: 'EdWeek Market Brief', date: 'Sep 2026', title: 'Lemnis, Public Charity Born From NWEA Sale, Makes First K-12 Acquisition', href: 'https://marketbrief.edweek.org/strategy-operations/lemnis-public-charity-born-from-nwea-sale-makes-first-k-12-acquisition/2026/09' },
       { source: 'Built in SF', date: 'Jan 2020', title: "Now Valued at $3.5B, Handshake is Poised to Be Gen Z's Linkedin", href: 'https://www.builtinsf.com/articles/handshake-raises-200m-3b-valuation-hiring' },
       { source: 'The Times', date: 'Aug 2022', title: 'Long Unicorn Status in the Pipeline for Virtual Internships', href: 'https://www.thetimes.com/article/long-unicorn-status-in-the-pipeline-for-virtual-internships-xdrlk75v2' },
       { source: 'Higher Ed Dive', date: 'May 2022', title: 'Zovio Sells Tutoring Services Business Tutor Me for $55M', href: 'https://www.highereddive.com/news/zovio-sells-tutoring-services-business-for-55m/624320/' },
