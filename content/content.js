@@ -74,7 +74,7 @@ const capabilities = [
       ['Sales, Marketing, and Retention Transformation', "Rebuild the revenue team end to end, from first outreach to renewal. Find and fix what's slowing you down."],
       ['Hypergrowth Strategy, Tactics, and Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
       ['Scaling from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
-      ['Growth Team Training and Evaluation', 'Hire, coach, and measure the people who will own the motion after we step back.'],
+      ['Growth Team Training and Evaluation', 'Hire, coach, and empower the people who will carry your business to the next level.'],
       ['Fundraising and Capital Performance', 'Raise on the strength of a repeatable engine, and put the capital where it compounds.']
     ].map(([label, desc], i) => ({ n: String(i + 1).padStart(2, '0'), label, desc }));
     const services = [
