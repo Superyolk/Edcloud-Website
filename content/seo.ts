@@ -2,7 +2,7 @@
 // Everything here restates facts that are already published on the site — name, address, phone,
 // email, the six services, the four client results — so the markup and the page never disagree.
 
-import { SERVICES } from '@/content/content';
+import { HOME, SERVICES } from '@/content/content';
 
 export const SITE_URL = 'https://www.edcloud.org';
 
@@ -78,6 +78,44 @@ export const organizationLd = {
     areaServed: 'US',
     availableLanguage: 'English',
   },
+};
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** "Sep 2026" -> "2026-09". Schema.org accepts a year-month Date; an unparseable one is omitted. */
+function isoMonth(date: string): string | undefined {
+  const [mon, yr] = date.trim().split(/\s+/);
+  const m = MONTHS.indexOf(mon);
+  return m < 0 || !/^\d{4}$/.test(yr) ? undefined : `${yr}-${String(m + 1).padStart(2, '0')}`;
+}
+
+/**
+ * The press list on the home page, made machine-readable.
+ *
+ * Deliberately an ItemList of NewsArticle rather than `subjectOf` on the organization: these
+ * stories are about EdCloud's clients, reported by third parties, not about EdCloud itself.
+ * Claiming otherwise would misstate what the page shows. Headline, publisher, date and URL are
+ * taken from the same entries the page renders.
+ */
+export const pressLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Press coverage of EdCloud clients',
+  itemListOrder: 'https://schema.org/ItemListOrderDescending',
+  numberOfItems: HOME.press.length,
+  itemListElement: [...HOME.press]
+    .sort((a, b) => (isoMonth(b.date) ?? '').localeCompare(isoMonth(a.date) ?? ''))
+    .map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'NewsArticle',
+        headline: p.title,
+        url: p.href,
+        datePublished: isoMonth(p.date),
+        publisher: { '@type': 'Organization', name: p.source },
+      },
+    })),
 };
 
 export const websiteLd = {
