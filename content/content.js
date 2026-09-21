@@ -85,7 +85,7 @@ const capabilities = [
 const cases = [
       { n: '01', stat: '$3.5B', statLabel: 'Handshake was last valued at over $3.5B.', title: 'Join Handshake. 520 Times', body: 'We helped the team at Handshake expand from an initial foothold of 30 universities to over 550 - building and executing one of the fastest and most successful higher education growth campaigns of all time.' },
       { n: '02', stat: '$3B', statLabel: 'Outschool was last valued at over $3B.', title: 'Outschool, Pandemic Mode', body: 'We started working with Outschool during the first month of the pandemic lockdowns, quickly helping their team build an enterprise sales operation and successfully adapt to a dramatically different K12 landscape.' },
-      { n: '03', stat: '$100M', statLabel: 'Wayfinder was last valued at nearly $100M.', title: 'Wayfinding from $0 to $15M ARR', body: 'We started working with the team at Wayfinder when they were doing less than $50k in sales. Today they are used by over a million students, and are the fastest growing SEL company in the United States.' },
+      { n: '03', stat: '$100M', statLabel: 'Wayfinder was last valued at just under $100M.', title: 'Wayfinding from $0 to $15M ARR', body: 'We started working with the team at Wayfinder when they were doing less than $50k in sales. Today they are used by over a million students, and are the fastest growing SEL company in the United States.' },
       { n: '04', stat: '$500M', statLabel: 'Clever was acquired by Kahoot for $500M.', title: 'Get Clever. To 90% Market Share', body: 'We helped build the Clever K12 sales and marketing teams from the ground up, guiding the company from 10% to 90% market share in just under 2 years - the fastest K12 technology takeover ever.' }
     ];
 
@@ -114,7 +114,7 @@ const services = [
     const results = [
       { client: 'Handshake', start: 'A foothold of 30 universities', built: 'One of the fastest higher ed growth campaigns on record', outcome: '550+ universities; last valued at over $3.5B' },
       { client: 'Clever', start: '10% K12 market share', built: 'Sales and marketing teams from the ground up', outcome: '90% share in under 2 years; acquired by Kahoot for $500M' },
-      { client: 'Wayfinder', start: 'Under $50k in sales', built: 'A national K12 sales motion for SEL', outcome: '$15M ARR; over a million students; last valued at over $100M' },
+      { client: 'Wayfinder', start: 'Under $50k in sales', built: 'A national K12 sales motion for SEL', outcome: '$15M ARR; over a million students; last valued at just under $100M' },
       { client: 'Outschool', start: 'Month one of pandemic lockdowns', built: 'An enterprise sales operation for a changed K12 market', outcome: 'Last valued at over $3B' }
     ];
   return { proof, phases, services, results };

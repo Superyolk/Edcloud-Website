@@ -41,7 +41,7 @@ export const SHARED = {
       "href": "https://www.edcloud.org/privacy-policy"
     },
     {
-      "label": "Accessibility Statement",
+      "label": "Accessibility",
       "href": "https://www.edcloud.org/accessibility-statement"
     }
   ],
