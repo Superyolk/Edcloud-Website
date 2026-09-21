@@ -1,10 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from './useMediaQuery';
 import { SHARED } from '@/content/copy';
-import { isRoute, route } from '@/content/site';
+import RouteLink from './RouteLink';
 import styles from './SiteHeader.module.css';
 
 type Props = {
@@ -13,18 +12,6 @@ type Props = {
 };
 
 const MENU_LABELS = { closed: 'Menu', open: 'Close' } as const;
-
-function NavAnchor({ href, className, children }: { href: string; className: string; children: React.ReactNode }) {
-  return isRoute(href) ? (
-    <Link href={route(href)} className={className}>
-      {children}
-    </Link>
-  ) : (
-    <a href={href} className={className}>
-      {children}
-    </a>
-  );
-}
 
 export default function SiteHeader({ transparentOverHero = false }: Props) {
   const [scrolled, setScrolled] = useState(false);
@@ -46,17 +33,17 @@ export default function SiteHeader({ transparentOverHero = false }: Props) {
   return (
     <header className={solid ? styles.header : `${styles.header} ${styles.transparent}`}>
       <nav aria-label="Primary" className={styles.nav}>
-        <Link href="/" className={styles.brand}>
+        <RouteLink href="/" className={styles.brand}>
           {/* eslint-disable-next-line @next/next/no-img-element -- hot-linked brand mark, exact 22px box */}
           <img src={SHARED.markSrc} alt={SHARED.markAlt} width={22} height={22} className={styles.mark} />
           {SHARED.wordmark}
-        </Link>
+        </RouteLink>
         <ul className={styles.links}>
           {SHARED.navLinks.map((l) => (
             <li key={l.label}>
-              <NavAnchor href={l.href} className={styles.link}>
+              <RouteLink href={l.href} className={styles.link}>
                 {l.label}
-              </NavAnchor>
+              </RouteLink>
             </li>
           ))}
         </ul>
@@ -74,9 +61,9 @@ export default function SiteHeader({ transparentOverHero = false }: Props) {
         <ul id="mobile-menu" className={styles.menu}>
           {SHARED.mobileMenu.map((l) => (
             <li key={l.label} className={styles.menuItem}>
-              <NavAnchor href={l.href} className={styles.menuLink}>
+              <RouteLink href={l.href} className={styles.menuLink}>
                 {l.label}
-              </NavAnchor>
+              </RouteLink>
             </li>
           ))}
         </ul>

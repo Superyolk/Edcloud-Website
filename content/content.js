@@ -78,7 +78,7 @@ const capabilities = [
       ['Fundraising and Capital Performance', 'Raise on the strength of a repeatable engine, and put the capital where it compounds.']
     ].map(([label, desc], i) => ({ n: String(i + 1).padStart(2, '0'), label, desc }));
     const services = [
-      { n: '01', title: 'Nationwide Hypergrowth', body: 'From tiny foothold to total ubiquity, our team can help plan and navigate your fastest path to national scale. Dramatically shortcut your sales and marketing learning curve while avoiding costly mistakes, and cut out years of wasted effort by putting our market-proven growth strategies to work.' },
+      { n: '01', title: 'Nationwide Hypergrowth', body: 'From a tiny local foothold to national market leader. Dramatically shortcut your sales and marketing learning curve while avoiding costly mistakes, and cut out years of wasted effort by putting our market-proven growth strategies to work.' },
       { n: '02', title: 'Ubiquitous Market Awareness', body: 'Don\'t just adopt the gold standard. Become one. We have helped build some of the best-known education technology brands ever, from inception to ubiquity - and we can help your company go from "virtually unknown" to "virtually everywhere" faster and more reliably than anybody else.' },
       { n: '03', title: 'Supercharged Product Market Fit', body: 'We can\'t help you work harder - you\'re going to have to do that on your own. But we can help you work smarter and move faster by supercharging the core components of your value prop and PMF that resonate best with K12 and higher education decision makers - focusing on the parts of your product that truly sell.' }
     ];

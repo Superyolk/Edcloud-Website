@@ -11,13 +11,9 @@ html {
   scroll-padding-top: calc(var(--nav-h) + 1px + 16px);
 }
 
-/* Someone arriving from another page still wants to see where they landed, so the jump is not
-   animated; within a page, a smooth scroll makes the move legible. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/* No scroll-behavior: smooth here. It reads nicely on an in-page anchor, but it also turns the
+   App Router's scroll-to-top on navigation into an animation the router then abandons, which
+   leaves you part-way down the page you just opened. Anchors jump instead, which is the trade. */
 
 body {
   margin: 0;
