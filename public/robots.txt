@@ -70,3 +70,7 @@ User-agent: cohere-ai
 Allow: /
 
 Sitemap: https://www.edcloud.org/sitemap.xml
+
+# A plain-text brief of the firm, its services, client results and press coverage, for agents that
+# would rather read prose than parse the pages. Generated from the same content the site renders.
+# https://www.edcloud.org/llms.txt

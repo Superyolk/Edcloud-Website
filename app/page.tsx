@@ -7,7 +7,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
 import JsonLd from '@/components/JsonLd';
-import { organizationLd, pageMeta, SEO_DESCRIPTION, websiteLd } from '@/content/seo';
+import { organizationLd, pageMeta, pressLd, SEO_DESCRIPTION, websiteLd } from '@/content/seo';
 import LinkButton from '@/components/LinkButton';
 import HeroVideo from '@/components/home/HeroVideo';
 import ServicesTabs from '@/components/home/ServicesTabs';
@@ -44,7 +44,7 @@ export default function HomePage() {
   const { hero } = HOME_COPY;
   return (
     <>
-      <JsonLd data={[organizationLd, websiteLd]} />
+      <JsonLd data={[organizationLd, websiteLd, pressLd]} />
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Hero" className={styles.hero}>
@@ -57,7 +57,10 @@ export default function HomePage() {
                 <h1 className={styles.heroTitle}>
                   {hero.h1Lines.map((line, i) => (
                     <Fragment key={line}>
-                      {i > 0 && <br />}
+                      {/* The space matters: a <br> alone yields no word boundary, so a crawler or
+                          screen reader reads the h1 as "GreatEducation Companiesto". It collapses
+                          against the break, so nothing moves on screen. */}
+                      {i > 0 && <> <br /></>}
                       {line}
                     </Fragment>
                   ))}
@@ -165,7 +168,7 @@ export default function HomePage() {
               <h2 className={styles.contactTitle}>
                 {HOME_COPY.contact.h2Lines.map((line, i) => (
                   <Fragment key={line}>
-                    {i > 0 && <br />}
+                    {i > 0 && <> <br /></>}
                     {line}
                   </Fragment>
                 ))}
