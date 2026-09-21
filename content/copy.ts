@@ -57,7 +57,7 @@ export const SHARED = {
       {
         "tag": "a",
         "text": "Book a Meeting",
-        "href": "https://calendly.com/aaronsokol/15",
+        "href": "https://calendar.app.google/4aEoabRCB1K1h2C47",
         "ariaLabel": null,
         "svgPath": null
       },
