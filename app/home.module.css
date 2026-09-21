@@ -220,6 +220,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 24px;
+  /* Three shared rows -- the text block, the hairline, the metric -- so every card's hairline and
+     metric sit on the same line across the row. Cards that wrap onto a second line get their own
+     implicit set of three and align with each other. */
+  grid-template-rows: auto auto auto;
 }
 
 .case {
@@ -227,14 +231,33 @@
   background: var(--white);
   padding: 32px;
   display: grid;
+  /* Inherit the three rows from .cases rather than sizing its own, which is what keeps the
+     hairlines level when one card's title or body runs a line longer than its neighbours'. */
+  grid-row: span 3;
+  grid-template-rows: subgrid;
   gap: 20px;
-  align-content: start;
   box-shadow: var(--shadow-card);
+}
+
+/* Without subgrid, fall back to pinning the hairline and metric to the bottom of the card. Cards
+   in a row are already equal height, so they still line up unless a metric label wraps. */
+@supports not (grid-template-rows: subgrid) {
+  .cases {
+    grid-template-rows: none;
+  }
+
+  .case {
+    grid-row: auto;
+    grid-template-rows: 1fr auto auto;
+  }
 }
 
 .caseTop {
   display: grid;
   gap: 12px;
+  /* The shared row is as tall as the wordiest card, so shorter cards keep their text at the top
+     and leave the slack underneath, rather than stretching to fill it. */
+  align-content: start;
 }
 
 .caseStat {
