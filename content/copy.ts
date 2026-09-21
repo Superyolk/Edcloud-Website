@@ -107,11 +107,6 @@ export const SHARED = {
     "col2": [
       {
         "tag": "a",
-        "text": "Navigate",
-        "href": "EdCloud Home.dc.html"
-      },
-      {
-        "tag": "a",
         "text": "About",
         "href": "EdCloud About.dc.html"
       },
@@ -127,7 +122,7 @@ export const SHARED = {
       },
       {
         "tag": "a",
-        "text": "Accessibility Statement",
+        "text": "Accessibility",
         "href": "https://www.edcloud.org/accessibility-statement"
       }
     ],
