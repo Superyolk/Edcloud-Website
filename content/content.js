@@ -71,7 +71,7 @@ const logos = [
     ];
 const capabilities = [
       ['Rapid Testing and Evolution', 'Find the parts of your product that K12 and higher ed buyers actually pay for, and prove it in market fast.'],
-      ['Sales, Marketing, and Retention Transformation', "Rebuild the revenue team end to end, from first outreach to renewal. Find and fix what's slowing you down."],
+      ['Revenue Transformation', "Rebuild the revenue team end to end, from first outreach to renewal. Find and fix what's slowing you down."],
       ['Hypergrowth Strategy, Tactics, and Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
       ['Scaling from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
       ['Growth Team Training and Evaluation', 'Hire, coach, and empower the people who will carry your business to the next level.'],
@@ -85,7 +85,7 @@ const capabilities = [
 const cases = [
       { n: '01', stat: '$3.5B', statLabel: 'Handshake was last valued at over $3.5B.', title: 'Join Handshake. 520 Times', body: 'We helped the team at Handshake expand from an initial foothold of 30 universities to over 550 - building and executing one of the fastest and most successful higher education growth campaigns of all time.' },
       { n: '02', stat: '$3B', statLabel: 'Outschool was last valued at over $3B.', title: 'Outschool, Pandemic Mode', body: 'We started working with Outschool during the first month of the pandemic lockdowns, quickly helping their team build an enterprise sales operation and successfully adapt to a dramatically different K12 landscape.' },
-      { n: '03', stat: '$100M', statLabel: 'Wayfinder was last valued at over $100M.', title: 'Wayfinding from $0 to $15M ARR', body: 'We started working with the team at Wayfinder when they were doing less than $50k in sales. Today they are used by over a million students, and are the fastest growing SEL company in the United States.' },
+      { n: '03', stat: '$100M', statLabel: 'Wayfinder was last valued at nearly $100M.', title: 'Wayfinding from $0 to $15M ARR', body: 'We started working with the team at Wayfinder when they were doing less than $50k in sales. Today they are used by over a million students, and are the fastest growing SEL company in the United States.' },
       { n: '04', stat: '$500M', statLabel: 'Clever was acquired by Kahoot for $500M.', title: 'Get Clever. To 90% Market Share', body: 'We helped build the Clever K12 sales and marketing teams from the ground up, guiding the company from 10% to 90% market share in just under 2 years - the fastest K12 technology takeover ever.' }
     ];
 

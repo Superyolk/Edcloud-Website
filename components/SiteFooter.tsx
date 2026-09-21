@@ -8,7 +8,8 @@ const { footer } = SHARED;
 const [, book, email, ...rest] = footer.col1;
 const address = rest.filter((r) => r.tag === 'span');
 const linkedin = rest.find((r) => r.tag === 'a' && r.svgPath);
-const [navigate, ...navLinks] = footer.col2;
+// The "Navigate" heading was removed on request, so this column is now just its links.
+const navLinks = footer.col2;
 
 export default function SiteFooter() {
   return (
@@ -35,9 +36,6 @@ export default function SiteFooter() {
           </div>
 
           <div className={styles.col2}>
-            <RouteLink href={navigate.href!} className={`${styles.heading} ${styles.headingNav}`}>
-              {navigate.text}
-            </RouteLink>
             {navLinks.map((l) => (
               <RouteLink key={l.text} href={l.href!} className={styles.white}>
                 {l.text}
