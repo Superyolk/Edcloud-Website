@@ -57,7 +57,8 @@ const logos = [
       { src: '/images/logos/lumi.webp', alt: 'Lumi', w: 213, h: 134 },
       { src: '/images/logos/marble.webp', alt: 'Marble', w: 440, h: 109 },
       { src: '/images/logos/worksheets-ai.webp', alt: 'Worksheets AI', w: 440, h: 440 },
-      { src: '/images/logos/uc-san-diego.webp', alt: 'UC San Diego', w: 358, h: 440 }
+      { src: '/images/logos/uc-san-diego.webp', alt: 'UC San Diego', w: 358, h: 440 },
+      { src: '/images/logos/cal-state-east-bay.webp', alt: 'Cal State East Bay', w: 425, h: 159 }
     ];
     const press = [
       // Added after the handoff. Source, headline and date are taken from the article's own metadata
