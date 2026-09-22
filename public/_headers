@@ -15,3 +15,9 @@
 # The hero loop is a few megabytes and changes about never, so it should be fetched once.
 /video/*
   Cache-Control: public, max-age=2592000, stale-while-revalidate=2592000
+
+# The font files are content-stable: a new cut would ship under a new name. next/font used to put
+# these under /_next/static, which is already immutable; self-hosting moved them out from under
+# that rule, so they get their own.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
