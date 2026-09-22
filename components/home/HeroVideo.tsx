@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type SyntheticEvent } from 'react';
 import { useMediaQuery } from '@/components/useMediaQuery';
 
-type Props = { src: string; className: string };
+type Props = { src: string; webmSrc?: string; className: string };
 
 const subscribeNoop = () => () => {};
 
@@ -11,7 +11,7 @@ const subscribeNoop = () => () => {};
  * Background loop for the home hero. Rendered only on the client and only when the visitor has
  * not asked for reduced motion; the poster <img> underneath is always there as the fallback.
  */
-export default function HeroVideo({ src, className }: Props) {
+export default function HeroVideo({ src, webmSrc, className }: Props) {
   const [atSeam, setAtSeam] = useState(false);
   const ref = useRef<HTMLVideoElement>(null);
   // false during SSR and until hydration, so the video only ever mounts on the client.
@@ -49,6 +49,9 @@ export default function HeroVideo({ src, className }: Props) {
       onTimeUpdate={onTimeUpdate}
       style={{ opacity: atSeam ? 0 : 1 }}
     >
+      {/* WebM first: Chrome, Edge and Firefox take it and it is the better encode. Safari, which
+          does not decode VP9 here, falls through to the H.264 file. */}
+      {webmSrc && <source src={webmSrc} type="video/webm" />}
       <source src={src} type="video/mp4" />
     </video>
   );

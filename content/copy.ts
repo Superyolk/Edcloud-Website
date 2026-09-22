@@ -137,9 +137,10 @@ export const HOME_COPY = {
     "description": "Trusted by Handshake, Clever, Outschool, & Wayfinder - EdCloud Venture Partners helps scale education technology companies from foothold to national ubiquity with field-proven marketing and sales expertise."
   },
   "hero": {
-    "posterSrc": "https://static.wixstatic.com/media/11062b_aa9be95a5d7c43ca974ea1c773b8803df000.jpg/v1/fill/w_1920,h_1080,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_aa9be95a5d7c43ca974ea1c773b8803df000.jpg",
+    "posterSrc": "/images/hero-poster.webp",
     "posterAlt": "Students working together on a campus",
-    "videoSrc": "https://video.wixstatic.com/video/11062b_aa9be95a5d7c43ca974ea1c773b8803d/1080p/mp4/file.mp4",
+    "videoSrc": "/video/hero.mp4",
+    "videoWebmSrc": "/video/hero.webm",
     "h1Lines": [
       "We Bring Great",
       "Education Companies",
@@ -198,11 +199,11 @@ export const HOME_COPY = {
   },
   "press": {
     "linkLabel": "Read The Full Article",
-    "figureSrc": "https://static.wixstatic.com/media/11062b_51f3741c03264d3ebb42126cfb510510~mv2.jpg/v1/fill/w_1450,h_700,q_90,enc_avif,quality_auto/11062b_51f3741c03264d3ebb42126cfb510510~mv2.jpg",
+    "figureSrc": "/images/stairway.webp",
     "figureAlt": "University campus building"
   },
   "contact": {
-    "imgSrc": "https://static.wixstatic.com/media/31d0a93857b149b5ab12ec952dde0516.jpg/v1/fill/w_980,h_653,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Classroom%20Lecture.jpg",
+    "imgSrc": "/images/classroom-lecture.webp",
     "imgAlt": "Classroom Lecture",
     "h2Lines": [
       "Ready to get started?",
@@ -255,7 +256,7 @@ export const ABOUT_COPY = {
     "description": "EdCloud Venture Partners helps post-traction education technology companies scale nationally with operator-led strategy, buyer-centric positioning, sales systems, procurement support, pricing optimization, and RevOps infrastructure to drive predictable growth, stronger adoption, and measurable impact in K-12 and higher education."
   },
   "hero": {
-    "imgSrc": "https://static.wixstatic.com/media/11062b_c4449fb00d5143e5bdb41c3924c507ff~mv2_d_4166_2343_s_2.jpg/v1/fill/w_1920,h_1080,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_c4449fb00d5143e5bdb41c3924c507ff~mv2_d_4166_2343_s_2.jpg",
+    "imgSrc": "/images/hero-about.webp",
     "imgAlt": "Technology Class",
     "h1": "About Us"
   },
@@ -399,7 +400,7 @@ export const ABOUT_COPY = {
     }
   ],
   "partner": {
-    "imgSrc": "https://static.wixstatic.com/media/c8e843_d6fbe6723c2e4c82a536a7c46f6040f9~mv2.png/v1/fill/w_486,h_450,al_c,q_85,enc_avif,quality_auto/headshot%202.png",
+    "imgSrc": "/images/aaron-sokol.webp",
     "imgAlt": "Aaron Sokol",
     "h2": "About Aaron Sokol",
     "paragraphs": [
@@ -437,7 +438,7 @@ export const SERVICES_COPY = {
     "description": "EdCloud helps post-traction education technology companies scale with research-driven go-to-market strategy, buyer insights, pricing and packaging, sales engine design, channel partnerships, smarter procurement paths, and RevOps systems that accelerate adoption in K-12 and higher education markets."
   },
   "hero": {
-    "imgSrc": "https://static.wixstatic.com/media/11062b_73e69c0bfc9b49ce8e001cc70aeeb043~mv2.jpeg/v1/fill/w_1920,h_1080,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_73e69c0bfc9b49ce8e001cc70aeeb043~mv2.jpeg",
+    "imgSrc": "/images/hero-home.webp",
     "imgAlt": "Modern Classroom",
     "h1": "Services & Results",
     "p": "Six operator-run services that take an education company from early traction to national scale. Every one is measured the way your board measures it: pipeline, ARR, ASP, cycle time, NRR."
