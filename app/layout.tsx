@@ -1,20 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { Instrument_Sans } from 'next/font/google';
 import { SHARED } from '@/content/copy';
 import { OG_IMAGE, ORG, SITE_URL } from '@/content/seo';
+import './fonts.css';
 import './tokens.css';
 import './globals.css';
-
-// One family. 400 and 600 carry the design; 500 is used by the Services proof strip and results
-// table header in the reference, so it is loaded too rather than being synthesised.
-const instrumentSans = Instrument_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  display: 'swap',
-  variable: '--font-instrument',
-  adjustFontFallback: false,
-});
 
 /**
  * Tints the browser chrome on mobile to the site's ink, so the address bar stops being a bright
@@ -66,7 +56,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={instrumentSans.variable}>
+    <html lang="en">
+      <head>
+        {/* next/font used to inject this. The latin face is needed for the first paint, so it is
+            fetched alongside the stylesheet rather than after it. The extended-Latin face is left
+            to the unicode-range rule, which only pulls it if a page needs those glyphs. */}
+        <link
+          rel="preload"
+          href="/fonts/instrument-sans-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
