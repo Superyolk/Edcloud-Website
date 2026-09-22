@@ -93,7 +93,7 @@
 
 .partner {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 40px;
   align-items: start;
 }
@@ -124,9 +124,14 @@
 
 .numbers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 24px;
   margin-top: var(--head-gap);
+  /* Three shared rows, the figure, the title and the description, so they line up across every card
+     in a row. Without this each card sized its own rows, and "Dedicated Professionals" wrapping to two
+     lines left the titles 16px apart and the descriptions up to 38px apart. Same fix as the Featured
+     Projects cards on the home page. */
+  grid-template-rows: auto auto auto;
 }
 
 .numberCard {
@@ -134,7 +139,21 @@
   padding: 32px;
   box-shadow: var(--shadow-card);
   display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
   gap: 8px;
+  align-content: start;
+}
+
+@supports not (grid-template-rows: subgrid) {
+  .numbers {
+    grid-template-rows: none;
+  }
+
+  .numberCard {
+    grid-row: auto;
+    grid-template-rows: none;
+  }
 }
 
 .stat {

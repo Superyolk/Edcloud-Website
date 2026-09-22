@@ -15,6 +15,15 @@ html {
    App Router's scroll-to-top on navigation into an animation the router then abandons, which
    leaves you part-way down the page you just opened. Anchors jump instead, which is the trade. */
 
+/* width/height attributes on an <img> tell the browser its shape before the file arrives, so the
+   page does not jump. But the browser also reads them as a fixed pixel height, and that beats a CSS
+   aspect-ratio: it is exactly what stretched the conference photo and the headshot to 1881px tall.
+   height:auto keeps the shape hint and hands the sizing back to CSS. Rules that set an explicit
+   height, like the full-bleed heroes, are more specific than this and still win. */
+img {
+  height: auto;
+}
+
 body {
   margin: 0;
   background: var(--paper);

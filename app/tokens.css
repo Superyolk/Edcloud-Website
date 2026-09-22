@@ -54,3 +54,10 @@
   --dur-nav: 540ms;                            /* the sticky nav fading from transparent to solid */
   --ease: cubic-bezier(.2,.7,.2,1);
 }
+
+/* Phones: a 72px number column left section text barely 180px wide, one or two words a line. */
+@media (max-width: 599px) {
+  :root {
+    --counter-col: 28px;
+  }
+}

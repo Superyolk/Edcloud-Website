@@ -68,6 +68,7 @@ for sz in [(16, 16), (32, 32), (48, 48), (64, 64)]:
     im = Image.open(f'{repo}/public/favicon.ico')
     im.size = sz
     check(f'favicon {sz[0]}', im)
+check('icon-192', Image.open(f'{repo}/public/icon-192.png'))
 check('apple-touch-icon', Image.open(f'{repo}/public/apple-touch-icon.png'), rounded=False)
 
 print()

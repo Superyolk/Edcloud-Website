@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- photos are hot-linked from Wix at a fixed crop; plain <img> keeps the reference's exact boxes */
+/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { SERVICES } from '@/content/content';
 import { SERVICES_COPY } from '@/content/copy';
@@ -27,7 +27,7 @@ export default function ServicesPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={2508} height={1881} />
+          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={1920} height={1080} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -122,9 +122,15 @@ export default function ServicesPage() {
                   {SERVICES.results.map((r) => (
                     <tr key={r.client}>
                       <td className={`${styles.td} ${styles.tdClient}`}>{r.client}</td>
-                      <td className={styles.td}>{r.start}</td>
-                      <td className={styles.td}>{r.built}</td>
-                      <td className={`${styles.td} ${styles.tdOutcome}`}>{r.outcome}</td>
+                      <td className={styles.td} data-label={SERVICES_COPY.tableHead[1]}>
+                        {r.start}
+                      </td>
+                      <td className={styles.td} data-label={SERVICES_COPY.tableHead[2]}>
+                        {r.built}
+                      </td>
+                      <td className={`${styles.td} ${styles.tdOutcome}`} data-label={SERVICES_COPY.tableHead[3]}>
+                        {r.outcome}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

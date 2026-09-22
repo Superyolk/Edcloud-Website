@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { SHARED } from '@/content/copy';
 import { OG_IMAGE, ORG, SITE_URL } from '@/content/seo';
 import './fonts.css';
 import './tokens.css';
@@ -35,7 +34,12 @@ export const metadata: Metadata = {
     'growth consulting',
   ],
   icons: {
-    icon: [{ url: '/favicon.ico', sizes: '32x32' }, { url: SHARED.markSrc, type: 'image/png', sizes: '100x100' }],
+    // Google Search shows the largest square rel=icon it can crawl on the home page; 192px is a
+    // multiple of 48 as it recommends. The .ico carries the small sizes browsers ask for.
+    icon: [
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/favicon.ico', sizes: '16x16 32x32 48x48 64x64' },
+    ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   openGraph: {
