@@ -81,6 +81,9 @@ if __name__ == '__main__':
                     sizes=[(16, 16), (32, 32), (48, 48), (64, 64)],
                     append_images=frames[:-1])
 
+    # Google Search's favicon: a square PNG in a multiple of 48px, linked from the home page.
+    render(base, 192, transparent=True).save(f'{repo}/public/icon-192.png')
+
     # iOS applies its own, larger mask and renders transparency poorly, so this one stays square.
     render(base, 180, transparent=False).save(f'{repo}/public/apple-touch-icon.png')
-    print('wrote mark (256), favicon (16/32/48/64), apple-touch-icon (180)')
+    print('wrote mark (256), favicon (16/32/48/64), icon-192, apple-touch-icon (180)')

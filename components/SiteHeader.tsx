@@ -13,6 +13,10 @@ type Props = {
 
 const MENU_LABELS = { closed: 'Menu', open: 'Close' } as const;
 
+// "EDCLOUD" always shows; "VENTURE PARTNERS" drops on the narrowest phones so Menu stays on screen.
+const [wordmarkHead, ...wordmarkRest] = SHARED.wordmark.split(' ');
+const wordmarkTail = wordmarkRest.join(' ');
+
 export default function SiteHeader({ transparentOverHero = false }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,9 +38,12 @@ export default function SiteHeader({ transparentOverHero = false }: Props) {
     <header className={solid ? styles.header : `${styles.header} ${styles.transparent}`}>
       <nav aria-label="Primary" className={styles.nav}>
         <RouteLink href="/" className={styles.brand}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- hot-linked brand mark, exact 22px box */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted brand mark, exact 22px box */}
           <img src={SHARED.markSrc} alt={SHARED.markAlt} width={22} height={22} className={styles.mark} />
-          {SHARED.wordmark}
+          <span>
+            {wordmarkHead}
+            <span className={styles.wordmarkTail}> {wordmarkTail}</span>
+          </span>
         </RouteLink>
         <ul className={styles.links}>
           {SHARED.navLinks.map((l) => (

@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- every photo and logo is hot-linked from Wix at a fixed crop; plain <img> keeps the reference's exact boxes */
+/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { Fragment } from 'react';
 import { HOME } from '@/content/content';
@@ -118,7 +118,7 @@ export default function HomePage() {
             <div className={styles.deliverablesIntro}>
               <p className={styles.lead}>{HOME_COPY.deliverables.lead}</p>
               <div className={styles.photoCard}>
-                <img src={HOME_COPY.deliverables.imgSrc} alt={HOME_COPY.deliverables.imgAlt} className={styles.photo} width={2508} height={1881} />
+                <img src={HOME_COPY.deliverables.imgSrc} alt={HOME_COPY.deliverables.imgAlt} className={styles.photo} width={1200} height={900} />
               </div>
             </div>
             <ol className={styles.capabilities}>
@@ -171,7 +171,7 @@ export default function HomePage() {
         <SectionShell n={contact.n} title={contact.title} id="contact">
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
-              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={2508} height={1881} />
+              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={980} height={653} />
             </div>
             <div className={styles.contactCard}>
               <h2 className={styles.contactTitle}>

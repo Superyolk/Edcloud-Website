@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- photos are hot-linked from Wix at a fixed crop; plain <img> keeps the reference's exact boxes */
+/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { ABOUT_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
@@ -24,7 +24,7 @@ export default function AboutPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="About hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={2508} height={1881} />
+          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={1920} height={1080} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
         <SectionShell n={partner.n} title={partner.title} white>
           <div className={styles.partner}>
-            <img src={ABOUT_COPY.partner.imgSrc} alt={ABOUT_COPY.partner.imgAlt} className={styles.headshot} width={2508} height={1881} />
+            <img src={ABOUT_COPY.partner.imgSrc} alt={ABOUT_COPY.partner.imgAlt} className={styles.headshot} width={486} height={450} />
             <div className={styles.partnerText}>
               <h2 className={styles.h2}>{ABOUT_COPY.partner.h2}</h2>
               {ABOUT_COPY.partner.paragraphs.map((text, i) => (

@@ -194,7 +194,7 @@ export const HOME_COPY = {
   "servicesLink": "Services & Results",
   "deliverables": {
     "lead": "EdCloud can help with everything it takes to move from founder-led sales to a momentum growth engine that never stops working.",
-    "imgSrc": "/images/conference-room.jpg",
+    "imgSrc": "/images/conference-room.webp",
     "imgAlt": "Educators at a district conference"
   },
   "press": {
@@ -337,7 +337,7 @@ export const ABOUT_COPY = {
           "text": "we stand up a national sales engine for K12 and higher ed rollouts: territory plans, account lists, sequences, demo flows, partner channels, and the collateral that moves deals forward."
         },
         {
-          "lead": "Make procurement eas:",
+          "lead": "Make procurement easy:",
           "text": "we reduce friction with RFP playbooks, sole-source/justification language, security/privacy documentation, and contracting guidance that respects institutional realities."
         },
         {
@@ -364,7 +364,7 @@ export const ABOUT_COPY = {
     },
     {
       "tag": "p",
-      "text": "As the portfolio of wins piled up, so did our conviction: the market didn’t need another consultancy writing decks; it needed operators who could design the system, build it, and turn it on - and then teach an internal team to run it long after we’re gone. That’s the our approach today."
+      "text": "As the portfolio of wins piled up, so did our conviction: the market didn’t need another consultancy writing decks; it needed operators who could design the system, build it, and turn it on - and then teach an internal team to run it long after we’re gone. That’s our approach today."
     },
     {
       "tag": "h3",
@@ -372,7 +372,7 @@ export const ABOUT_COPY = {
     },
     {
       "tag": "p",
-      "text": "We work with seed to Series B teams selling into K12 districts,colleges and universities, and workforce/enterprise learning programs. Ideal partners have meaningful early traction (a product that solves a real problem for students, educators, or administrators) and are ready to transition from founder-led sales to a repeatable revenue engine. We’re especially effective when stakes are high: multi-district deployments, campus-wide rollouts, and go-to-market pivots where the cost of getting it wrong is measured in lost academic years."
+      "text": "We work with seed to Series B teams selling into K12 districts, colleges and universities, and workforce/enterprise learning programs. Ideal partners have meaningful early traction (a product that solves a real problem for students, educators, or administrators) and are ready to transition from founder-led sales to a repeatable revenue engine. We’re especially effective when stakes are high: multi-district deployments, campus-wide rollouts, and go-to-market pivots where the cost of getting it wrong is measured in lost academic years."
     },
     {
       "tag": "h3",
@@ -404,7 +404,7 @@ export const ABOUT_COPY = {
     "imgAlt": "Aaron Sokol",
     "h2": "About Aaron Sokol",
     "paragraphs": [
-      "Aaron Sokol is the founder and Managing Partner of EdCloud Venture Partners, a California-based growth consultancy that helps post-traction education technology companies scale from early traction to national adoption. With 20+ years in education finance, edtech, and enterprise sales and marketing, Aaron has helped build and lead high-capacity growth teams at companies like Handshake, Clever, Edvisorly, Wayfinder, and GiveCampus - guiding them from initial foothold to category leadership across K-12 and higher ed.",
+      "Aaron Sokol is the founder and Managing Partner of EdCloud Venture Partners, a California-based growth consultancy that helps post-traction education technology companies scale from early traction to national adoption. With 20+ years in education finance, edtech, and enterprise sales and marketing, Aaron has helped build and lead high-capacity growth teams at companies like Handshake, Clever, EdVisorly, Wayfinder, and GiveCampus - guiding them from initial foothold to category leadership across K-12 and higher ed.",
       "Aaron is based in San Francisco, where he lives with his wife and kids."
     ]
   },
@@ -412,7 +412,7 @@ export const ABOUT_COPY = {
     {
       "stat": "22",
       "title": "Years of Experience",
-      "body": "A proven track record of success in education technology marketing and sales"
+      "body": "A proven track record of success in education technology marketing and sales."
     },
     {
       "stat": "14",
@@ -438,7 +438,7 @@ export const SERVICES_COPY = {
     "description": "EdCloud helps post-traction education technology companies scale with research-driven go-to-market strategy, buyer insights, pricing and packaging, sales engine design, channel partnerships, smarter procurement paths, and RevOps systems that accelerate adoption in K-12 and higher education markets."
   },
   "hero": {
-    "imgSrc": "/images/hero-home.webp",
+    "imgSrc": "/images/hero-services.webp",
     "imgAlt": "Modern Classroom",
     "h1": "Services & Results",
     "p": "Six operator-run services that take an education company from early traction to national scale. Every one is measured the way your board measures it: pipeline, ARR, ASP, cycle time, NRR."

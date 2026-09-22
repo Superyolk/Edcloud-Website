@@ -67,7 +67,7 @@
   margin: 0 auto;
   padding: 40px var(--gutter);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 32px;
 }
 
@@ -127,7 +127,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 24px;
 }
 
@@ -326,6 +326,51 @@
 .tdOutcome {
   color: var(--growth);
   font-weight: 600;
+}
+
+/* Phones and small tablets: a 640px table in a 250px card hid three of the four columns behind a sideways scroll.
+   Each client becomes its own block instead, with the column name above every value. */
+@media (max-width: 799px) {
+  .table {
+    min-width: 0;
+  }
+
+  /* Every value carries its own visible column name below, so the header row is redundant. */
+  .table thead {
+    display: none;
+  }
+
+  .table tbody,
+  .table tr,
+  .td {
+    display: block;
+  }
+
+  .table tr {
+    padding: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .td + .td {
+    margin-top: 12px;
+  }
+
+  .td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--slate);
+    font-size: var(--t-small);
+    font-weight: 500;
+  }
 }
 
 /* ---------- 04 Is this a fit ---------- */
