@@ -90,13 +90,6 @@ export const SHARED = {
         "svgPath": null
       },
       {
-        "tag": "span",
-        "text": "Fax: 510-306-2403",
-        "href": null,
-        "ariaLabel": null,
-        "svgPath": null
-      },
-      {
         "tag": "a",
         "text": "",
         "href": "https://www.linkedin.com/company/edcloud-llc",

@@ -2,61 +2,62 @@
 // Copied from "EdCloud Website/design_handoff_edcloud_site/content.js" with two mechanical fixes:
 //   1. the shipped file redeclared `const press`, `const services` and `const results` and pushed the last two
 //      logos twice (a SyntaxError, and 50 logos instead of 48) — the duplicate blocks are removed;
-//   2. the one local logo (UC San Diego) points at /images/ucsd-logo.png (the same file, copied to public/).
+//   2. the one local logo (UC San Diego) was a PNG; it now sits with the others as /images/logos/uc-san-diego.webp.
 // No string was retyped.
 export const HOME = (() => {
 const logos = [
       // Self-hosted. These were hot-linked from static.wixstatic.com until the Wix account was
-      // closed; each is now a local WebP at up to 440px, twice the 220px box it renders in, and
-      // carries its intrinsic w/h so the grid reserves space before the file arrives.
-      { src: '/images/logos/desmos.webp', alt: 'Desmos', w: 440, h: 126 },
+      // closed; each is now a local WebP trimmed to its artwork (scripts/logos/trim-logos.py) at up
+      // to 440px. w/h are the trimmed file's own size: the wall sizes every logo from its shape,
+      // and the grid reserves space before the file arrives. Emerson Collective was listed twice;
+      // the sharper of its two files is the one kept.
+      { src: '/images/logos/desmos.webp', alt: 'Desmos', w: 363, h: 78 },
       { src: '/images/logos/clever.webp', alt: 'Clever', w: 382, h: 102 },
-      { src: '/images/logos/first-round.webp', alt: 'First Round', w: 440, h: 440 },
-      { src: '/images/logos/lausd.webp', alt: 'LAUSD', w: 440, h: 128 },
+      { src: '/images/logos/first-round.webp', alt: 'First Round', w: 326, h: 326 },
+      { src: '/images/logos/lausd.webp', alt: 'LAUSD', w: 436, h: 126 },
       { src: '/images/logos/project-wayfinder.webp', alt: 'Project Wayfinder', w: 348, h: 113 },
-      { src: '/images/logos/reach-capital.webp', alt: 'Reach Capital', w: 440, h: 156 },
-      { src: '/images/logos/tutorme.webp', alt: 'TutorMe', w: 440, h: 118 },
+      { src: '/images/logos/reach-capital.webp', alt: 'Reach Capital', w: 393, h: 115 },
+      { src: '/images/logos/tutorme.webp', alt: 'TutorMe', w: 424, h: 88 },
       { src: '/images/logos/green-dot.webp', alt: 'Green Dot', w: 310, h: 138 },
-      { src: '/images/logos/edthena.webp', alt: 'Edthena', w: 203, h: 158 },
-      { src: '/images/logos/amplify.webp', alt: 'Amplify', w: 354, h: 158 },
-      { src: '/images/logos/wonderschool.webp', alt: 'Wonderschool', w: 440, h: 65 },
+      { src: '/images/logos/edthena.webp', alt: 'Edthena', w: 177, h: 143 },
+      { src: '/images/logos/amplify.webp', alt: 'Amplify', w: 336, h: 88 },
+      { src: '/images/logos/wonderschool.webp', alt: 'Wonderschool', w: 427, h: 58 },
       { src: '/images/logos/uc-berkeley.webp', alt: 'UC Berkeley', w: 204, h: 123 },
-      { src: '/images/logos/booknook.webp', alt: 'BookNook', w: 405, h: 291 },
-      { src: '/images/logos/everfi.webp', alt: 'EVERFI', w: 283, h: 48 },
+      { src: '/images/logos/booknook.webp', alt: 'BookNook', w: 364, h: 55 },
+      { src: '/images/logos/everfi.webp', alt: 'EVERFI', w: 281, h: 48 },
       { src: '/images/logos/cover.webp', alt: 'Cover', w: 214, h: 75 },
-      { src: '/images/logos/tcsa.webp', alt: 'TCSA', w: 440, h: 318 },
+      { src: '/images/logos/tcsa.webp', alt: 'TCSA', w: 370, h: 259 },
       { src: '/images/logos/handshake.webp', alt: 'Handshake', w: 440, h: 70 },
       { src: '/images/logos/berkeley-city-college.webp', alt: 'Berkeley City College', w: 309, h: 168 },
-      { src: '/images/logos/otherlab.webp', alt: 'Otherlab', w: 440, h: 146 },
-      { src: '/images/logos/emerson-collective.webp', alt: 'Emerson Collective', w: 440, h: 228 },
+      { src: '/images/logos/otherlab.webp', alt: 'Otherlab', w: 428, h: 129 },
+      { src: '/images/logos/emerson-collective.webp', alt: 'Emerson Collective', w: 430, h: 114 },
       { src: '/images/logos/bullseye.webp', alt: 'Bullseye', w: 440, h: 219 },
-      { src: '/images/logos/lindsay-leads.webp', alt: 'Lindsay Leads', w: 440, h: 129 },
-      { src: '/images/logos/classavo.webp', alt: 'Classavo', w: 278, h: 100 },
-      { src: '/images/logos/youth-radio.webp', alt: 'Youth Radio', w: 440, h: 243 },
-      { src: '/images/logos/codehs.webp', alt: 'CodeHS', w: 440, h: 118 },
-      { src: '/images/logos/hgp.webp', alt: 'HGP', w: 286, h: 178 },
-      { src: '/images/logos/rethink-capital-management.webp', alt: 'Rethink Capital Management', w: 213, h: 123 },
-      { src: '/images/logos/sfusd.webp', alt: 'SFUSD', w: 440, h: 440 },
-      { src: '/images/logos/ousd.webp', alt: 'OUSD', w: 316, h: 83 },
+      { src: '/images/logos/lindsay-leads.webp', alt: 'Lindsay Leads', w: 431, h: 118 },
+      { src: '/images/logos/classavo.webp', alt: 'Classavo', w: 278, h: 54 },
+      { src: '/images/logos/youth-radio.webp', alt: 'Youth Radio', w: 419, h: 205 },
+      { src: '/images/logos/codehs.webp', alt: 'CodeHS', w: 398, h: 118 },
+      { src: '/images/logos/hgp.webp', alt: 'HGP', w: 211, h: 105 },
+      { src: '/images/logos/rethink-capital-management.webp', alt: 'Rethink Capital Management', w: 200, h: 85 },
+      { src: '/images/logos/sfusd.webp', alt: 'SFUSD', w: 389, h: 410 },
+      { src: '/images/logos/ousd.webp', alt: 'OUSD', w: 299, h: 80 },
       { src: '/images/logos/y-combinator.webp', alt: 'Y Combinator', w: 440, h: 157 },
-      { src: '/images/logos/nyu.webp', alt: 'NYU', w: 440, h: 110 },
-      { src: '/images/logos/sf-state.webp', alt: 'San Francisco State University', w: 205, h: 205 },
-      { src: '/images/logos/pearson.webp', alt: 'Pearson', w: 431, h: 139 },
+      { src: '/images/logos/nyu.webp', alt: 'NYU', w: 423, h: 94 },
+      { src: '/images/logos/sf-state.webp', alt: 'San Francisco State University', w: 205, h: 127 },
+      { src: '/images/logos/pearson.webp', alt: 'Pearson', w: 393, h: 110 },
       { src: '/images/logos/cfund.webp', alt: 'CFund', w: 440, h: 205 },
-      { src: '/images/logos/givecampus.webp', alt: 'GiveCampus', w: 310, h: 61 },
-      { src: '/images/logos/stellic.webp', alt: 'Stellic', w: 440, h: 162 },
-      { src: '/images/logos/virtual-internships.webp', alt: 'Virtual Internships', w: 440, h: 150 },
-      { src: '/images/logos/breathe-for-change.webp', alt: 'Breathe For Change', w: 440, h: 440 },
-      { src: '/images/logos/wiley.webp', alt: 'Wiley', w: 440, h: 147 },
+      { src: '/images/logos/givecampus.webp', alt: 'GiveCampus', w: 288, h: 35 },
+      { src: '/images/logos/stellic.webp', alt: 'Stellic', w: 354, h: 74 },
+      { src: '/images/logos/virtual-internships.webp', alt: 'Virtual Internships', w: 420, h: 129 },
+      { src: '/images/logos/breathe-for-change.webp', alt: 'Breathe For Change', w: 405, h: 440 },
+      { src: '/images/logos/wiley.webp', alt: 'Wiley', w: 348, h: 79 },
       { src: '/images/logos/edvisorly.webp', alt: 'EdVisorly', w: 440, h: 83 },
       { src: '/images/logos/answersai-mobile.webp', alt: 'AnswersAi Mobile', w: 440, h: 84 },
-      { src: '/images/logos/teachfx.webp', alt: 'TeachFX', w: 440, h: 99 },
-      { src: '/images/logos/emerson-collective-2.webp', alt: 'Emerson Collective', w: 440, h: 220 },
-      { src: '/images/logos/newschools-venture-fund.webp', alt: 'NewSchools Venture Fund', w: 440, h: 172 },
-      { src: '/images/logos/lumi.webp', alt: 'Lumi', w: 224, h: 147 },
-      { src: '/images/logos/marble.webp', alt: 'Marble', w: 440, h: 116 },
+      { src: '/images/logos/teachfx.webp', alt: 'TeachFX', w: 434, h: 90 },
+      { src: '/images/logos/newschools-venture-fund.webp', alt: 'NewSchools Venture Fund', w: 360, h: 84 },
+      { src: '/images/logos/lumi.webp', alt: 'Lumi', w: 213, h: 134 },
+      { src: '/images/logos/marble.webp', alt: 'Marble', w: 440, h: 109 },
       { src: '/images/logos/worksheets-ai.webp', alt: 'Worksheets AI', w: 440, h: 440 },
-      { src: '/images/ucsd-logo.png', alt: 'UC San Diego', w: 734, h: 901 }
+      { src: '/images/logos/uc-san-diego.webp', alt: 'UC San Diego', w: 358, h: 440 }
     ];
     const press = [
       // Added after the handoff. Source, headline and date are taken from the article's own metadata

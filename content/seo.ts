@@ -56,7 +56,6 @@ export const organizationLd = {
   description: ORG.description,
   email: ORG.email,
   telephone: ORG.telephone,
-  faxNumber: ORG.telephone,
   address: postalAddress,
   sameAs: [ORG.linkedIn],
   areaServed: { '@type': 'Country', name: 'United States' },
