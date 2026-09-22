@@ -44,3 +44,6 @@ next-env.d.ts
 /playwright-report/
 /scripts/visual-diff-output/
 edcloud-preview.html
+
+# Mobile QA harness output (scripts/qa)
+/scripts/qa/output/

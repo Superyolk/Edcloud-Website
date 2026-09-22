@@ -12,7 +12,17 @@
     "serve:reference": "serve \"EdCloud Website/design_handoff_edcloud_site/reference\" -l 4174 --no-clipboard -c ../../../scripts/serve-reference.json",
     "test:visual": "playwright test scripts/visual-diff.spec.ts",
     "test:interactions": "playwright test scripts/interactions.spec.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "//qa": "Mobile-redesign QA harness (scripts/qa/). Each serves out/ on :4180 (building if missing) unless QA_BASE_URL is set. See docs/mobile/BASELINE.md.",
+    "qa:all": "node scripts/qa/all.mjs",
+    "qa:matrix": "node scripts/qa/matrix.mjs",
+    "qa:golden": "node scripts/qa/parity.mjs golden",
+    "qa:desktop-parity": "node scripts/qa/parity.mjs",
+    "qa:mobile-lint": "node scripts/qa/mobile-lint.mjs",
+    "qa:a11y": "node scripts/qa/a11y.mjs",
+    "qa:perf": "node scripts/qa/perf.mjs",
+    "qa:bytes": "node scripts/qa/bytes.mjs",
+    "qa:content": "node scripts/qa/content.mjs"
   },
   "dependencies": {
     "next": "16.3.4",
@@ -20,6 +30,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "1.63.0",
     "@types/node": "^24",
     "@types/pixelmatch": "^5.2.6",
