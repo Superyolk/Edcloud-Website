@@ -11,3 +11,7 @@
 
 /images/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+# The hero loop is a few megabytes and changes about never, so it should be fetched once.
+/video/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=2592000

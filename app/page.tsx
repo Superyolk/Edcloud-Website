@@ -48,7 +48,16 @@ export default function HomePage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Hero" className={styles.hero}>
-          <img src={hero.posterSrc} alt={hero.posterAlt} className={styles.heroLayer} />
+          {/* The largest-contentful paint on the home page: sized so the hero reserves its space,
+              and fetched at high priority rather than competing with the logo grid below. */}
+          <img
+            src={hero.posterSrc}
+            alt={hero.posterAlt}
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            className={styles.heroLayer}
+          />
           <HeroVideo src={hero.videoSrc} webmSrc={hero.videoWebmSrc} className={`${styles.heroLayer} ${styles.heroVideo}`} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
@@ -109,7 +118,7 @@ export default function HomePage() {
             <div className={styles.deliverablesIntro}>
               <p className={styles.lead}>{HOME_COPY.deliverables.lead}</p>
               <div className={styles.photoCard}>
-                <img src={HOME_COPY.deliverables.imgSrc} alt={HOME_COPY.deliverables.imgAlt} className={styles.photo} />
+                <img src={HOME_COPY.deliverables.imgSrc} alt={HOME_COPY.deliverables.imgAlt} className={styles.photo} width={2508} height={1881} />
               </div>
             </div>
             <ol className={styles.capabilities}>
@@ -127,14 +136,14 @@ export default function HomePage() {
         </SectionShell>
 
         <figure className={styles.figure}>
-          <img src={HOME_COPY.press.figureSrc} alt={HOME_COPY.press.figureAlt} className={styles.figureImg} />
+          <img src={HOME_COPY.press.figureSrc} alt={HOME_COPY.press.figureAlt} className={styles.figureImg} width={1450} height={700} />
         </figure>
 
         <SectionShell n={clientsSection.n} title={clientsSection.title} white>
           <ul className={styles.logos}>
             {HOME.logos.map((l) => (
               <li key={l.src} className={styles.logoTile}>
-                <img src={l.src} alt={l.alt} loading="lazy" className={styles.logo} />
+                <img src={l.src} alt={l.alt} width={l.w} height={l.h} loading="lazy" decoding="async" className={styles.logo} />
               </li>
             ))}
           </ul>
@@ -162,7 +171,7 @@ export default function HomePage() {
         <SectionShell n={contact.n} title={contact.title} id="contact">
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
-              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} />
+              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={2508} height={1881} />
             </div>
             <div className={styles.contactCard}>
               <h2 className={styles.contactTitle}>
