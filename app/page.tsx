@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
-import { Fragment } from 'react';
+import { Fragment, type CSSProperties } from 'react';
 import { HOME } from '@/content/content';
 import { HOME_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
@@ -34,6 +34,15 @@ function pressDateKey(date: string): number {
 
 // Newest first, so a story added to content.js lands in the right place without anyone reordering
 // the array by hand. Sorted on a copy; HOME.press keeps the order it was written in.
+// Client logos are sized by shape, not by box: each gets about the same ink area, so a square
+// crest and a long wordmark carry equal weight on the wall. Capped at 200px wide and 88px tall.
+const LOGO_AREA = 9000;
+function logoStyle(w: number, h: number): CSSProperties {
+  const ratio = w / h;
+  const width = Math.min(Math.sqrt(LOGO_AREA * ratio), 200, 88 * ratio);
+  return { '--logo-w': `${Math.round(width)}px` } as CSSProperties;
+}
+
 const pressItems = [...HOME.press].sort((a, b) => pressDateKey(b.date) - pressDateKey(a.date));
 // Select Clients now runs before Press, so the two sections trade section numbers and the
 // counters still read 01…07 down the page.
@@ -143,7 +152,16 @@ export default function HomePage() {
           <ul className={styles.logos}>
             {HOME.logos.map((l) => (
               <li key={l.src} className={styles.logoTile}>
-                <img src={l.src} alt={l.alt} width={l.w} height={l.h} loading="lazy" decoding="async" className={styles.logo} />
+                <img
+                  src={l.src}
+                  alt={l.alt}
+                  width={l.w}
+                  height={l.h}
+                  loading="lazy"
+                  decoding="async"
+                  className={styles.logo}
+                  style={logoStyle(l.w, l.h)}
+                />
               </li>
             ))}
           </ul>

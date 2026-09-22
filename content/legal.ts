@@ -1,4 +1,5 @@
-// Privacy Policy and Accessibility Statement — the live edcloud.org copy, verbatim.
+// Privacy Policy and Accessibility Statement — the live edcloud.org copy, verbatim, plus the Privacy
+// Policy's effective date (the old copy referred to one but never stated it).
 export type LegalBlock = { tag: 'h3'; text: string } | { tag: 'p'; text: string } | { tag: 'ul'; items: string[] };
 
 export const PRIVACY = {
@@ -6,6 +7,7 @@ export const PRIVACY = {
   n: '01',
   title: 'Privacy Policy',
   blocks: [
+    { tag: 'p', text: 'Effective date: September 22, 2026' },
     { tag: 'h3', text: 'Information we collect' },
     { tag: 'ul', items: [
       'Information you provide: contact details, company information, messages, and content you submit via forms, email, or meetings.',

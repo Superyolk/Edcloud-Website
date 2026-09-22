@@ -412,16 +412,28 @@
 
 /* ---------- 06 Select Clients ---------- */
 
+/* Flex rather than grid so a short last row sits centred instead of leaving a hole at the end.
+   Four tiles a row where the section is wide enough for four 220px tiles, three below that. */
 .logos {
+  --cols: 4;
+  --gap: 24px;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100% / 3 - 16px, 220px), 1fr));
-  gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+@media (max-width: 1087px) {
+  .logos {
+    --cols: 3;
+  }
 }
 
 .logoTile {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   background: var(--white);
   height: 132px;
   display: flex;
@@ -432,11 +444,26 @@
 }
 
 .logo {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
+  width: min(var(--logo-w), 100%);
   height: auto;
+  max-height: 100%;
   object-fit: contain;
+}
+
+/* Phones: three narrow tiles a row. Less padding gives the logos the room, at half their desktop size. */
+@media (max-width: 599px) {
+  .logos {
+    --gap: 12px;
+  }
+
+  .logoTile {
+    height: 72px;
+    padding: 8px;
+  }
+
+  .logo {
+    width: min(calc(var(--logo-w) * 0.5), 100%);
+  }
 }
 
 /* ---------- 07 Contact Us ---------- */
