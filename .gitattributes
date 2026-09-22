@@ -1,0 +1,3 @@
+# qa:content compares these byte for byte against what the server returns (LF); keep autocrlf off them.
+scripts/qa/content-snapshot/** text eol=lf
+*.png binary
