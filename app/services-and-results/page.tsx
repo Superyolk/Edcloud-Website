@@ -27,7 +27,7 @@ export default function ServicesPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} />
+          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={2508} height={1881} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>

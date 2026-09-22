@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Instrument_Sans } from 'next/font/google';
 import { SHARED } from '@/content/copy';
@@ -15,6 +15,14 @@ const instrumentSans = Instrument_Sans({
   variable: '--font-instrument',
   adjustFontFallback: false,
 });
+
+/**
+ * Tints the browser chrome on mobile to the site's ink, so the address bar stops being a bright
+ * strip above a dark hero.
+ */
+export const viewport: Viewport = {
+  themeColor: '#1B2431',
+};
 
 export const metadata: Metadata = {
   // Makes every relative URL below (canonicals, OG images) absolute in the rendered HTML.

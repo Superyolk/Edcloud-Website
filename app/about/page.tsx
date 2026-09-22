@@ -24,7 +24,7 @@ export default function AboutPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="About hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} />
+          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={2508} height={1881} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
         <SectionShell n={partner.n} title={partner.title} white>
           <div className={styles.partner}>
-            <img src={ABOUT_COPY.partner.imgSrc} alt={ABOUT_COPY.partner.imgAlt} className={styles.headshot} />
+            <img src={ABOUT_COPY.partner.imgSrc} alt={ABOUT_COPY.partner.imgAlt} className={styles.headshot} width={2508} height={1881} />
             <div className={styles.partnerText}>
               <h2 className={styles.h2}>{ABOUT_COPY.partner.h2}</h2>
               {ABOUT_COPY.partner.paragraphs.map((text, i) => (
