@@ -49,7 +49,7 @@ export default function HomePage() {
       <main>
         <section data-screen-label="Hero" className={styles.hero}>
           <img src={hero.posterSrc} alt={hero.posterAlt} className={styles.heroLayer} />
-          <HeroVideo src={hero.videoSrc} className={`${styles.heroLayer} ${styles.heroVideo}`} />
+          <HeroVideo src={hero.videoSrc} webmSrc={hero.videoWebmSrc} className={`${styles.heroLayer} ${styles.heroVideo}`} />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <div data-reveal="" className={styles.heroReveal}>
