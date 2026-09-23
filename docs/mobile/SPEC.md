@@ -638,6 +638,9 @@ Resolved double claims:
 - `about.module.css` goes to Pages (LegalPage imports it).
 - `scripts/qa/*` is split per file as listed.
 
+### Foundation API
+How to call what Foundation built (breakpoint constants, the added `--m-column`/`--m-bar-h` tokens, the `ui` primitives, `SectionShell titleSize`, `Picture`, `Disclosure`, `ShowAll`, the header sheet and the new QA checks) is in [FOUNDATION.md](FOUNDATION.md). That page is a usage guide. Where it and this spec disagree, this spec wins.
+
 ---
 
 ## 13. Expected page heights at 390
