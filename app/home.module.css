@@ -306,6 +306,15 @@
   object-position: 50% 30%;
 }
 
+/* The three still photos (conference, stairway, contact) carry a hairline black frame. An inset
+   outline draws it over the photo's edge, so no box grows by a pixel and nothing around it moves. */
+.photo,
+.figureImg,
+.contactPhoto {
+  outline: 1px solid var(--black);
+  outline-offset: -1px;
+}
+
 .capabilities {
   list-style: none;
   margin: 0;
