@@ -196,8 +196,8 @@ export const HOME_COPY = {
     "figureAlt": "University campus building"
   },
   "contact": {
-    "imgSrc": "/images/classroom-lecture.webp",
-    "imgAlt": "Classroom Lecture",
+    "imgSrc": "/images/classroom-hands-raised.webp",
+    "imgAlt": "Students raising their hands in a classroom",
     "h2Lines": [
       "Ready to get started?",
       "Let's get in touch."

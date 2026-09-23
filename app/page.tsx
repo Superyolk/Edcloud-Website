@@ -189,7 +189,7 @@ export default function HomePage() {
         <SectionShell n={contact.n} title={contact.title} id="contact">
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
-              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={980} height={653} />
+              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={1200} height={800} />
             </div>
             <div className={styles.contactCard}>
               <h2 className={styles.contactTitle}>
