@@ -174,7 +174,7 @@ All new tokens are declared **only** inside the mobile layer in `app/tokens.css`
 - Weights are 400 and 600 only. Tabular figures (`font-variant-numeric: tabular-nums`) apply to every counter, index, stat and date.
 - `text-wrap: balance` on every heading and every stat caption. `text-wrap: pretty` on every paragraph.
 - Hierarchy ladder at 390: H1 34 → section H2 27 → green accent 22 → lead 18 → row title 17 → body 16 → UI 15 → label 14 → meta 13. Each step is visibly distinct. This is graft G1: the ratio from section title to row title is 1.57.
-- **Measure:** at 390, 16px over 350px runs about 43–46 characters a line. From 600, prose blocks take `max-width: var(--m-measure)` (about 60 characters) and stay left-aligned.
+- **Measure:** at 390, 16px over 350px runs about 43–46 characters a line. From 600, the whole content column (section header, prose and rows together) takes `max-width: calc(var(--m-measure) + 2 * var(--m-gutter))` and is **centred** with `margin-inline: auto`, so the white space is equal on both sides (§18). Individual paragraphs are never capped narrower than their column.
 - **Home H1:** 3 lines at 375–430 and at most 4 at 320–374, with no orphan. `h1Lines` keeps its `<br>` plus space, and `text-wrap: balance` is applied. If qa shows an orphan at any phone width, hide the `<br>`s below 600 (`display:none`). The DOM text is unchanged, because the space already gives a word boundary.
 
 ### 2.2 Radii, elevation, motion rules
@@ -372,7 +372,7 @@ Heights are at 390. "M" means measured on the winning mockup. "E" means estimate
 | # | Section | 390 height | Layout at 390 |
 |---|---|---:|---|
 | — | Header | 56 (overlays the hero) | §5.2, transparent over the hero |
-| — | Hero | 608 (M) | Height `clamp(480px, 72svh, 640px)` (fallback `72vh`), full-bleed. The poster is a `<picture>` 4:5 crop with `object-fit:cover; object-position: 60% 50%`, under `--m-hero-scrim`. The H1 (`--m-t-display`, white, balance) and the `p` (`--m-t-body`, white at 0.92 opacity, `max-width: 34ch`) are bottom-anchored with 32px bottom padding and the gutter on both sides. There is no `rise` animation. At 390×844 the first screen shows the hero, the next section's ink rule and its "01 Our Promise" line, so the page announces that it continues (A-home-09, C-cross-14). The `<video>` is not rendered below 600 (§8.4). |
+| — | Hero | 608 (M) | Height `clamp(480px, 72svh, 640px)` (fallback `72vh`), full-bleed. The poster is a `<picture>` 4:5 crop with `object-fit:cover; object-position: 60% 50%`, under `--m-hero-scrim`. The H1 (`--m-t-display`, white, balance) and the `p` (`--m-t-body`, white at 0.92 opacity, full content width; no `ch` cap, per §18) are bottom-anchored with 32px bottom padding and the gutter on both sides. There is no `rise` animation. At 390×844 the first screen shows the hero, the next section's ink rule and its "01 Our Promise" line, so the page announces that it continues (A-home-09, C-cross-14). The `<video>` is not rendered below 600 (§8.4). |
 | 01 | Our Promise | ~785 (E) | The rule header. `lead` at `--m-t-lead` ink, then p2 and p3 at 16px `--ink-2`, 16px apart. "Read More" is a 44px-tall text link (15px/600 `--growth`, no underline, no glyph) with `ariaLabel="Read More about EdCloud"` through RouteLink's existing prop (A-home-05). The accessible name starts with the visible text (WCAG 2.5.3). If Lighthouse `link-text` still fails with only the aria-label, add a visually hidden `<span> about EdCloud</span>` instead and allowlist it. |
 | 02 | Services & Results | ~565 (E) | An **exclusive accordion on the existing single panel** (§7.1). There are three 56px rows (the title at `--m-t-h3` 600 plus the 10px indicator), with hairlines between them. The one panel moves under the active row: the green lead at `--m-t-accent`, the rest at 16px, then the 44px "Services & Results" LinkButton. The panel has no card padding or shadow on phones. On tablets the panel is capped at `--m-measure`, which removes the 160px dead space (A-home-06, A-home-15). |
 | 03 | Featured Projects | ~1,125 (E) | **Stat-first scoreboard ledger (G2).** Four rows separated by 1px `--ink` rules, 24px row padding. Each row is a grid with the figure line first (`order:-1`; DOM order unchanged): the `stat` at `--m-t-stat` (42px) green 600 tabular, lh 0.95, in a `min-width: 4.2ch` column so all four figures line up ($3.5B / $3B / $100M / $500M). Beside it, `statLabel` at 13px `--ink-2`, balance, bottom-aligned (`align-self:end`). Then 12px, the title at `--m-t-h3`, 8px, and the body at 16px. There are no cards and no shadow. The four figures read as one column (A-home-11: 1,957 down to about 1,125). Tablet: 2×2 with a 32px gap (B-pages-09). |
@@ -401,7 +401,7 @@ Heights are at 390. "M" means measured on the winning mockup. "E" means estimate
 **Tablet 768×1024 / 820×1180 (`MQ_TABLET`):**
 - The hero is `clamp(480px, 72svh, 640px)`, so 640px instead of a full 1,180px screen (A-home-18).
 - The video may mount in it (§8.4).
-- Gutters are 32px and prose is capped at 34em, so deliberate white space sits to the right.
+- Gutters are 32px and the content column is capped at 34em plus gutters and centred, so the white space is equal on both sides (§18).
 - 2×2 cases, 2-up capabilities, 4-column logos, and a 2-column press index.
 - The services accordion stays below 1024.
 - Estimated Home height at 768 is about 6,900 (baseline 10,923; C-cross-24).
@@ -751,6 +751,27 @@ Open: B-pages-18 (owner question, §16). Waived: B-pages-21 (contrast).
 
 ---
 
+## 18. Text and margins (owner requirement, 2026-09-23; binding, overrides anything above)
+
+The owner's words: "make sure the text looks good on the page, the site is mostly text. please make sure the margins are equal on both sides of the screen." These are **hard gates** for Phase 3 and every Phase 4 round, not polish.
+
+### 18.1 Equal margins
+1. At every width from 320 to 1023, the left inset and the right inset of every section's content column are equal within 1px. Phones: 20/20. Tablets and landscape: the column is capped (`--m-measure` plus gutters) and **centred**, so the white space is split evenly. Nothing is left-aligned with extra space on the right.
+2. No text block starts inside the gutter or runs past it. Every `h1`–`h4`, `p`, `li`, `dt`, `dd`, `blockquote`, `figcaption`, `label` and table cell has `left ≥ gutter` and `right ≤ viewport − gutter`, with safe-area insets added in landscape.
+3. On phones, no paragraph gets a narrower `max-width` than its column. Full-bleed media may reach the screen edges, but the text on or under it keeps the gutter on both sides.
+4. The header wordmark and Menu button, the section rule headers, the body copy, the ledger hairlines and the footer all share the same left and right edges. Nested insets like the old 68/24 counter indent are not allowed.
+5. **Enforced by qa.** The Foundation Engineer adds a `margins` check to `scripts/qa/mobile-lint.mjs` for rules 1 and 2. It runs at every lint width on every page, reports the offending selector with its L/R insets, and fails on any violation. Phase 4 critics also measure the L/R insets on their screenshots.
+
+### 18.2 Text that reads well
+1. Body text is 16–17px (`--m-t-body`), at line-height 1.5, 45–60 characters a line. Leads use 1.45. Text is left-aligned, never justified.
+2. No stranded words. Headings and stat captions use `text-wrap: balance`, and paragraphs use `text-wrap: pretty`. Nothing a heading renders may leave a single word alone on its last line at any phone width (320–430). Phase 4 critics check paragraphs by eye at 320, 375 and 390, and fix bad breaks with CSS only, never by changing copy.
+3. No automatic hyphenation (`hyphens: manual`). A compound like "K-12" must not break at its hyphen (A-home-17). Wrap it in a `white-space: nowrap` span in the markup; the DOM text stays identical.
+4. Vertical rhythm comes only from the 4px spacing tokens: paragraph gap `--s-4` (16), heading-to-body `--s-3`/`--s-4`, section spacing per §4.5. No one-off margins.
+5. Mobile type never gets tighter than the desktop brand (letter-spacing ≥ −0.01em on headings, 0 on body). No faux bold and no synthetic italics: weights are 400 and 600 only.
+6. Phase 4's principal-designer critic reviews the rag, widows, measure, hierarchy and margin symmetry on every page at 320, 375, 390, 430, 768 and 844×390. Each finding cites a crop and a measurement.
+
+---
+
 ## 17. Mockups and change log
 
 Reference images (390px, DPR 2, real copy):
@@ -764,3 +785,4 @@ Where a mockup and this text disagree, **this text wins**. The direction docs ar
 | Date | Change | By |
 |---|---|---|
 | 2026-09-23 | Initial binding spec (Phase 2) | Judge panel chair |
+| 2026-09-23 | §18 Text and margins (owner requirement): centred tablet column, no phone text caps, qa margins check, typography gates | Owner via lead |
