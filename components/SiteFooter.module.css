@@ -107,3 +107,76 @@
   height: 22px;
   mix-blend-mode: screen;
 }
+
+/* ---------- Mobile layer (phones + tablets; SPEC §5.4). Never matches at >= 1024px. ----------
+   Two columns at every phone width, every link a full 44px row, and the same left and right
+   edges as the header and the sections above (from 600 the capped, centred column). */
+@media (max-width: 1023.98px) {
+  .grid {
+    max-width: var(--m-column);
+    padding: var(--m-section-top) var(--gutter) var(--s-8);
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: var(--s-4);
+  }
+
+  .col1,
+  .col2 {
+    gap: 0;
+  }
+
+  /* The address lines. */
+  .col1 > span {
+    font-size: var(--m-t-label);
+    line-height: 1.5;
+  }
+
+  .white {
+    display: flex;
+    align-items: center;
+    min-height: var(--m-tap);
+    font-size: var(--m-t-ui);
+    line-height: 1.3;
+  }
+
+  .white:active {
+    color: var(--white-hover);
+  }
+
+  .book {
+    margin-bottom: 0;
+  }
+
+  /* A 44x44 target; the glyph stays flush with the text edge above it rather than centred. */
+  .linkedin {
+    align-items: center;
+    width: var(--m-tap);
+    height: var(--m-tap);
+    margin-top: var(--s-2);
+  }
+
+  .barInner {
+    max-width: var(--m-column);
+    padding: var(--s-2) var(--gutter) calc(var(--s-2) + env(safe-area-inset-bottom, 0px));
+    gap: 0 var(--s-4);
+    font-size: var(--m-t-meta);
+  }
+
+  .brand,
+  .barInner > span {
+    display: flex;
+    align-items: center;
+    min-height: var(--m-tap);
+  }
+}
+
+/* Touch screens keep :hover after a tap (C-cross-20). */
+@media (max-width: 1023.98px) and (hover: none) {
+  .white:hover:not(:active),
+  .brand:hover {
+    color: var(--white);
+  }
+
+  .linkedin:hover {
+    color: var(--white);
+  }
+}

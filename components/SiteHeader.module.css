@@ -91,71 +91,234 @@
   cursor: pointer;
 }
 
-/* --nav-collapse: below 820px the link list becomes the Menu / Close button. */
-@media (max-width: 819px) {
+/* The menu sheet and its parts are new elements: they only exist while the sheet is open, and
+   the sheet can only open below 1024 (SiteHeader closes it on crossing MQ_MOBILE). */
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Mobile layer (phones + tablets; SPEC §5.2, §5.3). Never matches at >= 1024px. ---------- */
+@media (max-width: 1023.98px) {
+  /* 56px bar plus the top safe area. The nav keeps its desktop content-box, so the inset is
+     padding on top of the 56px row and the Menu pill sits in the same place with or without a
+     notch. From 600 it takes the capped column, so the wordmark and Menu line up with the
+     section text below (SPEC §18.1 rule 4). */
+  .nav {
+    height: var(--m-bar-h);
+    padding: env(safe-area-inset-top, 0px) var(--gutter) 0;
+    max-width: var(--m-column);
+    gap: var(--s-3);
+  }
+
+  .brand {
+    gap: 10px;
+    min-height: var(--m-tap);
+    min-width: 0;
+    font-size: var(--m-t-meta);
+    letter-spacing: var(--ls-wordmark);
+  }
+
+  /* The desktop link list; every one of its links is in the sheet and the footer. */
   .links {
     display: none;
   }
 
   .menuButton {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--m-tap);
+    min-height: var(--m-tap);
+    padding: 0 14px;
+    font-size: var(--m-t-ui);
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  /* ---- The sheet ---- */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    height: 100vh; /* engines without dynamic viewport units */
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    background: var(--paper);
+    --nav-ink: var(--ink);
+    animation: sheetIn var(--m-dur-sheet) var(--m-ease) both;
+  }
+
+  /* The same box as the header bar above it, so Close lands exactly on Menu. */
+  .sheetBar {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sheetBarInner {
+    max-width: var(--m-column);
+    height: var(--m-bar-h);
+    margin: 0 auto;
+    padding: env(safe-area-inset-top, 0px) var(--gutter) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+
+  /* Scrolls on its own when a landscape phone is shorter than the menu (C-cross-01); the page
+     behind never scrolls with it. */
+  .sheetBody {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sheetPages,
+  .sheetLegal {
+    list-style: none;
+    max-width: var(--m-column);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  .sheetPages {
+    padding-top: var(--s-2);
+  }
+
+  .sheetPages li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  .sheetPage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    min-height: var(--m-disclosure-h);
+    font-size: var(--m-t-accent);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: var(--ls-display);
+    color: var(--ink);
+  }
+
+  /* The current page: the desktop tab's 10px green square, the site's one indicator (G10). */
+  .sheetPage[aria-current='page']::after {
+    content: '';
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--growth);
+  }
+
+  .sheetLegal {
+    display: grid;
+    gap: var(--s-2);
+    padding-top: var(--s-4);
+    padding-bottom: var(--s-4);
+  }
+
+  .sheetLegalLink {
+    display: flex;
+    align-items: center;
+    min-height: var(--m-control-h);
+    font-size: var(--m-t-ui);
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .sheetPage:active,
+  .sheetLegalLink:active,
+  .sheetEmail:active {
+    color: var(--growth-ink);
+  }
+
+  /* The gutter sits outside the inner box, so the ink rule spans the text column only. */
+  .sheetFoot {
+    padding: 0 var(--gutter) calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sheetFootInner {
+    max-width: var(--m-column);
+    margin: 0 auto;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink);
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .sheetContact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--m-control-h);
+    border-radius: var(--m-radius-pill);
+    background: var(--ink);
+    color: var(--white);
+    font-size: var(--m-t-ui);
+    font-weight: 600;
+  }
+
+  .sheetContact:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+    transition:
+      transform var(--m-dur-press) var(--m-ease),
+      opacity var(--m-dur-press) var(--m-ease);
+  }
+
+  .sheetReach {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: var(--s-4);
+    min-height: var(--m-tap);
+  }
+
+  .sheetEmail {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--m-tap);
+    font-size: var(--m-t-ui);
+    font-weight: 600;
+  }
+
+  .sheetPhone {
+    font-size: var(--m-t-label);
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
   }
 }
 
-.menu {
-  list-style: none;
-  margin: 0;
-  padding: 8px 24px 24px;
-  border-top: 1px solid var(--line);
-  background: var(--white);
-  display: grid;
-  gap: 0;
-  font-size: var(--t-body);
-}
-
-.menuItem {
-  border-bottom: 1px solid var(--line);
-}
-
-.menuItem:last-child {
-  border-bottom: 0;
-}
-
-.menuLink {
-  display: block;
-  padding: 14px 0;
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: none;
-  transition: opacity var(--dur) var(--ease);
-}
-
-.menuLink:hover {
-  color: var(--ink);
-  opacity: 0.7;
-}
-
-/* Phones: the full wordmark plus Menu is wider than 390px at desktop sizing, which pushed Menu
-   off-screen and gave every page a sideways scroll. Tighten the bar, then drop the tail. */
-@media (max-width: 439px) {
-  .nav {
-    padding: 0 16px;
-    gap: 12px;
-  }
-
-  .brand {
-    gap: 10px;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-  }
-
-  .menuButton {
-    padding: 10px 14px;
-  }
-}
-
-@media (max-width: 359px) {
+/* 320-359: the wordmark tail is visually hidden (clip pattern) so Menu stays on screen. It stays
+   in the DOM and in the link's accessible name. */
+@media (max-width: 359.98px) {
   .wordmarkTail {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Touch screens keep :hover after a tap; without this the wordmark stays at 70% (C-cross-20). */
+@media (max-width: 1023.98px) and (hover: none) {
+  .brand:hover {
+    opacity: 1;
   }
 }

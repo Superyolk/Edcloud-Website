@@ -10,6 +10,10 @@ type Props = {
   className?: string;
   children: ReactNode;
   ariaLabel?: string;
+  /** Marks the link to the page you are on (the menu sheet's current row). */
+  ariaCurrent?: 'page';
+  /** Passed to next/link. Left undefined (Next's default) unless a caller has a measured reason. */
+  prefetch?: boolean;
 };
 
 /**
@@ -24,13 +28,13 @@ type Props = {
  *
  * External URLs and mailto: fall through to a plain anchor.
  */
-export default function RouteLink({ href, className, children, ariaLabel }: Props) {
+export default function RouteLink({ href, className, children, ariaLabel, ariaCurrent, prefetch }: Props) {
   const pathname = usePathname();
   const target = isRoute(href) ? route(href) : href;
 
   if (!target.startsWith('/')) {
     return (
-      <a href={target} className={className} aria-label={ariaLabel}>
+      <a href={target} className={className} aria-label={ariaLabel} aria-current={ariaCurrent}>
         {children}
       </a>
     );
@@ -42,6 +46,8 @@ export default function RouteLink({ href, className, children, ariaLabel }: Prop
       href={target}
       className={className}
       aria-label={ariaLabel}
+      aria-current={ariaCurrent}
+      prefetch={prefetch}
       onClick={samePage ? () => window.scrollTo(0, 0) : undefined}
     >
       {children}

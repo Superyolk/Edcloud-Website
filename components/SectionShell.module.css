@@ -39,3 +39,57 @@
   gap: 16px;
   margin-top: var(--head-gap);
 }
+
+/* ---------- Mobile layer (phones + tablets; SPEC §5.1). Never matches at >= 1024px. ----------
+   The desktop counter column becomes a rule header: a 1px ink rule across the full column, then
+   "01  Our Promise" on one line, then the content at the full column width. The old 72px (28px on
+   phones) number column is gone, so the left and right margins are the same gutter on both
+   sides (A-home-13, B-pages-05, C-cross-15). */
+@media (max-width: 1023.98px) {
+  .container {
+    padding: var(--m-section-top) var(--gutter) var(--m-section-bottom);
+    /* Phones: none (the full width). From 600: the capped column, centred, so the white space is
+       split evenly (SPEC §18.1). content-box, as on desktop, so this is the text width. */
+    max-width: var(--m-column);
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    border-top: 1px solid var(--ink);
+    padding-top: var(--s-3);
+    margin-bottom: var(--m-head-gap);
+  }
+
+  .counter {
+    flex-shrink: 0;
+    font-size: var(--m-t-meta);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* A wrapped title keeps its own left edge; the counter sits on its first baseline. */
+  .title {
+    min-width: 0;
+    font-size: var(--m-t-h2);
+    line-height: var(--m-lh-head);
+    text-wrap: balance;
+  }
+
+  .titlePage {
+    font-size: var(--m-t-title);
+    line-height: 1.05;
+  }
+
+  /* The content row is a plain block at the full column width; the head's margin is the gap. */
+  .body {
+    display: block;
+    margin-top: 0;
+  }
+
+  /* The empty cell that stood in for the counter column: decorative, holds no content. */
+  .body > span[aria-hidden='true']:first-child {
+    display: none;
+  }
+}

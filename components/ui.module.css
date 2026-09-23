@@ -54,3 +54,104 @@
   background: var(--growth);
   border-color: var(--growth);
 }
+
+/* ---------- Primitives for new markup (every width) ----------
+   These only ever go on elements the mobile redesign adds, so they cannot move a desktop pixel. */
+
+/* <picture> wrapper from components/Picture.tsx: generates no box, so the <img> inside lays out
+   exactly as it did before the wrapper existed (SPEC §5.7, §10.3b). */
+.contents {
+  display: contents;
+}
+
+/* Visually hidden, still read by assistive tech and still in the DOM (the clip pattern). */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Mobile layer (phones + tablets). Never matches at >= 1024px. ---------- */
+
+@media (max-width: 1023.98px) {
+  /* Ledger primitives (SPEC §4.6). Compose them in markup: className={`${styles.row} ${ui.hair}`}. */
+
+  /* A 1px ink rule on top: section heads, ledger groups, the sheet foot. */
+  .rule {
+    border-top: 1px solid var(--ink);
+  }
+
+  /* A 1px hairline under a row; the row above's hairline doubles as this one's top. */
+  .hair {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Inline item number (capabilities, phases, services): green, never mistaken for the slate
+     section counter on the rule (B-pages-06). */
+  .idx {
+    font-size: var(--m-t-meta);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--growth);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Dates, sources, counts, captions: the 13px floor, tabular. */
+  .meta {
+    font-size: var(--m-t-meta);
+    line-height: 1.4;
+    color: var(--slate);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The clip pattern below 1024 only, for EXISTING elements that must stay in the accessibility
+     tree but not on a phone screen (the results table thead, the wordmark tail). */
+  .srOnlyMobile {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* "Read More" / "Services & Results": a 44px-tall target at 15px/600, no underline, no glyph. */
+  .linkButton {
+    min-height: var(--m-tap);
+    font-size: var(--m-t-ui);
+    color: var(--growth);
+  }
+
+  .linkButton:active {
+    color: var(--growth-ink);
+  }
+
+  .primary {
+    min-height: var(--m-control-h);
+    font-size: var(--m-t-ui);
+  }
+}
+
+/* Touch screens keep :hover after a tap. Without this a tapped button stays in its hover colour
+   until the next tap somewhere else (C-cross-20). */
+@media (max-width: 1023.98px) and (hover: none) {
+  .linkButton:hover:not(:active) {
+    color: var(--growth);
+  }
+
+  .primary:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+}

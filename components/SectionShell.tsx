@@ -17,6 +17,11 @@ type Props = {
   containerExtra?: ReactNode;
   /** Extra content inside the section, after the container (Home "Press" full-bleed figure). */
   sectionExtra?: ReactNode;
+  /**
+   * 'page': below 1024 the title takes the page-title size (--m-t-title), for pages whose only
+   * heading is this one (the legal pages). Sets nothing at >= 1024.
+   */
+  titleSize?: 'page';
 };
 
 export default function SectionShell({
@@ -31,6 +36,7 @@ export default function SectionShell({
   children,
   containerExtra,
   sectionExtra,
+  titleSize,
 }: Props) {
   const sectionClass = [white ? styles.white : '', className ?? ''].filter(Boolean).join(' ') || undefined;
   return (
@@ -38,7 +44,7 @@ export default function SectionShell({
       <div className={styles.container}>
         <div className={styles.head}>
           <span className={styles.counter}>{n}</span>
-          <Tag className={styles.title}>{title}</Tag>
+          <Tag className={titleSize === 'page' ? `${styles.title} ${styles.titlePage}` : styles.title}>{title}</Tag>
         </div>
         {offset ? (
           <div className={styles.body}>
