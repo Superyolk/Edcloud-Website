@@ -98,6 +98,15 @@
   align-items: start;
 }
 
+/* Each <picture> here is display: contents, which promotes its <source> elements to grid items of
+   .hero and .partner (Chrome gives <source> no display: none of its own). In .partner the two empty
+   items pushed the headshot into a third auto-fit column. The sources are new elements that must
+   never make a box, at any width (SPEC §10.3a). */
+.hero source,
+.partner source {
+  display: none;
+}
+
 .headshot {
   display: block;
   width: 100%;
@@ -178,4 +187,216 @@
   font-size: var(--t-body-sm);
   line-height: 1.5;
   color: var(--ink-2);
+}
+
+/* ---------- Mobile layer (phones + tablets; SPEC §6.2). Never matches at >= 1024px. ----------
+   Every rule above is the frozen desktop. Below 1024 the page becomes a short photo hero, the
+   Mission & History chapter list (G3), a byline portrait (G4) and a By The Numbers ledger. Every
+   text block sits on the section column, so the two margins are equal (SPEC §18.1). */
+@media (max-width: 1023.98px) {
+  /* The first screen shows the title, the next rule header and the start of the copy (B-pages-12).
+     The hero is pulled up under the header, so this height includes the bar. vh first for old
+     engines. */
+  .hero {
+    min-height: clamp(320px, 44vh, 440px);
+    min-height: clamp(320px, 44svh, 440px);
+  }
+
+  /* --ink at alpha, darkest at the bottom where the white title sits. */
+  .heroOverlay {
+    background: var(--m-hero-scrim);
+  }
+
+  .heroInner {
+    padding: calc(var(--nav-h) + var(--s-8)) var(--gutter) var(--s-8);
+  }
+
+  .heroTitle {
+    font-size: var(--m-t-title);
+    text-wrap: balance;
+  }
+
+  /* 01 Mission & History: the intro, then the chapters stacked as ruled rows. */
+  .mission {
+    display: block;
+    max-width: none;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  .h2 {
+    font-size: var(--m-t-accent);
+    line-height: 1.2;
+  }
+
+  /* The intro paragraph is the section's lead; chapter paragraphs are body copy. */
+  .h2 + .p {
+    margin-top: var(--s-3);
+    font-size: var(--m-t-lead);
+    line-height: var(--m-lh-lead);
+    color: var(--ink);
+  }
+
+  /* The chapter list opens on an ink rule, and every row after that on a hairline. The 4px above
+     and below each row keeps two closed rows' buttons 9px apart, over the 8px target spacing. */
+  .chapter {
+    padding-block: var(--s-1);
+    border-top: 1px solid var(--line);
+  }
+
+  .p + .chapter {
+    margin-top: var(--s-8);
+    border-top-color: var(--ink);
+  }
+
+  .chapter:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The row title; the heading button inside it is the 56px target. */
+  .h3 {
+    margin: 0;
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+  }
+
+  .chapterBody {
+    display: grid;
+    gap: var(--s-4);
+    padding-bottom: var(--s-6);
+  }
+
+  /* Bullets are the site's 6px green square, hung in the indent so the text keeps one edge. */
+  .list {
+    list-style: none;
+    padding-left: 0;
+    gap: var(--s-3);
+  }
+
+  .list > li {
+    position: relative;
+    padding-left: var(--s-5);
+  }
+
+  .list > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--growth);
+  }
+
+  /* 02 Managing Partner as a byline: the 128x160 portrait with the h2 bottom-aligned beside it,
+     then the bio across the full column. .partnerText steps aside so its children join the
+     portrait's grid without a DOM change (G4). */
+  .partner {
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: var(--s-5) var(--s-4);
+    align-items: end;
+  }
+
+  .headshot {
+    width: 128px;
+    max-width: none;
+    aspect-ratio: 4 / 5;
+    box-shadow: none;
+  }
+
+  .partnerText {
+    display: contents;
+  }
+
+  .partnerText > p {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  /* The closing line is a short coda in ink. */
+  .partnerP {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* 03 By The Numbers: a ledger on an ink rule. The figure on the left, the title and description
+     beside it, starting on the gutter like everything else (B-pages-14). */
+  .numbers {
+    display: block;
+    margin-top: 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .numberCard {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-row: auto;
+    gap: var(--s-1) var(--s-4);
+    padding: var(--s-5) 0;
+    background: none;
+    box-shadow: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stat {
+    grid-row: span 2;
+    font-size: var(--m-t-stat);
+    line-height: 0.95;
+  }
+
+  .numberTitle {
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .numberBody {
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+}
+
+/* Tablets: the hero title keeps to the same centred column as the sections under it, and the
+   numbers become a 2x2 ledger, so no card is stranded on a row of its own (B-pages-09). */
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .heroInner {
+    max-width: calc(var(--m-column) + 2 * var(--gutter));
+  }
+
+  .numbers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s-8);
+  }
+}
+
+/* Landscape phones (844x390): the hero sizes to its title, so the first rule header shows on the
+   first screen rather than a 320px band on a 390px-tall viewport (B-pages-12). */
+@media (max-width: 1023.98px) and (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .heroInner {
+    padding-top: calc(var(--nav-h) + var(--s-10));
+    padding-bottom: var(--s-6);
+  }
+}
+
+/* Wide tablets: the portrait becomes a 240px column beside the bio (B-pages-15). */
+@media (min-width: 820px) and (max-width: 1023.98px) {
+  .partner {
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--s-8);
+  }
+
+  .headshot {
+    grid-row: 1 / span 3;
+    width: 240px;
+  }
+
+  .partnerText > p {
+    grid-column: 2;
+  }
 }
