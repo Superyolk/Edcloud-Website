@@ -8,19 +8,49 @@
  * Budget: Perf >= 95, A11y/BP/SEO = 100, LCP <= 2000ms, CLS <= 0.02, TBT <= 100ms. Exit 1 on a
  * miss unless QA_REPORT_ONLY=1.
  *
+ * A11y is gated on the score with `color-contrast` taken out (the owner waived contrast; SPEC §1.4
+ * and §16.3). The raw Lighthouse score is still recorded next to it as `accessibility`.
+ *
+ * Media assertions on every run (SPEC §8.3, §8.4; Lighthouse's mobile emulation is a 412px phone):
+ * - no /video/ request at all (phones never get a <video>, G12);
+ * - no request for a desktop source that has a mobile crop (scripts/images/crops.json `src`): a
+ *   phone must take the <picture>'s crop, never the 1920px fallback.
+ *
  * Note: locally `serve` gzips; production (Cloudflare) serves brotli, so live byte counts differ a little.
  */
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 import fs from 'node:fs';
 import path from 'node:path';
-import { OUT_DIR, PAGES, main, median, pageUrl, startTarget, writeJson } from './lib.mjs';
+import { OUT_DIR, PAGES, ROOT, main, median, pageUrl, startTarget, writeJson } from './lib.mjs';
 
 const RUNS = Number(process.env.QA_LH_RUNS || 3);
 const DEFAULT_CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const CHROME = process.env.CHROME_PATH || (fs.existsSync(DEFAULT_CHROME) ? DEFAULT_CHROME : undefined);
 
 const BUDGET = { performance: 95, accessibility: 100, 'best-practices': 100, seo: 100, lcp: 2000, cls: 0.02, tbt: 100 };
+
+// Desktop files that have phone crops: a phone must never fetch one of these (SPEC §5.7).
+const CROPPED_SOURCES = new Set(
+  JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'images', 'crops.json'), 'utf8')).crops.map((c) => `/images/${c.src}`),
+);
+
+/**
+ * The accessibility category score recomputed the way Lighthouse does it (weighted mean of the
+ * scored audits), with color-contrast left out: the owner's waiver (SPEC §16.3).
+ */
+function a11yWithoutContrast(lhr) {
+  let sum = 0;
+  let weight = 0;
+  for (const ref of lhr.categories.accessibility?.auditRefs ?? []) {
+    const a = lhr.audits[ref.id];
+    if (!ref.weight || ref.id === 'color-contrast' || !a || a.score === null) continue;
+    if (['notApplicable', 'manual', 'informative', 'error'].includes(a.scoreDisplayMode)) continue;
+    sum += ref.weight * a.score;
+    weight += ref.weight;
+  }
+  return weight ? Math.round((sum / weight) * 100) : 0;
+}
 
 let runSeq = 0;
 
@@ -47,9 +77,17 @@ async function runOnce(url) {
     const failing = Object.values(lhr.audits)
       .filter((a) => a.score !== null && a.score < 1 && !['informative', 'notApplicable', 'manual'].includes(a.scoreDisplayMode))
       .map((a) => a.id);
+    const origin = new URL(url).origin;
+    const requested = (lhr.audits['network-requests']?.details?.items ?? [])
+      .map((i) => i.url)
+      .filter((u) => u.startsWith(origin))
+      .map((u) => new URL(u).pathname);
     return {
       performance: score('performance'),
       accessibility: score('accessibility'),
+      a11yExContrast: a11yWithoutContrast(lhr),
+      videoRequests: [...new Set(requested.filter((p) => p.startsWith('/video/')))],
+      croppedSourceRequests: [...new Set(requested.filter((p) => CROPPED_SOURCES.has(p)))],
       'best-practices': score('best-practices'),
       seo: score('seo'),
       lcp: num('largest-contentful-paint'),
@@ -79,11 +117,17 @@ main(async () => {
     for (const p of PAGES) {
       const runs = [];
       for (let i = 0; i < RUNS; i++) runs.push(await runOnce(pageUrl(target.base, p)));
-      const keys = ['performance', 'accessibility', 'best-practices', 'seo', 'lcp', 'cls', 'tbt', 'fcp', 'si', 'totalBytes', 'jsBytes'];
+      const keys = ['performance', 'accessibility', 'a11yExContrast', 'best-practices', 'seo', 'lcp', 'cls', 'tbt', 'fcp', 'si', 'totalBytes', 'jsBytes'];
       const med = Object.fromEntries(keys.map((k) => [k, median(runs.map((r) => r[k]))]));
       const misses = [];
-      for (const k of ['performance', 'accessibility', 'best-practices', 'seo']) if (med[k] < BUDGET[k]) misses.push(`${k} ${med[k]} < ${BUDGET[k]}`);
+      for (const k of ['performance', 'best-practices', 'seo']) if (med[k] < BUDGET[k]) misses.push(`${k} ${med[k]} < ${BUDGET[k]}`);
+      if (med.a11yExContrast < BUDGET.accessibility) misses.push(`accessibility (excl. color-contrast) ${med.a11yExContrast} < ${BUDGET.accessibility}`);
       for (const k of ['lcp', 'cls', 'tbt']) if (med[k] > BUDGET[k]) misses.push(`${k} ${med[k]} > ${BUDGET[k]}`);
+      // Media assertions hold on every run, not just the median.
+      const video = [...new Set(runs.flatMap((r) => r.videoRequests))];
+      const fallbacks = [...new Set(runs.flatMap((r) => r.croppedSourceRequests))];
+      if (video.length) misses.push(`video requested on a phone: ${video.join(', ')}`);
+      if (fallbacks.length) misses.push(`desktop source fetched instead of its phone crop: ${fallbacks.join(', ')}`);
       out.pages[p.slug] = {
         median: med,
         misses,
@@ -92,7 +136,7 @@ main(async () => {
         runs,
       };
       console.log(
-        `[qa] perf ${p.slug}: P${med.performance} A${med.accessibility} BP${med['best-practices']} SEO${med.seo} ` +
+        `[qa] perf ${p.slug}: P${med.performance} A${med.a11yExContrast} (raw ${med.accessibility}) BP${med['best-practices']} SEO${med.seo} ` +
           `LCP ${Math.round(med.lcp)}ms CLS ${med.cls?.toFixed(3)} TBT ${Math.round(med.tbt)}ms ` +
           `bytes ${med.totalBytes} js ${med.jsBytes}${misses.length ? ' — MISS: ' + misses.join('; ') : ''}`,
       );
