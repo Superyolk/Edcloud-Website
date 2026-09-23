@@ -23,6 +23,7 @@
     "qa:perf": "node scripts/qa/perf.mjs",
     "qa:bytes": "node scripts/qa/bytes.mjs",
     "qa:content": "node scripts/qa/content.mjs",
+    "qa:early": "node scripts/qa/early.mjs",
     "qa:breakpoints": "node scripts/qa/breakpoints-lint.mjs"
   },
   "dependencies": {

@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent, type HTMLAttributes } from 'react';
 import { HOME_COPY } from '@/content/copy';
+import ui from '@/components/ui.module.css';
 import styles from '@/app/home.module.css';
 
 type Status = { ok: boolean; message: string } | null;
@@ -31,6 +32,9 @@ export default function ContactForm() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // The button stays enabled while a send is under way (aria-disabled, not disabled), so focus
+    // does not fall back to <body>; a second press in that window is ignored here instead.
+    if (busy) return;
     const form = e.currentTarget;
     const fd = new FormData(form);
     const payload = {
@@ -77,12 +81,19 @@ export default function ContactForm() {
         );
       })}
       <div className={styles.submitRow}>
-        <button type="submit" className={styles.submit} disabled={busy}>
+        <button type="submit" className={styles.submit} aria-disabled={busy || undefined}>
           {busy ? 'Sending…' : contact.submit}
         </button>
       </div>
+      {/* The live region is mounted from the start and only its text changes: a region inserted
+          together with its message is often not announced (VoiceOver on iOS). It is visually
+          hidden and out of flow, so the form's grid is exactly as before; the visible line below
+          carries the same words and is hidden from assistive tech so they are not read twice. */}
+      <p role="status" aria-live="polite" className={ui.srOnly}>
+        {status?.message ?? ''}
+      </p>
       {status && (
-        <p role="status" className={status.ok ? styles.formStatusOk : styles.formStatusErr}>
+        <p aria-hidden="true" className={status.ok ? styles.formStatusOk : styles.formStatusErr}>
           {status.message}
         </p>
       )}

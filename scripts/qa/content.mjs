@@ -38,7 +38,13 @@ function extract() {
   const norm = (s) => s.replace(/\s+/g, ' ').trim();
   const skip = new Set(['SCRIPT', 'STYLE', 'TEMPLATE']);
   const segments = [];
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  // A <span data-nowrap> (components/KeepTogether.tsx) only keeps a phrase like "K-12" on one line;
+  // it splits one text node into three without changing a character. Unwrap it on a copy and merge
+  // the text nodes back, so a sentence is still compared as the one segment it always was.
+  const root = document.body.cloneNode(true);
+  root.querySelectorAll('[data-nowrap]').forEach((el) => el.replaceWith(document.createTextNode(el.textContent || '')));
+  root.normalize();
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
     if (n.parentElement && skip.has(n.parentElement.tagName)) continue;
     const t = norm(n.textContent || '');

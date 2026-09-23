@@ -86,8 +86,16 @@ test.describe('mobile menu', () => {
     await expect(page.locator('main')).toHaveAttribute('inert', '');
     const close = sheet.getByRole('button', { name: 'Close' });
     await expect(close).toBeFocused();
-    // The open menu turns the home header solid.
-    await expect(page.locator('header')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    // The open menu turns the home header solid. Below 1024 the solid white is the header's
+    // ::before layer, which fades in by opacity (SPEC §5.2, Phase 4 R1), not its own background.
+    await expect
+      .poll(() =>
+        page.locator('header').evaluate((h) => {
+          const s = getComputedStyle(h, '::before');
+          return `${s.backgroundColor} ${s.opacity}`;
+        }),
+      )
+      .toBe('rgb(255, 255, 255) 1');
     await close.click();
     await expect(page.locator('#mobile-menu')).toHaveCount(0);
     await expect(button).toBeFocused();

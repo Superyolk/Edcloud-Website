@@ -42,6 +42,16 @@ export default function ShowAllButton({ controls, label, count, limit, focusOnEx
   useLayoutEffect(() => {
     const list = document.getElementById(controls);
     if (!list || !hydrated) return;
+    // An item a find-in-page or #:~:text= match revealed before hydration (the pre-hydration
+    // loader in scripts/defer-hydration.mjs marks it data-found): open the list instead of hiding
+    // it again under the reader.
+    const found = list.querySelectorAll('[data-found]');
+    found.forEach((el) => el.removeAttribute('data-found'));
+    if (found.length && !open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the browser changed the DOM before hydration; state follows it before paint
+      setOpen(true);
+      return;
+    }
     const rest = phone ? styles.restPhone : tablet ? styles.restTablet : null;
     const untilFound = 'onbeforematch' in document.body;
     for (const item of Array.from(list.getElementsByClassName(styles.item))) {
@@ -86,7 +96,18 @@ export default function ShowAllButton({ controls, label, count, limit, focusOnEx
     .join(' ');
 
   return (
-    <button type="button" ref={buttonRef} className={cls} aria-expanded={open} aria-controls={controls} onClick={onClick}>
+    <button
+      type="button"
+      ref={buttonRef}
+      className={cls}
+      aria-expanded={open}
+      aria-controls={controls}
+      onClick={onClick}
+      // Read by the pre-hydration loader (scripts/defer-hydration.mjs), which collapses the list
+      // to these limits before React runs.
+      data-showall-phone={limit.phone}
+      data-showall-tablet={limit.tablet}
+    >
       <span>{open ? SHOW_FEWER : label}</span>
       {!open && (
         <span aria-hidden="true" className={styles.count}>

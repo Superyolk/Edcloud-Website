@@ -33,21 +33,28 @@ Unchanged: the home header transparency test, both contact form tests (the focus
 | `content-allowlist.json` | `hrefs: ["#contact"]` (the Home Contact pill, SPEC §5.6) and the segment `"about EdCloud"`. | The segment is the visually hidden tail of Home's "Read More" link. It is the SPEC §6.1 fallback, because Lighthouse `link-text` ignores `aria-label`. |
 | `.gitattributes` | `public/robots.txt`, `public/_headers` and `public/_redirects` are pinned to LF. | With `core.autocrlf=true`, a Windows checkout produced CRLF, and `qa:content` then failed `/robots.txt` on bytes alone. |
 
+## Phase 4 round 1 (QA harness)
+
+| File | Change | Reason |
+|---|---|---|
+| `content.mjs` | Before collecting text-node segments, every `<span data-nowrap>` is unwrapped on a copy of the body and the text nodes are merged back (`normalize()`). | SPEC §18.2 rule 3: "K-12", "long-term", dates and "Level AA" are kept on one line by a wrapper span (`components/KeepTogether.tsx`). The span splits one text node into three without changing a character; unwrapping it compares the sentence as the one segment it always was. Any real text change still fails. |
+| `mobile-lint.mjs` | `bodyText` (p/li/dd/td under 16px) skips a cell set as a meta line: computed `text-transform: uppercase`, weight 600 or more, 13px or more. `textSize` (nothing under 13px) still applies to it. | Judge ruling 2 (R1-designer-08) requires SPEC G9's Results client cell as a 13px/600 uppercase meta line, the same treatment as the proof strip's client names and Home's press sources. It is a one-word label, not running copy; every other p/li/dd/td is still held to 16px. |
+| `early.mjs` (new, `npm run qa:early`, in `qa:all`) | On a throttled phone (CPU 4x, 150ms RTT, 1.6 Mbps): a `#:~:text=` link into a collapsed Press story and into a collapsed About chapter must land on the text, open, after hydration; a tap on Menu and on a collapsed chapter 300ms after first paint, before React attaches, must take effect. | R1-a11y-05 and R1-a11y-06: since phones hydrate after the first paint, both failed on 2 of 2 runs. Both checks fail on the pre-fix build. |
+
+`scripts/interactions.spec.ts`, **mobile menu › Menu opens a five-link sheet…**: "the open menu turns the home header solid" now reads the header's `::before` layer (white, opacity 1) instead of the header's own `background-color`. Below 1024 the solid state is that layer, which fades by opacity over 150ms, so the header itself stays transparent (SPEC §5.2; R1-client-08, R1-designer-10). The desktop transparency test is unchanged. Nothing else in the file changed.
+
 ## Deliberate tablet (600–1023) changes to show in review
 
 - The nav collapses to Menu and the sheet below **1024**, not 820.
 - Home:
   - the services accordion is kept on tablets
-  - 2×2 featured projects, with the caption under the figure
-  - 2-up capabilities
+  - featured projects, capabilities and the press index (4 visible) stay the phone's single-column ledgers (Phase 4 R1: 2-up cells in the capped column were narrower than a phone's)
   - 4-column logos (24 visible)
-  - a 2-column press index (4 visible)
   - the contact band sits inside the column
   - the hero is 640px
-- About: every chapter starts open, in the centred 34em column.
+- About: every chapter starts open, in the centred 29em column; By The Numbers is the single-column ledger; the byline keeps its phone shape with a 128×160 portrait.
 - Services & Results:
-  - all six services start open, 2-up
-  - the proof strip is **2×2, not 4-up**, a deviation from SPEC §6.3 that needs judge sign-off: "300 → 1.5M" doesn't fit a quarter of the capped column at the tablet stat size
-  - results stack below 820 (previously below 800)
-  - phases are 3-up from 820
-- Every page: the content column is capped at 34em plus gutters and centred, so the margins are equal on both sides (SPEC §18).
+  - all six services start open, in one column
+  - the proof strip is **2×2, not 4-up** (judge ruling ACCEPT, Phase 4 R1): "300 → 1.5M" doesn't fit a quarter of the capped column at the tablet stat size
+  - phases, the fit lists and the results stay stacked up to 1023 (previously phases 3-up and a 4-column table from 820)
+- Every page: the content column is capped at 29em plus gutters (493px at 17px, ~60 characters a line) and centred, so the margins are equal on both sides (SPEC §18; 34em in Phase 3 measured 71 cpl).

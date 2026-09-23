@@ -94,7 +94,9 @@
     --m-lh-body: 1.5;
     --m-lh-lead: 1.45;
     --m-lh-head: 1.1;
-    --m-measure: 34em;                                          /* prose cap from 600 (~60 cpl) */
+    /* Prose cap from 600. Instrument Sans sets about 0.47em a character, so 29em is ~60 cpl; the
+       34em first shipped in Phase 3 measured 71 cpl median (Phase 4 R1-designer-01, SPEC §17). */
+    --m-measure: 29em;
 
     /* Space: 4px base */
     --s-1: 4px;
@@ -156,7 +158,7 @@
     --m-gutter: var(--s-8);                                     /* 32 */
     --m-section-top: var(--s-14);                               /* 56 */
     --m-section-bottom: var(--s-16);                            /* 64 */
-    --m-column: calc(34 * var(--m-t-body));                     /* = --m-measure at body size */
+    --m-column: calc(29 * var(--m-t-body));                     /* = --m-measure at body size (493px at 17px) */
   }
 }
 

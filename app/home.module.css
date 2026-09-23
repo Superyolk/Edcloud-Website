@@ -577,7 +577,9 @@
 @media (max-width: 1023.98px) {
   /* Hero: about 72% of the screen, not all of it, so the "01 Our Promise" rule shows beneath it on
      the first screen (A-home-09, C-cross-14). vh first for engines without svh. */
+  /* The bar has no bottom border below 1024 (--m-elev-1 is a shadow), so the pull-up is --nav-h. */
   .hero {
+    margin-top: calc(-1 * var(--nav-h));
     min-height: clamp(480px, 72vh, 640px);
     min-height: clamp(480px, 72svh, 640px);
     align-items: end;
@@ -733,8 +735,12 @@
 
   /* ---------- 03 Featured Projects: stat-first scoreboard (G2) ----------
      Each case is one ledger row under an ink rule: the figure and its caption first (order only,
-     the DOM is unchanged), then the title and body at the full width. The figure column has one
-     fixed width in every row, so the four figures read as one column. */
+     the DOM is unchanged), then the title and body at the full width. The figure box has one
+     fixed width in every row, so the four figures read as one column. A wrapping flex row rather
+     than a two-column grid: when the reader enlarges text so far that the figure and caption no
+     longer fit side by side, the caption drops under the figure instead of being pushed off the
+     screen (WCAG 1.4.10). The same single-column ledger runs up to 1023: in the capped tablet
+     column a 2x2 grid left each body ~240px (Phase 4 R1-designer-02). */
   .cases {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
@@ -743,20 +749,26 @@
 
   .case {
     grid-row: auto;
-    grid-template-rows: none;
-    grid-template-columns: 3.25em minmax(0, 1fr); /* fits the widest figure, $500M */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
     column-gap: var(--s-4);
     row-gap: 0;
     padding: var(--s-6) 0;
     background: transparent;
     box-shadow: none;
     border-top: 1px solid var(--ink);
-    font-size: var(--m-t-stat); /* the em of the figure column above */
+  }
+
+  /* The last row ends on the section's own bottom padding, like every other section (a 24px row
+     padding on top of it left the $500M row 26px airier than the rest). */
+  .case:last-child {
+    padding-bottom: 0;
   }
 
   .caseTop {
     order: 1;
-    grid-column: 1 / -1;
+    flex: 1 0 100%;
     gap: var(--s-2);
     margin-top: var(--s-3);
   }
@@ -769,14 +781,17 @@
     display: contents;
   }
 
+  /* 3.25em of the figure fits the widest one, $500M. */
   .case .stat {
     order: -1;
+    flex: 0 0 3.25em;
     white-space: nowrap;
   }
 
   .statLabel {
     order: -1;
-    align-self: end;
+    flex: 1 1 9em;
+    min-width: 0;
     font-size: var(--m-t-meta);
     line-height: 1.35;
     text-wrap: balance;
@@ -866,6 +881,7 @@
   .pressRow {
     position: relative;
     grid-template-columns: minmax(0, 1fr);
+    align-content: start;
     gap: var(--s-2);
     padding: var(--s-5) 0 var(--s-2);
   }
@@ -975,6 +991,9 @@
   }
 
   /* 48px fields with 16px+ text (no iOS zoom on focus) and a visible --slate border (C-cross-12). */
+  /* scroll-margin-top: when validation or a jump scrolls a field to the top, its label (18px
+     plus the 8px gap above the field) lands below the sticky header with room to spare, instead
+     of under it. */
   .input {
     min-height: var(--m-control-h);
     padding: var(--s-2) var(--s-3);
@@ -982,6 +1001,7 @@
     font-weight: 400;
     line-height: 1.4;
     border-color: var(--slate);
+    scroll-margin-top: var(--s-8);
   }
 
   .textarea {
@@ -1063,32 +1083,13 @@
   }
 }
 
-/* Tablets: 2-up grids inside the centred column (SPEC §6.1 tablet). */
+/* Tablets: the phone's single-column ledgers inside the centred column. The cases, the
+   capabilities and the press index each read at the column measure; 2-up cells in the capped
+   column were narrower than a phone's (273px, 22-35 characters a line; Phase 4 R1-designer-02).
+   Only the logo grid, which holds no running text, goes multi-column. */
 @media (min-width: 600px) and (max-width: 1023.98px) {
-  .cases {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--s-8);
-  }
-
-  /* Half a column is too narrow to hold the figure and its caption side by side: the caption
-     drops under the figure instead of wrapping one word a line. */
-  .case {
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-  }
-
-  .statLabel {
-    margin-top: var(--s-2);
-  }
-
   .photo {
     aspect-ratio: 3 / 2;
-  }
-
-  .capabilities {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--s-8);
   }
 
   .figureImg {
@@ -1097,12 +1098,6 @@
 
   .logos {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .press {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--s-8);
   }
 
   /* The band stays inside the column here; full-bleed would outrun the capped text. */

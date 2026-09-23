@@ -14,6 +14,7 @@ import ServicesTabs from '@/components/home/ServicesTabs';
 import ContactForm from '@/components/home/ContactForm';
 import ContactPill from '@/components/home/ContactPill';
 import Picture from '@/components/Picture';
+import { keepTogether } from '@/components/KeepTogether';
 import ui from '@/components/ui.module.css';
 import ShowAll, { showAllItem, showAllList, type ShowAllLimit } from '@/components/ShowAll';
 import styles from './home.module.css';
@@ -106,7 +107,7 @@ export default function HomePage() {
 
         <SectionShell n={promise.n} title={promise.title}>
           <div className={styles.promise}>
-            <p className={styles.lead}>{HOME_COPY.promise.lead}</p>
+            <p className={styles.lead}>{keepTogether(HOME_COPY.promise.lead)}</p>
             <p className={styles.body}>{HOME_COPY.promise.p2}</p>
             <p className={styles.body}>{HOME_COPY.promise.p3}</p>
             <div>
@@ -158,7 +159,7 @@ export default function HomePage() {
                   loading="lazy"
                   decoding="async"
                   phoneSizes="calc(100vw - 40px)"
-                  tabletSizes="min(34em, calc(100vw - 64px))"
+                  tabletSizes="min(31em, calc(100vw - 64px))"
                 />
               </div>
             </div>
@@ -250,7 +251,7 @@ export default function HomePage() {
                 loading="lazy"
                 decoding="async"
                 phoneSizes="100vw"
-                tabletSizes="min(34em, calc(100vw - 64px))"
+                tabletSizes="min(31em, calc(100vw - 64px))"
               />
             </div>
             <div className={styles.contactCard}>

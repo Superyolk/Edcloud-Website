@@ -272,3 +272,32 @@ Every run was within 80ms of its median. The widest spread was Services, at 1653
 ### Mobile lint (unique findings per page across the sweep)
 
 Every check (overflow, tapSize, tapSpacing, textSize, bodyText, inputFont, mediaDims, safeArea, margins and tapSizeInline) is at **0 on every page**. The baseline counts are above.
+
+## After Phase 4 round 1 (fixes on `mobile-redesign`, 2026-09-23)
+
+Fresh build (`QA_BUILD=1`), served on :4194.
+
+| Gate | Result |
+|---|---|
+| lint / typecheck / build | clean (0 errors; the only lint warnings are in the gitignored critic scripts under `scripts/qa/output/`) |
+| qa:breakpoints, qa:content | PASS |
+| qa:desktop-parity | 15/15 at 0px |
+| qa:a11y | PASS (0 violations other than the waived `color-contrast`) |
+| qa:mobile-lint | 0 findings on every page (the bodyText meta-line exemption is in TEST-CHANGES.md) |
+| qa:matrix | PASS |
+| qa:bytes | PASS: Home 43.6% of baseline bytes; JS growth gz 2,889 B (Home), 5,083 B (About, Services), 4,062 B (legal), against 5,120 B |
+| qa:early (new) | PASS: text fragments into collapsed Press and About content, and taps before hydration, on a throttled phone |
+| qa:perf | PASS: Perf 100 on all five; LCP Home 1654, About 1428, Services 1728, legal 1278 ms; CLS 0.000; TBT 6–7 ms |
+| interactions.spec.ts | 13/13 |
+
+Page heights (px):
+
+| Page | 390×844 | 320×568 | 768×1024 | 820×1180 | 844×390 |
+|---|---:|---:|---:|---:|---:|
+| home | **7,413** (≤ 8,500) | 7,688 | 7,809 | 7,847 | 7,552 |
+| about | **4,198** (≤ 6,500) | 4,587 | 6,358 | 6,368 | 6,108 |
+| services-and-results | **5,293** (≤ 7,000) | 5,620 | 6,466 | 6,477 | 6,175 |
+
+Tablet and landscape pages are taller than after Phase 3 because the 2-up/3-up grids became single-column ledgers inside a 29em (493px) column. That is the point of R1-designer-01/02: the prose there measured 71 characters a line, and the grid cells 5–35. There is no tablet length gate.
+
+Line breaks (a width sweep of every page at 320–430, 600, 700, 768, 820, 844 and 1000): "K-12" and "long-term" never split, and no heading ends on a single word except the two-word "Accessibility Statement" H1, which cannot share a line at the page-title size. No horizontal overflow at any width. At 320px with text enlarged 200%, `scrollWidth` is 320 on every page.

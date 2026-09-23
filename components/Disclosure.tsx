@@ -17,6 +17,10 @@
  *   3. After hydration (a layout effect, so before the next paint): panels that should be closed
  *      get hidden="until-found", and data-js on the group switches the CSS rule off. Find-in-page
  *      and #:~:text= links fire `beforematch`, which opens the group.
+ *   Built pages do step 3's DOM part earlier: the inline loader from scripts/defer-hydration.mjs
+ *   sets hidden="until-found" on [data-disclosure] groups' [data-panel]s at the end of parsing, so
+ *   a text-fragment link can reach a panel before hydration. A panel the browser revealed that
+ *   way carries data-found, and the group opens on hydration instead of collapsing it again.
  *
  * At >= 1024 nothing is ever hidden and the heading renders a plain <span> (no button, no tab
  * stop, no box), so desktop is the same DOM text in the same boxes.
@@ -104,6 +108,19 @@ export default function Disclosure({
   useLayoutEffect(() => {
     const group = groupRef.current;
     if (!group || !hydrated) return;
+    // A find-in-page or #:~:text= match the browser revealed before hydration (marked by the
+    // pre-hydration loader): keep that panel open rather than hiding it under the reader.
+    let found = false;
+    for (const el of panels.current) {
+      if (el.hasAttribute('data-found')) {
+        el.removeAttribute('data-found');
+        found = true;
+      }
+    }
+    if (found && !open) {
+      setUserOpen(true);
+      return;
+    }
     // Safari has no hidden="until-found" yet; there a plain `hidden` is the collapse.
     const untilFound = 'onbeforematch' in document.body;
     for (const el of panels.current) {
@@ -139,6 +156,8 @@ export default function Disclosure({
     <DisclosureContext.Provider value={ctx}>
       <Tag
         ref={groupRef as never}
+        // Read by the pre-hydration loader (scripts/defer-hydration.mjs): where this group collapses.
+        data-disclosure={collapseQuery === MQ_PHONE ? 'phone' : 'mobile'}
         className={cx(
           styles.group,
           collapseQuery === MQ_PHONE ? styles.collapsePhone : styles.collapseMobile,
@@ -156,6 +175,26 @@ export default function Disclosure({
   );
 }
 
+/**
+ * The last two words of a heading (three when the second-to-last is "&") glued in one
+ * `<span data-nowrap>` (app/globals.css), so a two-line title never ends on one word (SPEC §18.2
+ * rule 2); balance alone chose "Smarter Procurement / Pathways". The DOM text is unchanged
+ * (qa:content unwraps data-nowrap). Mobile button only: in desktop text an extra element moved
+ * glyphs by a subpixel. Kept here, not in KeepTogether.tsx, so the client bundle stays small.
+ */
+function keepLastWords(text: string): ReactNode {
+  const words = text.split(' ');
+  const n = words.length > 3 && words[words.length - 2] === '&' ? 3 : 2;
+  if (words.length <= n) return text;
+  // One outer span, so the flex button still sees one item; the head and its space are one string.
+  return (
+    <span>
+      {`${words.slice(0, -n).join(' ')} `}
+      <span data-nowrap="">{words.slice(-n).join(' ')}</span>
+    </span>
+  );
+}
+
 export type DisclosureHeadingProps = {
   /** The existing heading level. Default 'h3'. */
   as?: 'h2' | 'h3' | 'h4';
@@ -163,6 +202,12 @@ export type DisclosureHeadingProps = {
   className?: string;
   /** The existing heading text. No new copy. */
   children: ReactNode;
+  /**
+   * Glue the last two words of a string heading (keepLastWords above) on the mobile
+   * button, so a two-line title never ends on one word. Only the button gets the span: a span in
+   * the desktop text moves its glyphs by a subpixel, and desktop is pixel-frozen.
+   */
+  keepLastWords?: boolean;
 };
 
 /**
@@ -170,7 +215,7 @@ export type DisclosureHeadingProps = {
  * hydration and at >= 1024 the button is a <span> with the same class, so the row keeps its
  * size (no shift when the button arrives) and desktop gets no new tab stop.
  */
-export function DisclosureHeading({ as: Tag = 'h3', className, children }: DisclosureHeadingProps) {
+export function DisclosureHeading({ as: Tag = 'h3', className, children, keepLastWords: glue = false }: DisclosureHeadingProps) {
   const { baseId, parts, open, interactive, toggle } = useDisclosure('DisclosureHeading');
   const id = `${baseId}-button`;
   return (
@@ -185,10 +230,12 @@ export function DisclosureHeading({ as: Tag = 'h3', className, children }: Discl
           onClick={toggle}
           data-row=""
         >
-          {children}
+          {glue && typeof children === 'string' ? keepLastWords(children) : children}
         </button>
       ) : (
-        <span id={id} className={styles.button}>
+        // data-trigger: a tap here before hydration is replayed on the button once it exists
+        // (scripts/defer-hydration.mjs), by this shared id.
+        <span id={id} className={styles.button} data-trigger="">
           {children}
         </span>
       )}
@@ -221,6 +268,7 @@ export function DisclosurePanel({ as: Tag = 'div', part = 'panel', className, co
     <Tag
       ref={register as never}
       id={panelId(baseId, part)}
+      data-panel=""
       className={cx(styles.panel, contentsOnDesktop && styles.contentsDesktop, className)}
       role={isRegion ? 'region' : undefined}
       aria-labelledby={isRegion ? `${baseId}-button` : undefined}

@@ -38,8 +38,11 @@
    with 32px of air above it, and the site's green square bullets. The page title above is the
    SectionShell H1 at --m-t-title, clearly larger than these headings (B-pages-10). */
 @media (max-width: 1023.98px) {
+  /* One track that can never grow past the column: an implicit auto track grew to its
+     min-content (338px in a 280px column at 200% text) and pushed every line off screen. */
   .body {
     max-width: none;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-4);
     font-size: var(--m-t-body);
     line-height: var(--m-lh-body);
@@ -61,7 +64,10 @@
   }
 
   /* Bullets hang in the indent, so every line of an item keeps the same left edge. */
+  /* One track that cannot grow past the column (an auto track grows to the longest word, e.g.
+     "providers/contractors" at 200% text). */
   .list {
+    grid-template-columns: minmax(0, 1fr);
     list-style: none;
     padding-left: 0;
     gap: var(--s-3);

@@ -107,6 +107,32 @@
 
 /* ---------- Mobile layer (phones + tablets; SPEC §5.2, §5.3). Never matches at >= 1024px. ---------- */
 @media (max-width: 1023.98px) {
+  /* The solid state is a layer under the bar rather than the header's own background, so it can
+     fade with opacity (SPEC §2.2: motion is transform and opacity, 150-240ms) instead of the
+     desktop's 540ms background change, which let body copy show through the wordmark for a
+     quarter of a second after a jump. The bottom edge is --m-elev-1, a shadow, so the bar is
+     56px tall, not 56 + a 1px border (SPEC §5.2). */
+  .header {
+    background: transparent;
+    border-bottom: 0;
+    transition: none;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--white);
+    box-shadow: var(--m-elev-1);
+    pointer-events: none;
+    transition: opacity var(--m-dur-press) var(--m-ease);
+  }
+
+  .transparent::before {
+    opacity: 0;
+  }
+
   /* 56px bar plus the top safe area. The nav keeps its desktop content-box, so the inset is
      padding on top of the 56px row and the Menu pill sits in the same place with or without a
      notch. From 600 it takes the capped column, so the wordmark and Menu line up with the
@@ -115,8 +141,10 @@
     height: var(--m-bar-h);
     padding: env(safe-area-inset-top, 0px) var(--gutter) 0;
     max-width: var(--m-column);
-    /* 8px, the tap-spacing minimum: the one-line wordmark and Menu then fit from 374 up. */
-    gap: var(--s-2);
+    /* 16px between the wordmark and the Menu pill, so the tracked caps never crowd the pill
+       outline (it was 9px at 375). Where one line would come closer than that, the wordmark
+       stacks as EDCLOUD / VENTURE PARTNERS instead (below ~383px). */
+    gap: var(--s-4);
   }
 
   .brand {
@@ -130,6 +158,10 @@
        two lines there instead; wider phones keep one line. */
     white-space: normal;
     line-height: 1.2;
+    /* With text enlarged the wordmark is clipped at its box rather than running under the Menu
+       pill; the full name stays the link's accessible name. The focus ring is drawn outside the
+       box, so it is not clipped. */
+    overflow: hidden;
   }
 
   .wordmarkTail {
@@ -180,7 +212,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--s-2);
+    gap: var(--s-4);
   }
 
   /* Scrolls on its own when a landscape phone is shorter than the menu (C-cross-01); the page
@@ -323,6 +355,21 @@
     clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
+  }
+}
+
+/* Landscape phones (844x390): a pinned foot left only ~110px for the list, and the two legal rows
+   sat entirely under it with nothing to say the list scrolls. Here the whole sheet scrolls as
+   one column instead, foot included, so every destination is reachable by the same scroll. */
+@media (max-width: 1023.98px) and (orientation: landscape) and (max-height: 500px) {
+  .sheet {
+    grid-template-rows: auto auto auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .sheetBody {
+    overflow: visible;
   }
 }
 

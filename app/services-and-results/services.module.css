@@ -393,6 +393,7 @@
 @media (max-width: 1023.98px) {
   /* ---- Hero: a photo band, not a whole screen. vh first for old engines. ---- */
   .hero {
+    margin-top: calc(-1 * var(--nav-h)); /* no 1px header border below 1024 */
     min-height: clamp(420px, 56vh, 560px);
     min-height: clamp(420px, 56svh, 560px);
   }
@@ -421,15 +422,24 @@
 
   /* ---- Proof strip: a 2x2 ruled grid. The outer cells have no outside padding, so the text
      column meets the gutter on both sides. ---- */
+  /* Two columns (each track is at least half the row, so never three) while a cell still holds
+     its nowrap figure; the 5.75em floor is in em of the figure size, so with text enlarged (200%
+     at 320px) the strip falls back to one column instead of the figures running into each other
+     (WCAG 1.4.4, 1.4.10). The hairlines below assume 2x2; at one column they still separate the
+     rows. */
   .proofInner {
     max-width: var(--m-column);
     padding: var(--s-6) var(--gutter);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    font-size: var(--m-t-stat-sm);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.75em, 50%)), 1fr));
     gap: 0;
   }
 
+  /* Figure / label / client on fixed rows: the label row takes the slack, so the client names in
+     one row of the strip share a baseline even when only one label wraps to two lines. */
   .proofItem {
-    align-content: start;
+    grid-template-rows: auto 1fr auto;
+    align-content: stretch;
     gap: var(--s-1);
     border-left: 0;
     padding: var(--s-3) 0;
@@ -460,6 +470,7 @@
 
   /* Balanced, so a two-line label never leaves "years" alone on the second line. */
   .proofLabel {
+    align-self: start;
     font-size: var(--m-t-label);
     font-weight: 400;
     color: var(--ink-2);
@@ -557,6 +568,10 @@
     color: var(--growth);
   }
 
+  /* Balanced like every heading. The heading button glues each title's last two words
+     (DisclosureHeading keepLastWords), so a two-line title can never end on one word: balance
+     alone set "Smarter Procurement / Pathways" at 320-371, and pretty stranded five of the six
+     (SPEC §18.2 rule 2). */
   .serviceTitle {
     grid-row: 1;
     grid-column: 2;
@@ -658,6 +673,11 @@
     border-top: 1px solid var(--ink);
   }
 
+  /* The last block ends on the section's own bottom padding, like every other section. */
+  .table tbody tr:last-child {
+    padding-bottom: 0;
+  }
+
   /* Cells are prose now, so they get the same no-lone-last-word wrap as paragraphs. */
   .td {
     display: block;
@@ -667,12 +687,17 @@
     text-wrap: pretty;
   }
 
-  /* The client leads in ink, the outcome is the green headline, then how it got there. The
-     client stays at body size rather than a 13px meta line: it is a table cell, and running
-     copy in cells never drops under 16px (SPEC §2.1). */
+  /* The client is the row's meta line (G9): 13px/600 uppercase ink, tracked, the way the proof
+     strip above sets the same names, so the green outcome under it is clearly the headline. */
   .tdClient {
     order: 0;
     white-space: normal;
+    font-size: var(--m-t-meta);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
   }
 
   .tdOutcome {
@@ -683,8 +708,12 @@
     text-wrap: balance;
   }
 
+  /* The run-in labels are for the eye only: the clipped header row already names every cell's
+     column for assistive tech, so the "/ ''" alternative text keeps the label from being read
+     twice. Engines without alt text for generated content keep the first declaration. */
   .td[data-label]:not(.tdOutcome)::before {
     content: attr(data-label) ': ';
+    content: attr(data-label) ': ' / '';
     font-weight: 600;
     color: var(--ink);
   }
@@ -717,23 +746,14 @@
   }
 }
 
-/* Tablets: the hero text keeps to the centred column, the six services sit 2-up and start open,
-   and the fit lists sit side by side. The proof strip stays 2x2 here on purpose: in the ~578px
-   centred column a row of four leaves ~126px a cell, and "300 → 1.5M" (nowrap, ~160px at the
-   tablet stat size) ran into its neighbour. 2x2 still strands nothing (B-pages-16). */
+/* Tablets: the hero text keeps to the centred column and the six services start open. Every
+   list stays the phone's single-column ledger: 2-up services and fit lists, 3-up phases and a
+   4-column results table all set their text narrower than a phone does inside the capped column
+   (102-273px cells; Phase 4 R1-designer-02, SPEC §17). The proof strip stays 2x2: it holds
+   figures, not running text, and a row of four left "300 → 1.5M" no room (B-pages-16). */
 @media (min-width: 600px) and (max-width: 1023.98px) {
   .heroInner {
     max-width: calc(var(--m-column) + 2 * var(--gutter));
-  }
-
-  .serviceList {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--s-8);
-  }
-
-  .fit {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -747,110 +767,5 @@
   .heroInner {
     padding-top: calc(var(--nav-h) + var(--s-6));
     padding-bottom: var(--s-6);
-  }
-}
-
-/* Wide tablets: three phases side by side (never 2 + 1, B-pages-09), and the results become a
-   real four-column table again, with room for "What we built" (B-pages-17). */
-@media (min-width: 820px) and (max-width: 1023.98px) {
-  .phases {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--s-6);
-    border-top: 0;
-  }
-
-  .phase {
-    align-content: start;
-    padding-top: var(--s-4);
-    border-top: 1px solid var(--ink);
-    border-bottom: 0;
-  }
-
-  .table {
-    display: table;
-  }
-
-  .table thead,
-  .th {
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    clip: auto;
-    clip-path: none;
-    white-space: normal;
-  }
-
-  .table thead {
-    display: table-header-group;
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    clip: auto;
-    clip-path: none;
-    white-space: normal;
-  }
-
-  .table tbody {
-    display: table-row-group;
-  }
-
-  .table tr {
-    display: table-row;
-    padding: 0;
-    border-top: 0;
-  }
-
-  .th,
-  .td {
-    display: table-cell;
-    padding: var(--s-4) var(--s-3);
-    border-bottom: 1px solid var(--line);
-  }
-
-  /* The outer columns sit on the column edges, so the margins stay equal. */
-  .th:first-child,
-  .td:first-child {
-    padding-left: 0;
-  }
-
-  .th:last-child,
-  .td:last-child {
-    padding-right: 0;
-  }
-
-  .th {
-    font-size: var(--m-t-label);
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  /* "What we built" and the green outcome get the widest columns, so neither stacks into
-     one-word lines; the client names are short and take what is left (~18%). */
-  .th:nth-child(2) {
-    width: 24%;
-  }
-
-  .th:nth-child(3) {
-    width: 30%;
-  }
-
-  .th:nth-child(4) {
-    width: 29%;
-  }
-
-  .tdOutcome {
-    margin-bottom: 0;
-    font-size: inherit;
-    line-height: inherit;
-    text-wrap: pretty;
-  }
-
-  .td[data-label]:not(.tdOutcome)::before {
-    content: none;
   }
 }

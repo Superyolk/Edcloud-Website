@@ -8,7 +8,7 @@
  *                   (links inside running text are reported with inline:true — WCAG 2.5.8 exempts them)
  *   tapSpacing      two such targets closer than 8px (and not nested / overlapping)
  *   textSize        rendered text < 13px
- *   bodyText        p/li/dd/td copy < 16px
+ *   bodyText        p/li/dd/td copy < 16px (a 13px+ 600 uppercase meta line is a label, not copy)
  *   inputFont       input/select/textarea font-size < 16px (iOS zooms on focus)
  *   mediaDims       img/video without both width and height attributes
  *   safeArea        fixed/sticky elements touching a viewport edge with no safe-area-inset rule
@@ -136,8 +136,12 @@ function audit() {
   }
   for (const el of Array.from(document.querySelectorAll('p, li, dd, td'))) {
     if (!visible(el) || !(el.textContent || '').trim()) continue;
-    const size = px(getComputedStyle(el).fontSize);
-    if (size < 16) out.push({ check: 'bodyText', selector: selectorOf(el), detail: `${size}px` });
+    const cs = getComputedStyle(el);
+    const size = px(cs.fontSize);
+    // A meta line (SPEC §2.1 --m-t-meta, G5/G9: 13px/600 uppercase, e.g. the Results client cell)
+    // is a label, not running copy; the 13px textSize floor above still applies to it.
+    const meta = cs.textTransform === 'uppercase' && Number(cs.fontWeight) >= 600 && size >= 13;
+    if (size < 16 && !meta) out.push({ check: 'bodyText', selector: selectorOf(el), detail: `${size}px` });
   }
   for (const el of Array.from(document.querySelectorAll('input, select, textarea'))) {
     const type = (el.getAttribute('type') || '').toLowerCase();

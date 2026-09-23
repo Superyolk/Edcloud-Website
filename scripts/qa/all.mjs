@@ -21,6 +21,7 @@ const STEPS = [
   { name: 'mobile-lint', args: ['mobile-lint.mjs'] },
   { name: 'matrix', args: ['matrix.mjs'] },
   { name: 'bytes', args: ['bytes.mjs'] },
+  { name: 'early', args: ['early.mjs'] }, // throttled: text fragments and taps before hydration
   { name: 'perf', args: ['perf.mjs'] },
 ];
 

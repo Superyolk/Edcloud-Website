@@ -79,6 +79,8 @@ a:hover {
 
 @media (max-width: 1023.98px) {
   html {
+    /* The bar's bottom edge is a shadow below 1024, not a 1px border. */
+    scroll-padding-top: calc(var(--nav-h) + 16px);
     /* iOS inflates text when a phone turns to landscape unless told not to; the fluid type scale
        already sizes for the width. */
     -webkit-text-size-adjust: 100%;
@@ -91,8 +93,22 @@ a:hover {
     /* Running copy never drops under 16px (SPEC §2.1). Anything that sets its own size still wins. */
     font-size: var(--m-t-body);
     line-height: var(--m-lh-body);
-    /* "K-12" and the like must never break at the hyphen (SPEC §18.2 rule 3). */
+    /* No automatic hyphenation (SPEC §18.2 rule 3). A hard hyphen is still a break opportunity,
+       so "K-12" and the like are kept whole by the data-nowrap spans below. */
     hyphens: manual;
+    /* Reflow at 320px with text enlarged (WCAG 1.4.4, 1.4.10): a word longer than its line breaks
+       rather than pushing the page sideways. It only acts on a word that cannot fit at all, so
+       text at its normal size breaks exactly as before. */
+    overflow-wrap: break-word;
+  }
+
+  /* Phrases keepTogether() and keepLastWords() glue (components/KeepTogether.tsx): "K-12", dates,
+     "Level AA", a heading's last two words. An inline-block moves to the next line whole rather
+     than breaking inside, like nowrap; unlike nowrap, max-width lets it wrap inside itself when
+     it is wider than the whole line, so enlarged text still reflows at 320px (WCAG 1.4.10). */
+  [data-nowrap] {
+    display: inline-block;
+    max-width: 100%;
   }
 
   /* No stranded words: headings balance, prose avoids a lone last word (SPEC §18.2 rule 2). */
@@ -101,6 +117,10 @@ a:hover {
   h3,
   h4 {
     text-wrap: balance;
+    /* Display sizes at 200% text (a 68px "Companies" on a 320px screen) may break inside a word;
+       anywhere, unlike break-word, also lets a heading's min-content shrink, so a heading in a
+       flex row or an auto grid track cannot hold the column open. Never acts at normal sizes. */
+    overflow-wrap: anywhere;
   }
 
   p,

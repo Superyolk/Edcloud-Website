@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { MQ_MOBILE } from '@/app/breakpoints';
 import { HOME } from '@/content/content';
 import { HOME_COPY } from '@/content/copy';
 import LinkButton from '@/components/LinkButton';
@@ -29,6 +30,28 @@ const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)'
 export default function ServicesTabs() {
   const [active, setActive] = useState(0);
   const current = split(HOME.services[active].body);
+  // Below 1024, opening a row collapses the open panel ABOVE it, which would pull the row you
+  // just tapped ~260px up from under your thumb. The row's screen position is recorded before
+  // the change and restored in the same frame (before paint), so the tapped row stays put and
+  // its panel opens beneath it. Desktop layout never moves, so it is left alone.
+  const anchor = useRef<{ index: number; top: number } | null>(null);
+
+  const open = (i: number) => {
+    if (i === active) return;
+    const el = document.getElementById(tabId(i));
+    anchor.current = el && window.matchMedia(MQ_MOBILE).matches ? { index: i, top: el.getBoundingClientRect().top } : null;
+    setActive(i);
+  };
+
+  useLayoutEffect(() => {
+    const a = anchor.current;
+    anchor.current = null;
+    if (!a || a.index !== active) return;
+    const el = document.getElementById(tabId(a.index));
+    if (!el) return;
+    const shift = el.getBoundingClientRect().top - a.top;
+    if (Math.abs(shift) >= 1) window.scrollBy(0, shift);
+  }, [active]);
 
   return (
     <div className={styles.services} style={{ '--panel-row': active + 2 } as CSSProperties}>
@@ -41,10 +64,13 @@ export default function ServicesTabs() {
                 type="button"
                 id={tabId(i)}
                 className={isActive ? `${styles.tab} ${styles.tabActive}` : styles.tab}
-                onClick={() => setActive(i)}
+                onClick={() => open(i)}
                 onMouseEnter={() => finePointer() && setActive(i)}
                 aria-expanded={isActive}
                 aria-controls={PANEL_ID}
+                // One row is always open (the accordion is exclusive), so pressing the open row
+                // does nothing; saying so keeps a screen reader from promising a collapse (APG).
+                aria-disabled={isActive || undefined}
                 // A full-width row: it answers a press with colour, not the global button shrink.
                 data-row=""
                 style={{ gridRow: i + 1 + (i > active ? 1 : 0) }}
@@ -56,8 +82,10 @@ export default function ServicesTabs() {
           );
         })}
       </ol>
-      {/* key: a new service remounts the panel, which replays its fade-in on phones. */}
-      <div key={active} id={PANEL_ID} role="region" aria-labelledby={tabId(active)} className={styles.panel}>
+      {/* key: a new service remounts the panel, which replays its fade-in on phones. No
+          role="region": it added a landmark the frozen desktop never had. A labelled group
+          keeps the panel named by its row without joining the landmark list. */}
+      <div key={active} id={PANEL_ID} role="group" aria-labelledby={tabId(active)} className={styles.panel}>
         <p className={styles.panelLead}>{current.lead}</p>
         <p className={styles.body}>{current.rest}</p>
         <div className={styles.panelFoot}>

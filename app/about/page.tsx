@@ -5,8 +5,9 @@ import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
 import Picture from '@/components/Picture';
 import Disclosure, { DisclosureHeading, DisclosurePanel } from '@/components/Disclosure';
-import { MQ_PHONE, MQ_TABLET_WIDE } from '@/app/breakpoints';
+import { MQ_PHONE } from '@/app/breakpoints';
 import JsonLd from '@/components/JsonLd';
+import { keepTogether } from '@/components/KeepTogether';
 import { breadcrumbLd, pageMeta, personLd, SEO_DESCRIPTION } from '@/content/seo';
 import styles from './about.module.css';
 
@@ -103,7 +104,10 @@ export default function AboutPage() {
                 <DisclosureHeading as="h3" className={styles.h3}>
                   {ch.heading}
                 </DisclosureHeading>
-                <DisclosurePanel className={styles.chapterBody} contentsOnDesktop>
+                {/* No role="region": eight chapter panels would flood the landmark list (APG
+                    limits region panels to about six), and the button's aria-controls already
+                    ties each panel to its heading. The landmarks match the desktop's. */}
+                <DisclosurePanel className={styles.chapterBody} contentsOnDesktop region={false}>
                   {ch.body.map(({ block, i }) => renderBlock(block, i))}
                 </DisclosurePanel>
               </Disclosure>
@@ -122,14 +126,14 @@ export default function AboutPage() {
               height={450}
               loading="lazy"
               decoding="async"
-              phoneSizes="128px"
-              tabletSizes={`${MQ_TABLET_WIDE} 240px, 128px`}
+              phoneSizes="112px"
+              tabletSizes="128px"
             />
             <div className={styles.partnerText}>
               <h2 className={styles.h2}>{ABOUT_COPY.partner.h2}</h2>
               {ABOUT_COPY.partner.paragraphs.map((text, i) => (
                 <p key={text} className={i === 0 ? styles.p : styles.partnerP}>
-                  {text}
+                  {keepTogether(text)}
                 </p>
               ))}
             </div>

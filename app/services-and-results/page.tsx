@@ -100,7 +100,7 @@ export default function ServicesPage() {
                   <span className={styles.serviceIndex}>{s.n}</span>
                   <div className={styles.serviceInner}>
                     <div className={styles.serviceText}>
-                      <DisclosureHeading as="h3" className={styles.serviceTitle}>
+                      <DisclosureHeading as="h3" className={styles.serviceTitle} keepLastWords>
                         {s.title}
                       </DisclosureHeading>
                       <DisclosurePanel as="p" part="pitch" className={styles.servicePitch}>
@@ -136,7 +136,7 @@ export default function ServicesPage() {
             <p className={styles.lead}>{SERVICES_COPY.resultsLead}</p>
             <div className={styles.tableWrap}>
               <table className={styles.table}>
-                {/* Below 820 the rows stack; the header is clipped, not removed, so screen
+                {/* Below 1024 the rows stack; the header is clipped, not removed, so screen
                     readers still pair every cell with its column. */}
                 <thead>
                   <tr className={styles.thead}>
