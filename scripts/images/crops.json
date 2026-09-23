@@ -1,0 +1,24 @@
+{
+  "//": "Mobile crops for components/Picture.tsx (docs/mobile/SPEC.md §8.1). One entry per crop: src is a file in public/images; name is what Picture takes; slots says which <source> uses it (phone = MQ_PHONE, tablet = MQ_TABLET); ratio is width:height; focusX/focusY put that fraction of the source at the centre of the crop (clamped to the frame; 0 = left/top edge); widths are the srcset widths, and any width wider than the crop itself is replaced by the crop's own width (never upscaled). Run: python scripts/images/build-crops.py",
+  "crops": [
+    { "src": "hero-poster.webp", "name": "hero-poster", "slots": ["phone"], "ratio": "4:5", "focusX": 0.6, "focusY": 0.5, "widths": [480, 828, 1170] },
+    { "src": "hero-poster.webp", "name": "hero-poster", "slots": ["tablet"], "ratio": "3:2", "focusX": 0.5, "focusY": 0.5, "widths": [1200, 1600] },
+
+    { "src": "hero-about.webp", "name": "hero-about", "slots": ["phone"], "ratio": "4:5", "focusX": 0.44, "focusY": 0.5, "widths": [480, 828, 1170] },
+    { "src": "hero-about.webp", "name": "hero-about", "slots": ["tablet"], "ratio": "3:2", "focusX": 0.5, "focusY": 0.5, "widths": [1200, 1600] },
+
+    { "src": "hero-services.webp", "name": "hero-services", "slots": ["phone"], "ratio": "4:5", "focusX": 0.4, "focusY": 0.5, "widths": [480, 828, 1170] },
+    { "src": "hero-services.webp", "name": "hero-services", "slots": ["tablet"], "ratio": "3:2", "focusX": 0.5, "focusY": 0.5, "widths": [1200, 1600] },
+
+    { "src": "conference-room.webp", "name": "conference-room", "slots": ["phone"], "ratio": "16:9", "focusX": 0.5, "focusY": 0.5, "widths": [480, 828, 1170] },
+    { "src": "conference-room.webp", "name": "conference-room", "slots": ["tablet"], "ratio": "3:2", "focusX": 0.5, "focusY": 0.5, "widths": [1200] },
+
+    { "src": "stairway.webp", "name": "stairway", "slots": ["phone"], "ratio": "39:14", "focusX": 0.5, "focusY": 0.5, "widths": [480, 828, 1170] },
+    { "src": "stairway.webp", "name": "stairway", "slots": ["tablet"], "ratio": "21:9", "focusX": 0.5, "focusY": 0.5, "widths": [1450] },
+
+    { "src": "classroom-lecture.webp", "name": "classroom-lecture", "slots": ["phone"], "ratio": "39:14", "focusX": 0.5, "focusY": 0.5, "widths": [480, 828, 980] },
+    { "src": "classroom-lecture.webp", "name": "classroom-lecture", "slots": ["tablet"], "ratio": "21:9", "focusX": 0.5, "focusY": 0.5, "widths": [980] },
+
+    { "src": "aaron-sokol.webp", "name": "aaron-sokol", "slots": ["phone", "tablet"], "ratio": "4:5", "focusX": 0.5, "focusY": 0, "widths": [256, 360] }
+  ]
+}
