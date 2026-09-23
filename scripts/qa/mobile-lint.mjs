@@ -12,6 +12,13 @@
  *   inputFont       input/select/textarea font-size < 16px (iOS zooms on focus)
  *   mediaDims       img/video without both width and height attributes
  *   safeArea        fixed/sticky elements touching a viewport edge with no safe-area-inset rule
+ *   margins         SPEC §18.1 rules 1-2. (a) Each region (header nav, every main section, each footer
+ *                   row) has a text column whose left and right insets differ by <= 1px; the column
+ *                   is the union of the content boxes that hold its visible text. (b) Every visible
+ *                   h1-h4/p/li/dt/dd/blockquote/figcaption/label/td/th keeps left >= gutter and
+ *                   right <= viewport - gutter (gutter = the live --gutter). Collapsed ([hidden],
+ *                   until-found), [inert], invisible, fixed-position and fully off-screen elements
+ *                   are skipped; media is never checked, so full-bleed images are fine.
  *
  * Findings are deduped per page by (check, selector) and keep the list of widths they occur at.
  * Output: scripts/qa/output/mobile-lint.json and mobile-lint.md.
@@ -25,7 +32,7 @@ import { OUT_DIR, PAGES, contextOptions, main, pageUrl, settlePage, startTarget,
 const PHONE_WIDTHS = Array.from({ length: 111 }, (_, i) => 320 + i);
 const TABLET_WIDTHS = [600, 700, 768, 800, 820, 900, 1000, 1023];
 const SWEEP = [...PHONE_WIDTHS.map((w) => ({ w, h: 844 })), ...TABLET_WIDTHS.map((w) => ({ w, h: 1024 }))];
-const CHECKS = ['overflow', 'tapSize', 'tapSpacing', 'textSize', 'bodyText', 'inputFont', 'mediaDims', 'safeArea'];
+const CHECKS = ['overflow', 'tapSize', 'tapSpacing', 'textSize', 'bodyText', 'inputFont', 'mediaDims', 'safeArea', 'margins'];
 
 /** Runs in the page. Returns [{ check, selector, detail }]. */
 function audit() {
@@ -177,6 +184,73 @@ function audit() {
     const r = el.getBoundingClientRect();
     const edges = [r.top <= 0 && 'top', r.bottom >= vh && 'bottom', r.left <= 0 && 'left', r.right >= vw && 'right'].filter(Boolean);
     if (edges.length && !safeMatch(el)) out.push({ check: 'safeArea', selector: selectorOf(el), detail: `${pos} at ${edges.join('/')}` });
+  }
+
+  // margins (SPEC §18.1 rules 1 and 2: equal left/right margins, no text in the gutter)
+  const gutter = (() => {
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:absolute;visibility:hidden;padding-left:var(--gutter)';
+    document.body.appendChild(probe);
+    const g = px(getComputedStyle(probe).paddingLeft);
+    probe.remove();
+    return g;
+  })();
+  // Collapsed disclosures / show-all items (hidden, hidden=until-found) and anything the page has
+  // taken out of use are not on screen, so they have no margins to measure.
+  const shelved = (el) => !!el.closest('[hidden], [inert]');
+  const offscreen = (r) => r.right <= 0 || r.left >= vw;
+  const inFixed = (el, stop) => {
+    for (let a = el; a && a !== stop; a = a.parentElement) if (getComputedStyle(a).position === 'fixed') return true;
+    return false;
+  };
+  const contentBox = (el) => {
+    const r = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    return {
+      left: r.left + px(cs.borderLeftWidth) + px(cs.paddingLeft),
+      right: r.right - px(cs.borderRightWidth) - px(cs.paddingRight),
+    };
+  };
+  // Rule 1: each region's text column. A text run's column is the content box of its nearest
+  // block-level box, or of that box's flex/grid parent when it is a flex/grid item (a shrink-wrapped
+  // footer link or the Menu button sits in a column wider than itself). The union of those boxes
+  // is the column the reader sees; its left and right insets must match within 1px.
+  const regionLabel = (el) =>
+    el.getAttribute('data-screen-label') ? `${el.tagName.toLowerCase()}[data-screen-label="${el.getAttribute('data-screen-label')}"]` : selectorOf(el);
+  for (const region of Array.from(document.querySelectorAll('header nav, main > section, main > * > section, body > footer > *'))) {
+    if (!visible(region) || shelved(region)) continue;
+    let left = Infinity;
+    let right = -Infinity;
+    const tw = document.createTreeWalker(region, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      const el = n.parentElement;
+      if (!n.textContent?.trim() || !el || shelved(el) || !visible(el) || inFixed(el, region)) continue;
+      let box = el;
+      while (box !== region && getComputedStyle(box).display.startsWith('inline')) box = box.parentElement;
+      const parent = box.parentElement;
+      if (box !== region && parent && /(^|\s|-)(flex|grid)$/.test(getComputedStyle(parent).display)) box = parent;
+      const r = box.getBoundingClientRect();
+      if (offscreen(r)) continue;
+      const c = contentBox(box);
+      left = Math.min(left, c.left);
+      right = Math.max(right, c.right);
+    }
+    if (!Number.isFinite(left)) continue;
+    const L = left;
+    const R = vw - right;
+    if (Math.abs(L - R) > 1) out.push({ check: 'margins', selector: regionLabel(region), detail: `column L ${r1(L)} R ${r1(R)}` });
+  }
+  // Rule 2: no text block starts inside the gutter or runs past it. Full-bleed media is fine; the
+  // text on it is not.
+  for (const el of Array.from(document.body.querySelectorAll('h1, h2, h3, h4, p, li, dt, dd, blockquote, figcaption, label, td, th'))) {
+    if (!(el.textContent || '').trim() || shelved(el) || !visible(el) || inFixed(el, null)) continue;
+    const r = el.getBoundingClientRect();
+    if (offscreen(r)) continue;
+    const L = r.left;
+    const R = vw - r.right;
+    if (L < gutter - 0.5 || R < gutter - 0.5) {
+      out.push({ check: 'margins', selector: selectorOf(el), detail: `text L ${r1(L)} R ${r1(R)} (gutter ${r1(gutter)})` });
+    }
   }
   return out;
 }

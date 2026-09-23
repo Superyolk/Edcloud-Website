@@ -1,7 +1,15 @@
 {
   "//": "Strings the mobile redesign may ADD to the DOM, per category, once a reviewer has confirmed they are UI chrome (button labels etc.), not copy. Exact strings; duplicates of existing copy for mobile-only markup also go here.",
-  "segments": [],
+  "//segments": "SPEC §11. Show-all labels and their aria-hidden item counts (from content .length, never typed: 9 press stories, 48 client logos). The menu sheet's foot repeats existing copy (the header's Contact link, the footer's email and phone line); it is only in the DOM while the sheet is open.",
+  "segments": ["Show all press", "Show all clients", "Show fewer", "9", "48", "Contact", "info@edcloud.org", "Tel: 510-306-2403"],
   "words": [],
   "hrefs": [],
-  "alts": []
+  "alts": [],
+  "//meta": "SPEC §4.3 and §15 item 7: viewport-fit=cover is a meta viewport attribute, not metadata. Each pair lets exactly that one <meta> entry change from the snapshot's value to the new one; anything else in <head> must still match byte for byte.",
+  "meta": [
+    {
+      "from": "viewport=width=device-width, initial-scale=1",
+      "to": "viewport=width=device-width, initial-scale=1, viewport-fit=cover"
+    }
+  ]
 }

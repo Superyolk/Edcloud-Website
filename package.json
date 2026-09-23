@@ -22,7 +22,8 @@
     "qa:a11y": "node scripts/qa/a11y.mjs",
     "qa:perf": "node scripts/qa/perf.mjs",
     "qa:bytes": "node scripts/qa/bytes.mjs",
-    "qa:content": "node scripts/qa/content.mjs"
+    "qa:content": "node scripts/qa/content.mjs",
+    "qa:breakpoints": "node scripts/qa/breakpoints-lint.mjs"
   },
   "dependencies": {
     "next": "16.3.4",

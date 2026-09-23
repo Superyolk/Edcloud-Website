@@ -16,7 +16,8 @@
  * Rules: anything REMOVED from a multiset fails. Anything ADDED fails unless it is listed in
  * scripts/qa/content-allowlist.json under its category ("segments" | "hrefs" | "alts" | "words"),
  * which is where reviewed UI chrome (e.g. a "Show all press" button label) goes. Every added string
- * is printed either way so reviewers can see it. Any jsonLd/meta/file difference fails.
+ * is printed either way so reviewers can see it. Any jsonLd/meta/file difference fails, except an
+ * exact <meta> entry swap listed under "meta" in the allowlist (viewport-fit=cover, SPEC §15.7).
  *
  * The desktop (1440) and mobile (390) DOMs are both snapshotted, since markup may differ by width.
  */
@@ -152,7 +153,11 @@ main(async () => {
       }
     }
     r.exact.jsonLd = JSON.stringify(snap.jsonLd) === JSON.stringify(data.jsonLd);
-    r.exact.meta = JSON.stringify(snap.meta) === JSON.stringify(data.meta);
+    // Allow-listed <meta> changes (content-allowlist.json "meta": exact from -> to pairs) are
+    // applied to the snapshot side; every other head entry still has to match exactly.
+    const metaSwaps = new Map((allow.meta ?? []).map((m) => [m.from, m.to]));
+    const snapMeta = { ...snap.meta, meta: snap.meta.meta.map((m) => metaSwaps.get(m) ?? m).sort() };
+    r.exact.meta = JSON.stringify(snapMeta) === JSON.stringify(data.meta);
     r.exact.textByteIdentical = snap.text === data.text; // informational
     const fail = Object.keys(r.removed).length + Object.keys(r.addedNotAllowed).length + (r.exact.jsonLd ? 0 : 1) + (r.exact.meta ? 0 : 1);
     r.status = fail ? 'FAIL' : 'PASS';
@@ -166,9 +171,15 @@ main(async () => {
     for (const [k, v] of Object.entries(r.added)) for (const s of v) console.log(`      + ${k}: ${JSON.stringify(s)}${(allow[k] ?? []).includes(s) ? ' (allow-listed)' : ''}`);
     for (const [k, v] of Object.entries(r.removed)) for (const s of v) console.log(`      - ${k}: ${JSON.stringify(s)}`);
   }
+  // app/sitemap.ts stamps every <lastmod> with the build time by design, so a byte compare fails on
+  // every rebuild. Each <lastmod> must still be a valid ISO timestamp; everything else in the file
+  // (URLs, changefreq, priority, order) is still compared byte for byte.
+  const ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+  const stable = (f, body) =>
+    f === 'sitemap.xml' ? body.replace(/<lastmod>([^<]*)<\/lastmod>/g, (m, t) => (ISO.test(t) ? '<lastmod>BUILD-TIME</lastmod>' : m)) : body;
   for (const [f, body] of Object.entries(files)) {
     const sf = path.join(CONTENT_DIR, f);
-    const same = fs.existsSync(sf) && fs.readFileSync(sf, 'utf8') === body;
+    const same = fs.existsSync(sf) && stable(f, fs.readFileSync(sf, 'utf8')) === stable(f, body);
     report.files[f] = same ? 'PASS' : 'FAIL';
     if (!same) report.failures++;
     console.log(`[qa] content ${same ? 'PASS' : 'FAIL'} /${f}`);
