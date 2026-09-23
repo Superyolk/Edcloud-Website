@@ -485,9 +485,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 62% 50%;
-  transform: scale(1.35); /* crops out the soft right edge of the source photo */
-  transform-origin: 62% 50%;
+  /* The box runs from near-square (desktop) to tall and narrow (phones). Anchoring right of centre
+     keeps the raised hands, the student in green and the teacher in every crop. */
+  object-position: 74% 50%;
 }
 
 .contactCard {
