@@ -136,6 +136,13 @@ main(async () => {
     }
     const snap = JSON.parse(fs.readFileSync(sf, 'utf8'));
     const r = { removed: {}, added: {}, addedNotAllowed: {}, exact: {} };
+    // Words are rebuilt from the text-node segments on both sides. body.textContent glues adjacent
+    // elements into one token ("Clients06PressEdWeek"), so ANY element inserted between two
+    // sections (even an allow-listed Show-all button) broke tokens that were never copy. Segments
+    // are compared as their own multiset below, so a changed or removed word still fails.
+    const segWords = (d) => d.segments.flatMap((x) => x.split(' ')).filter(Boolean).sort();
+    snap.words = segWords(snap);
+    data.words = segWords(data);
     for (const k of MULTISETS) {
       const removed = minus(snap[k], data[k]);
       const added = minus(data[k], snap[k]);

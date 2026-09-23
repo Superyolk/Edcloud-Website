@@ -14,6 +14,7 @@ import ServicesTabs from '@/components/home/ServicesTabs';
 import ContactForm from '@/components/home/ContactForm';
 import ContactPill from '@/components/home/ContactPill';
 import Picture from '@/components/Picture';
+import ui from '@/components/ui.module.css';
 import ShowAll, { showAllItem, showAllList, type ShowAllLimit } from '@/components/ShowAll';
 import styles from './home.module.css';
 
@@ -109,9 +110,12 @@ export default function HomePage() {
             <p className={styles.body}>{HOME_COPY.promise.p2}</p>
             <p className={styles.body}>{HOME_COPY.promise.p3}</p>
             <div>
-              {/* The accessible name starts with the visible text (WCAG 2.5.3); "Read More" alone failed link-text. */}
-              <LinkButton href="/about" ariaLabel={`${HOME_COPY.promise.readMore} about EdCloud`}>
+              {/* "Read More" alone failed Lighthouse link-text, which reads the link's text and ignores
+                  aria-label, so the rest of the name is visually hidden text (SPEC §6.1 fallback,
+                  allow-listed in qa:content). The name still starts with the visible text (WCAG 2.5.3). */}
+              <LinkButton href="/about">
                 {HOME_COPY.promise.readMore}
+                <span className={ui.srOnly}> about EdCloud</span>
               </LinkButton>
             </div>
           </div>

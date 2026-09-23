@@ -64,6 +64,13 @@
   display: contents;
 }
 
+/* Chromium gives <source> no display: none of its own, so inside a display: contents <picture>
+   the two sources would become empty grid/flex items of the image's parent (they pushed the
+   About headshot into a third column and the Home hero text 95px down). New elements only. */
+.contents > source {
+  display: none;
+}
+
 /* Visually hidden, still read by assistive tech and still in the DOM (the clip pattern). */
 .srOnly {
   position: absolute;

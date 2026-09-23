@@ -1,9 +1,10 @@
 {
   "//": "Strings the mobile redesign may ADD to the DOM, per category, once a reviewer has confirmed they are UI chrome (button labels etc.), not copy. Exact strings; duplicates of existing copy for mobile-only markup also go here.",
-  "//segments": "SPEC §11. Show-all labels and their aria-hidden item counts (from content .length, never typed: 9 press stories, 48 client logos). The menu sheet's foot repeats existing copy (the header's Contact link, the footer's email and phone line); it is only in the DOM while the sheet is open.",
-  "segments": ["Show all press", "Show all clients", "Show fewer", "9", "48", "Contact", "info@edcloud.org", "Tel: 510-306-2403"],
+  "//segments": "SPEC §11. Show-all labels and their aria-hidden item counts (from content .length, never typed: 9 press stories, 48 client logos). The menu sheet's foot repeats existing copy (the header's Contact link, the footer's email and phone line); it is only in the DOM while the sheet is open. \"about EdCloud\" is SPEC §6.1's visually hidden tail of Home's \"Read More\" link (Lighthouse link-text ignores aria-label).",
+  "segments": ["Show all press", "Show all clients", "Show fewer", "9", "48", "Contact", "info@edcloud.org", "Tel: 510-306-2403", "about EdCloud"],
   "words": [],
-  "hrefs": [],
+  "//hrefs": "SPEC §5.6: Home's floating Contact pill is an <a href=\"#contact\"> whose text is the existing navLinks label, so it adds one more \"#contact\" to Home's href multiset (it links to a section already on the page).",
+  "hrefs": ["#contact"],
   "alts": [],
   "//meta": "SPEC §4.3 and §15 item 7: viewport-fit=cover is a meta viewport attribute, not metadata. Each pair lets exactly that one <meta> entry change from the snapshot's value to the new one; anything else in <head> must still match byte for byte.",
   "meta": [

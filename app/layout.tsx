@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { preload } from 'react-dom';
 import { OG_IMAGE, ORG, SITE_URL } from '@/content/seo';
 import './fonts.css';
 import './tokens.css';
@@ -64,21 +65,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  // next/font used to inject this. The latin face is needed for the first paint, so it is fetched
+  // alongside the stylesheet rather than after it. The extended-Latin face is left to the
+  // unicode-range rule, which only pulls it if a page needs those glyphs. Same-origin, so the CSP
+  // stays 'self' (SPEC §8.5, G14). ReactDOM.preload rather than a literal <link> in <head>: React
+  // hoisted the literal link and also kept it, so the head carried the preload twice.
+  preload('/fonts/instrument-sans-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   return (
     <html lang="en">
-      <head>
-        {/* next/font used to inject this. The latin face is needed for the first paint, so it is
-            fetched alongside the stylesheet rather than after it. The extended-Latin face is left
-            to the unicode-range rule, which only pulls it if a page needs those glyphs. Same-origin,
-            so the CSP stays 'self' (SPEC §8.5, G14). */}
-        <link
-          rel="preload"
-          href="/fonts/instrument-sans-latin.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body>{children}</body>
     </html>
   );

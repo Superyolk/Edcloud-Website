@@ -37,6 +37,11 @@
     margin: 0;
     padding: 0;
     border: 0;
+    /* until-found keeps the box: a list item with a fixed height or ground (e.g. a logo tile)
+       would otherwise paint over the first visible row. */
+    height: 0;
+    min-height: 0;
+    background: transparent;
   }
 
   /* A full-width 48px outlined pill, 24px under the list. */

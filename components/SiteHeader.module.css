@@ -115,7 +115,8 @@
     height: var(--m-bar-h);
     padding: env(safe-area-inset-top, 0px) var(--gutter) 0;
     max-width: var(--m-column);
-    gap: var(--s-3);
+    /* 8px, the tap-spacing minimum: the one-line wordmark and Menu then fit from 374 up. */
+    gap: var(--s-2);
   }
 
   .brand {
@@ -124,6 +125,15 @@
     min-width: 0;
     font-size: var(--m-t-meta);
     letter-spacing: var(--ls-wordmark);
+    /* At 360-~372 the one-line wordmark is wider than the room left by Menu and ran under it.
+       Letting it wrap (only between EDCLOUD and the tail, which stays in one piece) stacks it on
+       two lines there instead; wider phones keep one line. */
+    white-space: normal;
+    line-height: 1.2;
+  }
+
+  .wordmarkTail {
+    white-space: nowrap;
   }
 
   /* The desktop link list; every one of its links is in the sheet and the footer. */
@@ -170,7 +180,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--s-3);
+    gap: var(--s-2);
   }
 
   /* Scrolls on its own when a landscape phone is shorter than the menu (C-cross-01); the page

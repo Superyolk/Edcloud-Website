@@ -41,8 +41,10 @@ function Brand({ className, markClassName }: { className: string; markClassName:
       {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted brand mark, exact 22px box */}
       <img src={SHARED.markSrc} alt={SHARED.markAlt} width={22} height={22} className={markClassName} />
       <span>
-        {wordmarkHead}
-        <span className={styles.wordmarkTail}> {wordmarkTail}</span>
+        {/* The space sits outside the tail so that, below 1024, the wordmark can break there (and
+            only there) on phones too narrow for one line. The DOM text is unchanged. */}
+        {wordmarkHead}{' '}
+        <span className={styles.wordmarkTail}>{wordmarkTail}</span>
       </span>
     </RouteLink>
   );
