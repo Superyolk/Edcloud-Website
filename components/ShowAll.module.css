@@ -1,0 +1,111 @@
+/* Show-all primitive (components/ShowAll.tsx; SPEC §5.5 B). .list and .item go on EXISTING list
+   elements but carry rules only below 1024; .button is a new element with no box at >= 1024. */
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* A new element: no box on desktop (SPEC §10.3a). */
+.button {
+  display: none;
+}
+
+/* Safari has no hidden="until-found"; the component falls back to plain `hidden` there, and a
+   list item's own display (flex, grid) would otherwise beat the browser's [hidden] rule. */
+.item[hidden]:not([hidden='until-found']) {
+  display: none !important;
+}
+
+/* ---------- Mobile layer (phones + tablets). Never matches at >= 1024px. ---------- */
+@media (max-width: 1023.98px) {
+  /* The containing block for collapsed items (below). */
+  .list {
+    position: relative;
+  }
+
+  /* A collapsed item takes no gap and draws no hairline. */
+  .item[hidden] {
+    position: absolute;
+    inset-inline: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  /* A full-width 48px outlined pill, 24px under the list. */
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    width: 100%;
+    min-height: var(--m-control-h);
+    margin: var(--s-6) 0 0;
+    padding: 0 var(--s-5);
+    border: 1px solid var(--ink);
+    border-radius: var(--m-radius-pill);
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--m-t-ui);
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+
+  /* The item count: a quiet tabular figure, not a badge. */
+  .count {
+    font-size: var(--m-t-meta);
+    font-weight: 400;
+    color: var(--slate);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Phones: items past the phone limit. First paint only while scripting will be there to reveal
+   them; after hydration the `hidden` attribute takes over (data-js). */
+@media (max-width: 599.98px) and (scripting: enabled) {
+  .list:not([data-open]):not([data-js]) .restPhone {
+    display: none;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .list[data-open] .restPhone {
+    animation: itemIn var(--m-dur-open) var(--m-ease) both;
+  }
+
+  .nothingOnPhone {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) and (scripting: enabled) {
+  .list:not([data-open]):not([data-js]) .restTablet {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .list[data-open] .restTablet {
+    animation: itemIn var(--m-dur-open) var(--m-ease) both;
+  }
+
+  .nothingOnTablet {
+    display: none;
+  }
+}
+
+/* Without scripting every item already shows and the button could do nothing. */
+@media (scripting: none) {
+  .button {
+    display: none;
+  }
+}

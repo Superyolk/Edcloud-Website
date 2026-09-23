@@ -1,0 +1,115 @@
+/* Disclosure primitive (components/Disclosure.tsx; SPEC §5.5 A). Every class here is on markup
+   the redesign adds, or on an existing element only inside the mobile layer, so desktop is
+   untouched. The one desktop-side rule is the §10.3(b) neutraliser for new wrappers. */
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* A new wrapper (About's chapter <div>s) must not exist for the desktop grid: its children lay
+   out exactly as they did before it was added. */
+@media (min-width: 1024px) {
+  .contentsDesktop {
+    display: contents;
+  }
+}
+
+/* Safari has no hidden="until-found", so the component falls back to a plain `hidden` there. An
+   author `display` on the panel (e.g. a grid <dl>) would beat the browser's own [hidden] rule, so
+   this restates it. until-found panels are left alone: display:none would take them out of
+   find-in-page. `hidden` is only ever set below 1024. */
+.panel[hidden]:not([hidden='until-found']) {
+  display: none !important;
+}
+
+/* ---------- Mobile layer (phones + tablets). Never matches at >= 1024px. ---------- */
+@media (max-width: 1023.98px) {
+  /* The containing block for collapsed panels (below). */
+  .group {
+    position: relative;
+  }
+
+  /* The heading row: the whole heading is the target. A <span> before hydration, a <button>
+     after, styled the same so nothing moves when the button arrives. */
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    width: 100%;
+    min-height: var(--m-disclosure-h);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .button:active {
+    color: var(--growth-ink);
+  }
+
+  /* The one indicator on the site (G10): the desktop tab's 10px square. Filled = open;
+     an outlined square = closed. No chevrons, no plus/minus. */
+  .button::after {
+    content: '';
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--growth);
+  }
+
+  .group[data-js]:not([data-open]) .button::after {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--slate);
+  }
+
+  /* A collapsed panel takes no grid gap and draws no hairline (SPEC §5.5 A.4). */
+  .panel[hidden] {
+    position: absolute;
+    inset-inline: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  /* Opened by the reader: fade and rise 4px. Height never animates. */
+  .group[data-animate] .panel:not([hidden]) {
+    animation: panelIn var(--m-dur-open) var(--m-ease) both;
+  }
+}
+
+/* First paint, before hydration: collapse the groups that start closed, only where scripting
+   will be there to open them again. */
+@media (max-width: 599.98px) and (scripting: enabled) {
+  .collapsePhone:not([data-open]):not([data-js]) .panel {
+    display: none;
+  }
+
+  .collapsePhone:not([data-open]):not([data-js]) .button::after {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--slate);
+  }
+}
+
+@media (max-width: 1023.98px) and (scripting: enabled) {
+  .collapseMobile:not([data-open]):not([data-js]) .panel {
+    display: none;
+  }
+
+  .collapseMobile:not([data-open]):not([data-js]) .button::after {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--slate);
+  }
+}
