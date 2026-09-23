@@ -185,7 +185,7 @@ This section was measured on the integrated branch (Foundation plus the Home, Pa
 | qa:mobile-lint | FAIL (baseline findings) | **PASS**: 0 findings on every page. The sweep covers 320–430 in 1px steps plus 600–1023, and includes the new `margins` check. |
 | qa:a11y | FAIL (`color-contrast`) | **PASS**: 0 violations at 390 and 1440 with `color-contrast` disabled (owner decision, 2026-09-23) |
 | qa:bytes | PASS | **PASS**: every Media & Perf assertion passes |
-| qa:perf | FAIL | **FAIL on LCP only.** Every other budget passes on every page (see below). |
+| qa:perf | FAIL | **PASS** after the Phase 3 perf fix (`scripts/defer-hydration.mjs`, see below). At 56c59c5 it failed on LCP only. |
 
 ### Page heights at 390×844 (px)
 
@@ -227,26 +227,37 @@ The 1024, 1280 and 1440 heights are unchanged from the baseline. Engineer measur
 
 ### Lighthouse mobile (median of 3, local `serve`)
 
-| Page | Perf | A11y excl. contrast (raw) | BP | SEO | LCP ms (baseline) | CLS | TBT ms | FCP ms | LCP element |
+Measured with a fresh build (`QA_BUILD=1`, served on :4193) after the Phase 3 perf fix. The LCP column shows the value at the baseline, then at 56c59c5, then now.
+
+| Page | Perf | A11y excl. contrast (raw) | BP | SEO | LCP ms: baseline → 56c59c5 → now | CLS | TBT ms | FCP ms | LCP element |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| home | **97** | **100** (96) | 100 | **100** | **2629** (3679) | 0.000 | 8 | 1055 | hero 4:5 crop (828w) |
-| about | 98 | **100** (96) | 100 | 100 | **2394** (2395) | 0.000 | 7 | 904 | hero 4:5 crop |
-| services-and-results | 97 | **100** (96) | 100 | 100 | **2547** (2397) | 0.000 | 8 | 904 | hero 4:5 crop |
-| privacy-policy | 99 | **100** (96) | 100 | 100 | **2169** (2167) | 0.000 | 7 | 904 | first body paragraph |
-| accessibility-statement | 99 | **100** (96) | 100 | 100 | **2169** (2168) | 0.000 | 7 | 904 | first body paragraph |
+| home | **100** | **100** (96) | 100 | **100** | 3679 → 2629 → **1729** | 0.000 | 6 | 1054 | hero 4:5 crop (828w) |
+| about | 100 | **100** (96) | 100 | 100 | 2395 → 2394 → **1429** | 0.000 | 8 | 904 | hero 4:5 crop |
+| services-and-results | 100 | **100** (96) | 100 | 100 | 2397 → 2547 → **1654** | 0.000 | 8 | 904 | hero 4:5 crop |
+| privacy-policy | 100 | **100** (96) | 100 | 100 | 2167 → 2169 → **1278** | 0.000 | 7 | 903 | first body paragraph |
+| accessibility-statement | 100 | **100** (96) | 100 | 100 | 2168 → 2169 → **1279** | 0.000 | 7 | 904 | first body paragraph |
 
-**LCP ≤ 2.0s is not met locally on any page.** It wasn't met at the baseline either. The cause is how Lantern's simulation reads a zero-latency local server:
+Every run was within 80ms of its median. The widest spread was Services, at 1653–1729ms.
 
-- Lantern charges to LCP every request that finished, and every script that was evaluated, before the observed paint.
-- Served locally, Next/React's ~150 KiB of async chunks arrive and evaluate at about 15–90ms. That is before the 40–110ms paint, so they are charged even to text-only pages.
-- The legal pages show this most clearly. Their LCP is simulated at ~2.17s, yet their FCP for the same paint is 0.90s.
-- In single runs where the chunks happened to finish after the paint, the same build scored 1.13–1.31s.
+**Why LCP missed at 56c59c5.** Read from the Lighthouse JSON and Lantern's own node timings:
 
-Two fixes were tried and rejected:
-- `experimental.inlineCss` made LCP worse (2.3–2.9s) and tripled the HTML size.
-- React emitted the font preload twice. It was de-duplicated. That removed no bytes, because the browser was already deduping it.
+- The LCP resource was never the problem. The hero crop is discoverable in the HTML, has `fetchpriority=high`, is not lazy, and its load delay and duration were 5ms and 10ms.
+- The cost was the framework JS. next build puts all six client chunks in the head as `<script async>` (about 150 KiB brotli, of which ~125 KiB is React DOM and the Next runtime). A phone starts fetching them at the same moment as the stylesheets, the font and the hero, on the same connection.
+- Lantern treats any script that finished downloading before the observed paint as render-blocking. It lets one off only if it finds an evaluation task of 10ms or more that started after the paint. Short evaluation tasks are pruned from its graph, so their scripts are always charged. Its LCP graph therefore held every chunk. On Home the optimistic estimate ended with `1mh6a…js` (React DOM) at 2405ms and the pessimistic one at 2855ms, while the hero itself finished at 2103ms and 2253ms, slowed by sharing the bandwidth.
+- With the chunk tags stripped out, the same page simulated at 1729ms. That was the ceiling for this lever.
 
-Production (PSI) numbers still need checking after deploy.
+**Things that were checked and ruled out:**
+- **Compression.** The harness's `serve` already sends brotli (`Content-Encoding: br` on HTML, CSS and JS), as Cloudflare does. It is not a source of distortion.
+- **HTTP/2.** The local server is HTTP/1.1, while Cloudflare is h2 or h3. A local h2 + TLS server brought Home to 2144–2338ms. That was better but still over budget, so the harness was not changed.
+- **A webpack build** (`next build --webpack`) ships the same ~125 KiB of framework JS as Turbopack. There is no dependency to trim: the site's own client code is ~14 KiB brotli.
+- **Fetching the chunks only after `requestAnimationFrame`** made things worse (2.8s). Chrome's first paint landed at ~70ms regardless of when the script ran, so the chunks still finished before it.
+
+**The fix: `scripts/defer-hydration.mjs`**, a post-build step now part of `npm run build`. Below 1024px, the client chunks are fetched and run only after the `first-contentful-paint` entry, the hero image's load and one more frame. At 1024px and wider, a `media`-scoped preload keeps the downloads starting from the head, and the chunks run at the end of parse. Desktop parity stays 15/15 at 0px.
+- **Trade-off:** phones hydrate after the first paint instead of racing it. The Menu, the Show-all and disclosure buttons and the contact form wake up a little later. Content, layout and the no-JS fallbacks do not depend on JS (SPEC §5.5, §11). CLS stays 0.000 and TBT is 6–8ms.
+- **Fallback:** a `load` + 1.5s timer covers background tabs, which never paint, and browsers without Paint Timing.
+- **CSP:** the loader is a small inline script, which `script-src 'self' 'unsafe-inline'` already allows.
+
+**Next step:** production (PSI) numbers still need checking after deploy.
 
 ### axe-core
 

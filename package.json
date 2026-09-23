@@ -5,7 +5,7 @@
   "description": "EdCloud Venture Partners marketing site (Home, About, Services & Results) built from the design handoff.",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/defer-hydration.mjs",
     "start": "next start",
     "lint": "eslint .",
     "//serve:reference": "cleanUrls must stay off (scripts/serve-reference.json) or serve strips the .html from the prototypes' own links.",

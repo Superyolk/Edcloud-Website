@@ -54,7 +54,9 @@ def inline_page(fn):
         js=js.replace('{src:e.getAttribute("src")}','{src:e.getAttribute("data-src")}')
         js=js.replace('new URL(e.src)','new URL(e.getAttribute("data-src")||"/_next/static/chunks/x.js","http://localhost/")')
         return f'<script data-src="{m.group(1)}">'+js+"</script>"
-    html=re.sub(r'<script src="(/_next/static/chunks/[^"]+\.js)"[^>]*></script>', js_repl, html)
+    # scripts/defer-hydration.mjs turns the async chunk tags into data-hydrate-src placeholders;
+    # inline those too (the loader then finds none left and does nothing).
+    html=re.sub(r'<script (?:src|data-hydrate-src)="(/_next/static/chunks/[^"]+\.js)"[^>]*></script>', js_repl, html)
     # local public images → data URIs
     html=re.sub(r'/images/[A-Za-z0-9._-]+', lambda m: data_uri(OUT+m.group(0)), html)
     # internal links → top-window hash routes (target=_top makes Next's Link skip client routing)

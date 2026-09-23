@@ -16,7 +16,8 @@
  * - no request for a desktop source that has a mobile crop (scripts/images/crops.json `src`): a
  *   phone must take the <picture>'s crop, never the 1920px fallback.
  *
- * Note: locally `serve` gzips; production (Cloudflare) serves brotli, so live byte counts differ a little.
+ * Note: locally `serve` compresses with brotli (or gzip) on the fly, as Cloudflare does; the quality
+ * levels differ, so live byte counts differ a little.
  */
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
