@@ -12,6 +12,9 @@ import LinkButton from '@/components/LinkButton';
 import HeroVideo from '@/components/home/HeroVideo';
 import ServicesTabs from '@/components/home/ServicesTabs';
 import ContactForm from '@/components/home/ContactForm';
+import ContactPill from '@/components/home/ContactPill';
+import Picture from '@/components/Picture';
+import ShowAll, { showAllItem, showAllList, type ShowAllLimit } from '@/components/ShowAll';
 import styles from './home.module.css';
 
 export const metadata: Metadata = pageMeta({
@@ -37,11 +40,19 @@ function pressDateKey(date: string): number {
 // Client logos are sized by shape, not by box: each gets about the same ink area, so a square
 // crest and a long wordmark carry equal weight on the wall. Capped at 200px wide and 88px tall.
 const LOGO_AREA = 9000;
+// Phones (--logo-w-m, read only below 1024): the same equal-area model, sized for the 2-column
+// credits grid's 175x80 cells (SPEC §6.1 row 05). Capped at 139px wide and 52px tall.
+const LOGO_AREA_M = 4200;
 function logoStyle(w: number, h: number): CSSProperties {
   const ratio = w / h;
   const width = Math.min(Math.sqrt(LOGO_AREA * ratio), 200, 88 * ratio);
-  return { '--logo-w': `${Math.round(width)}px` } as CSSProperties;
+  const widthM = Math.min(Math.sqrt(LOGO_AREA_M * ratio), 139, 52 * ratio);
+  return { '--logo-w': `${Math.round(width)}px`, '--logo-w-m': `${Math.round(widthM)}px` } as CSSProperties;
 }
+
+// How many items stay visible below 1024 until "Show all" (SPEC §6.1 rows 05 and 06).
+const CLIENTS_LIMIT: ShowAllLimit = { phone: 16, tablet: 24 };
+const PRESS_LIMIT: ShowAllLimit = { phone: 3, tablet: 4 };
 
 const pressItems = [...HOME.press].sort((a, b) => pressDateKey(b.date) - pressDateKey(a.date));
 // Select Clients now runs before Press, so the two sections trade section numbers and the
@@ -59,13 +70,16 @@ export default function HomePage() {
         <section data-screen-label="Hero" className={styles.hero}>
           {/* The largest-contentful paint on the home page: sized so the hero reserves its space,
               and fetched at high priority rather than competing with the logo grid below. */}
-          <img
+          <Picture
+            name="hero-poster"
             src={hero.posterSrc}
             alt={hero.posterAlt}
             width={1920}
             height={1080}
             fetchPriority="high"
             className={styles.heroLayer}
+            phoneSizes="100vw"
+            tabletSizes="100vw"
           />
           <HeroVideo src={hero.videoSrc} webmSrc={hero.videoWebmSrc} className={`${styles.heroLayer} ${styles.heroVideo}`} />
           <div aria-hidden="true" className={styles.heroOverlay} />
@@ -95,7 +109,10 @@ export default function HomePage() {
             <p className={styles.body}>{HOME_COPY.promise.p2}</p>
             <p className={styles.body}>{HOME_COPY.promise.p3}</p>
             <div>
-              <LinkButton href="/about">{HOME_COPY.promise.readMore}</LinkButton>
+              {/* The accessible name starts with the visible text (WCAG 2.5.3); "Read More" alone failed link-text. */}
+              <LinkButton href="/about" ariaLabel={`${HOME_COPY.promise.readMore} about EdCloud`}>
+                {HOME_COPY.promise.readMore}
+              </LinkButton>
             </div>
           </div>
         </SectionShell>
@@ -127,7 +144,18 @@ export default function HomePage() {
             <div className={styles.deliverablesIntro}>
               <p className={styles.lead}>{HOME_COPY.deliverables.lead}</p>
               <div className={styles.photoCard}>
-                <img src={HOME_COPY.deliverables.imgSrc} alt={HOME_COPY.deliverables.imgAlt} className={styles.photo} width={1200} height={900} />
+                <Picture
+                  name="conference-room"
+                  src={HOME_COPY.deliverables.imgSrc}
+                  alt={HOME_COPY.deliverables.imgAlt}
+                  className={styles.photo}
+                  width={1200}
+                  height={900}
+                  loading="lazy"
+                  decoding="async"
+                  phoneSizes="calc(100vw - 40px)"
+                  tabletSizes="min(34em, calc(100vw - 64px))"
+                />
               </div>
             </div>
             <ol className={styles.capabilities}>
@@ -145,13 +173,24 @@ export default function HomePage() {
         </SectionShell>
 
         <figure className={styles.figure}>
-          <img src={HOME_COPY.press.figureSrc} alt={HOME_COPY.press.figureAlt} className={styles.figureImg} width={1450} height={700} />
+          <Picture
+            name="stairway"
+            src={HOME_COPY.press.figureSrc}
+            alt={HOME_COPY.press.figureAlt}
+            className={styles.figureImg}
+            width={1450}
+            height={700}
+            loading="lazy"
+            decoding="async"
+            phoneSizes="100vw"
+            tabletSizes="100vw"
+          />
         </figure>
 
         <SectionShell n={clientsSection.n} title={clientsSection.title} white>
-          <ul className={styles.logos}>
-            {HOME.logos.map((l) => (
-              <li key={l.src} className={styles.logoTile}>
+          <ul id="clients-list" className={`${styles.logos} ${showAllList}`}>
+            {HOME.logos.map((l, i) => (
+              <li key={l.src} className={`${styles.logoTile} ${showAllItem(i, CLIENTS_LIMIT)}`}>
                 <img
                   src={l.src}
                   alt={l.alt}
@@ -165,12 +204,13 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+          <ShowAll controls="clients-list" label="Show all clients" count={HOME.logos.length} limit={CLIENTS_LIMIT} />
         </SectionShell>
 
         <SectionShell n={pressSection.n} title={pressSection.title}>
-          <ul className={styles.press}>
-            {pressItems.map((p) => (
-              <li key={p.href} className={styles.pressRow}>
+          <ul id="press-list" className={`${styles.press} ${showAllList}`}>
+            {pressItems.map((p, i) => (
+              <li key={p.href} className={`${styles.pressRow} ${showAllItem(i, PRESS_LIMIT)}`}>
                 <div className={styles.pressMeta}>
                   <span>{p.source}</span>
                   <span>{p.date}</span>
@@ -184,12 +224,30 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+          <ShowAll
+            controls="press-list"
+            label="Show all press"
+            count={pressItems.length}
+            limit={PRESS_LIMIT}
+            focusOnExpand="first-revealed"
+          />
         </SectionShell>
 
         <SectionShell n={contact.n} title={contact.title} id="contact">
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
-              <img src={HOME_COPY.contact.imgSrc} alt={HOME_COPY.contact.imgAlt} className={styles.contactPhoto} width={980} height={653} />
+              <Picture
+                name="classroom-lecture"
+                src={HOME_COPY.contact.imgSrc}
+                alt={HOME_COPY.contact.imgAlt}
+                className={styles.contactPhoto}
+                width={980}
+                height={653}
+                loading="lazy"
+                decoding="async"
+                phoneSizes="100vw"
+                tabletSizes="min(34em, calc(100vw - 64px))"
+              />
             </div>
             <div className={styles.contactCard}>
               <h2 className={styles.contactTitle}>
@@ -204,6 +262,8 @@ export default function HomePage() {
             </div>
           </div>
         </SectionShell>
+        {/* Phones and tablets only: a floating jump to the form once the hero has scrolled away. */}
+        <ContactPill />
       </main>
       <SiteFooter />
     </>
