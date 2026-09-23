@@ -74,3 +74,58 @@ a:hover {
     animation: none !important;
   }
 }
+
+/* ---------- Mobile layer (phones + tablets; SPEC §4). Never matches at >= 1024px. ---------- */
+
+@media (max-width: 1023.98px) {
+  html {
+    /* iOS inflates text when a phone turns to landscape unless told not to; the fluid type scale
+       already sizes for the width. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    /* A tap gets the :active states below instead of the grey iOS flash. */
+    -webkit-tap-highlight-color: transparent;
+    /* Running copy never drops under 16px (SPEC §2.1). Anything that sets its own size still wins. */
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+    /* "K-12" and the like must never break at the hyphen (SPEC §18.2 rule 3). */
+    hyphens: manual;
+  }
+
+  /* No stranded words: headings balance, prose avoids a lone last word (SPEC §18.2 rule 2). */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  blockquote,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  /* Every button and pill answers a press (SPEC §4.1). Full-width rows (disclosures, the Home
+     services rows) opt out with data-row: a 3% shrink of a 350px row reads as a jolt, so they
+     change colour instead. Transform + opacity only, so nothing reflows. */
+  button:not([data-row]):active {
+    transform: scale(0.97);
+    opacity: 0.85;
+    transition:
+      transform var(--m-dur-press) var(--m-ease),
+      opacity var(--m-dur-press) var(--m-ease);
+  }
+
+  /* The hero's 600ms rise held the text LCP back on phones (A-home-03). Desktop keeps it. The
+     !important matches the reduced-motion rule below: the animation is set in a page module,
+     which loads after this file. */
+  [data-reveal] {
+    animation: none !important;
+  }
+}

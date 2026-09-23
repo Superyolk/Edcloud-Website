@@ -8,9 +8,14 @@ import './globals.css';
 /**
  * Tints the browser chrome on mobile to the site's ink, so the address bar stops being a bright
  * strip above a dark hero.
+ *
+ * viewport-fit=cover lets the full-bleed heroes run under a notch or home indicator; everything
+ * fixed or edge-to-edge pads itself with env(safe-area-inset-*) (SPEC §4.3). Desktop browsers
+ * ignore it.
  */
 export const viewport: Viewport = {
   themeColor: '#1B2431',
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -64,7 +69,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         {/* next/font used to inject this. The latin face is needed for the first paint, so it is
             fetched alongside the stylesheet rather than after it. The extended-Latin face is left
-            to the unicode-range rule, which only pulls it if a page needs those glyphs. */}
+            to the unicode-range rule, which only pulls it if a page needs those glyphs. Same-origin,
+            so the CSP stays 'self' (SPEC §8.5, G14). */}
         <link
           rel="preload"
           href="/fonts/instrument-sans-latin.woff2"
