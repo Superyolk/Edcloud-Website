@@ -1,10 +1,12 @@
-/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { SERVICES } from '@/content/content';
 import { SERVICES_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import Picture from '@/components/Picture';
+import Disclosure, { DisclosureHeading, DisclosurePanel } from '@/components/Disclosure';
+import { MQ_PHONE } from '@/app/breakpoints';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbLd, pageMeta, SEO_DESCRIPTION, servicesLd } from '@/content/seo';
 import styles from './services.module.css';
@@ -27,7 +29,17 @@ export default function ServicesPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={1920} height={1080} />
+          <Picture
+            name="hero-services"
+            src={hero.imgSrc}
+            alt={hero.imgAlt}
+            className={styles.heroImg}
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            phoneSizes="100vw"
+            tabletSizes="100vw"
+          />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -72,16 +84,31 @@ export default function ServicesPage() {
           className={styles.bordered}
           containerExtra={
             <ol className={styles.serviceList}>
-              {SERVICES.services.map((s) => (
-                <li key={s.n} className={styles.service}>
+              {/* Each service is a disclosure row on phones (G7): the title is the button, the
+                  green result line stays visible, and the pitch and For/How/When open with it.
+                  The first row starts open; tablets start with all six open. At >= 1024 the
+                  heading is a plain <span> and nothing is ever hidden. */}
+              {SERVICES.services.map((s, i) => (
+                <Disclosure
+                  key={s.n}
+                  as="li"
+                  className={styles.service}
+                  collapseQuery={MQ_PHONE}
+                  defaultOpen={i === 0}
+                  parts={['pitch', 'spec']}
+                >
                   <span className={styles.serviceIndex}>{s.n}</span>
                   <div className={styles.serviceInner}>
                     <div className={styles.serviceText}>
-                      <h3 className={styles.serviceTitle}>{s.title}</h3>
-                      <p className={styles.servicePitch}>{s.pitch}</p>
+                      <DisclosureHeading as="h3" className={styles.serviceTitle}>
+                        {s.title}
+                      </DisclosureHeading>
+                      <DisclosurePanel as="p" part="pitch" className={styles.servicePitch}>
+                        {s.pitch}
+                      </DisclosurePanel>
                       <p className={styles.serviceResult}>{s.result}</p>
                     </div>
-                    <dl className={styles.dl}>
+                    <DisclosurePanel as="dl" part="spec" className={styles.dl}>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{bestFor}</dt>
                         <dd className={styles.dd}>{s.fit}</dd>
@@ -94,9 +121,9 @@ export default function ServicesPage() {
                         <dt className={styles.dt}>{timeline}</dt>
                         <dd className={styles.dd}>{s.timeline}</dd>
                       </div>
-                    </dl>
+                    </DisclosurePanel>
                   </div>
-                </li>
+                </Disclosure>
               ))}
             </ol>
           }
@@ -109,6 +136,8 @@ export default function ServicesPage() {
             <p className={styles.lead}>{SERVICES_COPY.resultsLead}</p>
             <div className={styles.tableWrap}>
               <table className={styles.table}>
+                {/* Below 820 the rows stack; the header is clipped, not removed, so screen
+                    readers still pair every cell with its column. */}
                 <thead>
                   <tr className={styles.thead}>
                     {SERVICES_COPY.tableHead.map((h) => (

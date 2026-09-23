@@ -1,0 +1,84 @@
+/* Privacy Policy and Accessibility Statement body (SPEC §6.4, B-pages-19). The desktop rules are
+   copied verbatim from app/about/about.module.css (.mission, .h3, .p, .list), which these pages
+   used to borrow; they have their own module now so the About chapter-list styles below 1024
+   cannot leak into them. qa:desktop-parity proves the copy is exact. */
+
+.body {
+  max-width: 68ch;
+  display: grid;
+  gap: 20px;
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.h2 {
+  margin: 24px 0 0;
+  font-size: var(--t-h3);
+  line-height: 1.25;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+/* ---------- Mobile layer (phones + tablets). Never matches at >= 1024px. ----------
+   Long prose on a phone: 16px/1.5 copy at the full column, each section heading on a hairline
+   with 32px of air above it, and the site's green square bullets. The page title above is the
+   SectionShell H1 at --m-t-title, clearly larger than these headings (B-pages-10). */
+@media (max-width: 1023.98px) {
+  .body {
+    max-width: none;
+    gap: var(--s-4);
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  /* 16px margin + the 16px grid gap = 32px above the hairline; 16px between it and the words. */
+  .h2 {
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+  }
+
+  .h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Bullets hang in the indent, so every line of an item keeps the same left edge. */
+  .list {
+    list-style: none;
+    padding-left: 0;
+    gap: var(--s-3);
+  }
+
+  .list > li {
+    position: relative;
+    padding-left: var(--s-5);
+  }
+
+  .list > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--growth);
+  }
+}
