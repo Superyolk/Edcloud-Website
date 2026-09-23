@@ -1,6 +1,7 @@
 /**
  * qa:a11y — axe-core on every page at 390x844 (mobile emulation) and 1440x900. Fails on any
- * violation. Output: scripts/qa/output/a11y.json (full violations with nodes) and a console summary.
+ * violation. The one rule switched off is `color-contrast`: the owner ruled colour contrast out of
+ * scope on 2026-09-23 (SPEC §1.4; the palette tokens stay as they are). Every other axe rule runs. Output: scripts/qa/output/a11y.json (full violations with nodes) and a console summary.
  */
 import AxeBuilder from '@axe-core/playwright';
 import { chromium } from '@playwright/test';
@@ -23,7 +24,8 @@ main(async () => {
       for (const p of PAGES) {
         const page = await context.newPage();
         await settlePage(page, pageUrl(target.base, p), { freeze: false });
-        const r = await new AxeBuilder({ page }).analyze();
+        // color-contrast only: owner decision of 2026-09-23 (SPEC §1.4). Nothing else is disabled.
+        const r = await new AxeBuilder({ page }).disableRules(['color-contrast']).analyze();
         const violations = r.violations.map((x) => ({
           id: x.id,
           impact: x.impact,

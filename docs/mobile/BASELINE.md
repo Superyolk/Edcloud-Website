@@ -170,3 +170,94 @@ What they are:
 - Content snapshot: `scripts/qa/content-snapshot/` (committed). The allow-list for added UI chrome is `scripts/qa/content-allowlist.json`.
 - Before screenshots: `docs/mobile/before/<page>-390.png`.
 - Contact sheets (regenerate with `npm run qa:matrix`): `scripts/qa/output/contact-sheets/page-<page>.png` and `viewport-<WxH>.png`.
+
+## After Phase 3 (integrated `mobile-redesign`, 2026-09-23)
+
+This section was measured on the integrated branch (Foundation plus the Home, Pages and Media & Perf merges, plus integration fixes), with the same machine, tools and capture conditions as the baseline above. The build was fresh (`QA_BUILD=1`) and served on :4184. The baseline figures are repeated for comparison.
+
+### Gate status
+
+| Check | Baseline | After Phase 3 |
+|---|---|---|
+| qa:breakpoints | n/a | **PASS**: 39 files, 52 queries, 0 violations |
+| qa:content | PASS | **PASS**: 0 failures. Nothing was removed. The only additions are allow-listed UI chrome (Show all / Show fewer, the counts 9 and 48, the Contact pill href `#contact`, and the hidden "about EdCloud" tail). JSON-LD, meta, `/llms.txt`, `/sitemap.xml` and `/robots.txt` are unchanged. |
+| qa:desktop-parity | PASS (15/15, 0 px) | **PASS (15/15, 0 px)** at 1024, 1280 and 1440, against the untouched Phase 0 goldens |
+| qa:mobile-lint | FAIL (baseline findings) | **PASS**: 0 findings on every page. The sweep covers 320–430 in 1px steps plus 600–1023, and includes the new `margins` check. |
+| qa:a11y | FAIL (`color-contrast`) | **PASS**: 0 violations at 390 and 1440 with `color-contrast` disabled (owner decision, 2026-09-23) |
+| qa:bytes | PASS | **PASS**: every Media & Perf assertion passes |
+| qa:perf | FAIL | **FAIL on LCP only.** Every other budget passes on every page (see below). |
+
+### Page heights at 390×844 (px)
+
+| Page | Baseline | After | Gate |
+|---|---:|---:|---:|
+| home | 12065 | **7429** | ≤ 8500 |
+| about | 9153 | **4194** | ≤ 6500 |
+| services-and-results | 9867 | **5338** | ≤ 7000 |
+| privacy-policy | 3841 | 3286 | none |
+| accessibility-statement | 2370 | 1918 | none |
+
+At the other matrix sizes (px):
+
+| Page | 320×568 | 360×780 | 375×667 | 393×852 | 414×896 | 430×932 | 844×390 | 768×1024 | 820×1180 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| home | 7704 | 7545 | 7397 | 7441 | 7463 | 7273 | 7011 | 7239 | 7306 |
+| about | 4662 | 4376 | 4260 | 4199 | 4080 | 4026 | 5589 | 5685 | 5848 |
+| services-and-results | 5664 | 5360 | 5328 | 5321 | 5156 | 5063 | 5037 | 5612 | 5341 |
+
+The 1024, 1280 and 1440 heights are unchanged from the baseline. Engineer measurements with everything expanded at 390: Home 9,629 (both Show-all lists open), About 6,932 (all chapters open), Services 6,977 (all six services open).
+
+### First-load transfer at 390×844 (`qa:bytes`, cold cache)
+
+| Page | Requests | Total KiB (baseline) | Total KiB (after) | Images KiB | JS KiB | JS gz growth vs baseline |
+|---|---:|---:|---:|---:|---:|---:|
+| home | 16 | 3440.6 (621.0 excl. video) | **269.2** (no video on phones) | 53.5 | 147.8 | +2.6 KiB |
+| about | 17 | 712.6 | **249.7** | 30.6 | 156.7 | +4.6 KiB |
+| services-and-results | 16 | 788.1 | **257.9** | 37.9 | 156.7 | +4.6 KiB |
+| privacy-policy | 15 | 619.9 | **224.6** | 10.3 | 155.8 | +3.8 KiB |
+| accessibility-statement | 15 | 619.1 | **223.9** | 10.3 | 155.8 | +3.8 KiB |
+
+- **Home share:** 43.3% of the baseline's non-video bytes, against a gate of ≤ 60%.
+- **JS growth:** the largest is +4,716 B gz on About and Services, under the 5 KiB budget (5,120 B).
+- **Media assertions:**
+  - no page requests an image that only Home uses
+  - each head carries exactly one image preload (the header mark)
+  - no `<picture>` fallback is fetched at 390, and no crop is fetched at 1440
+  - `<video>` elements at phone / tablet / reduced motion / Save-Data / desktop: 0 / 1 / 0 / 0 / 1. The tablet video starts after `load`.
+
+### Lighthouse mobile (median of 3, local `serve`)
+
+| Page | Perf | A11y excl. contrast (raw) | BP | SEO | LCP ms (baseline) | CLS | TBT ms | FCP ms | LCP element |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| home | **97** | **100** (96) | 100 | **100** | **2629** (3679) | 0.000 | 8 | 1055 | hero 4:5 crop (828w) |
+| about | 98 | **100** (96) | 100 | 100 | **2394** (2395) | 0.000 | 7 | 904 | hero 4:5 crop |
+| services-and-results | 97 | **100** (96) | 100 | 100 | **2547** (2397) | 0.000 | 8 | 904 | hero 4:5 crop |
+| privacy-policy | 99 | **100** (96) | 100 | 100 | **2169** (2167) | 0.000 | 7 | 904 | first body paragraph |
+| accessibility-statement | 99 | **100** (96) | 100 | 100 | **2169** (2168) | 0.000 | 7 | 904 | first body paragraph |
+
+**LCP ≤ 2.0s is not met locally on any page.** It wasn't met at the baseline either. The cause is how Lantern's simulation reads a zero-latency local server:
+
+- Lantern charges to LCP every request that finished, and every script that was evaluated, before the observed paint.
+- Served locally, Next/React's ~150 KiB of async chunks arrive and evaluate at about 15–90ms. That is before the 40–110ms paint, so they are charged even to text-only pages.
+- The legal pages show this most clearly. Their LCP is simulated at ~2.17s, yet their FCP for the same paint is 0.90s.
+- In single runs where the chunks happened to finish after the paint, the same build scored 1.13–1.31s.
+
+Two fixes were tried and rejected:
+- `experimental.inlineCss` made LCP worse (2.3–2.9s) and tripled the HTML size.
+- React emitted the font preload twice. It was de-duplicated. That removed no bytes, because the browser was already deduping it.
+
+Production (PSI) numbers still need checking after deploy.
+
+### axe-core
+
+| Page | 390 (`color-contrast` nodes: baseline → after, waived) | 1440 (baseline → after, waived) | Other violations |
+|---|---:|---:|---:|
+| home | 41 → 23 | 42 → 42 | 0 |
+| about | 3 → 3 | 3 → 3 | 0 |
+| services-and-results | 30 → 30 | 34 → 34 | 0 |
+| privacy-policy | 1 → 1 | 1 → 1 | 0 |
+| accessibility-statement | 1 → 1 | 1 → 1 | 0 |
+
+### Mobile lint (unique findings per page across the sweep)
+
+Every check (overflow, tapSize, tapSpacing, textSize, bodyText, inputFont, mediaDims, safeArea, margins and tapSizeInline) is at **0 on every page**. The baseline counts are above.

@@ -14,6 +14,7 @@ import path from 'node:path';
 import { OUT_DIR, QA_DIR, ensureDir, main, startTarget } from './lib.mjs';
 
 const STEPS = [
+  { name: 'breakpoints', args: ['breakpoints-lint.mjs'] }, // static scan (SPEC §3); needs no server
   { name: 'content', args: ['content.mjs'] },
   { name: 'desktop-parity', args: ['parity.mjs'] },
   { name: 'a11y', args: ['a11y.mjs'] },

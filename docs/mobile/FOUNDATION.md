@@ -169,7 +169,7 @@ const PRESS_LIMIT = { phone: 3, tablet: 4 };
 
 ## 8. QA
 
-- `npm run qa:breakpoints` is new. It isn't wired into `qa:all` yet, because `scripts/qa/all.mjs` belongs to the Integrator.
+- `npm run qa:breakpoints` is new. The Integrator wired it into `qa:all` as its first step.
 - `qa:mobile-lint` has a new `margins` check (SPEC §18.1 rules 1 and 2):
   - Each region is the header nav, each `main` section, and each footer row. A region's text column must have left and right insets within 1px of each other.
   - Every visible `h1`–`h4`/`p`/`li`/`dt`/`dd`/`blockquote`/`figcaption`/`label`/`td`/`th` must keep `left ≥ gutter` and `right ≤ viewport − gutter`.
