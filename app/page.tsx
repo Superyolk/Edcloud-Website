@@ -99,7 +99,11 @@ export default function HomePage() {
                     </Fragment>
                   ))}
                 </h1>
-                <p className={styles.heroLead}>{hero.p}</p>
+                {/* keepTogether: "experience -" is glued so the dash never starts a line (SPEC §18.2
+                    rule 3), as everywhere else. The spans arrive after hydration, below 1024 only,
+                    and measured 0 change in the lead's line count at every width from 320 to 1023,
+                    so the bottom-anchored H1 above never moves (Phase 4 R4-designer-02). */}
+                <p className={styles.heroLead}>{keepTogether(hero.p)}</p>
               </div>
             </div>
           </div>

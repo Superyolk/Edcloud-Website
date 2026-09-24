@@ -51,6 +51,10 @@
     /* Phones: none (the full width). From 600: the capped column, centred, so the white space is
        split evenly (SPEC §18.1). content-box, as on desktop, so this is the text width. */
     max-width: var(--m-column);
+    /* The query container for the "narrow for its text" rules here and in the page modules. Its
+       width comes from the screen (a block with a max-width), never from its content, so the
+       containment changes nothing at any text size. */
+    container-type: inline-size;
   }
 
   .head {
@@ -80,6 +84,21 @@
   .titlePage {
     font-size: var(--m-t-title);
     line-height: 1.05;
+  }
+
+  /* Enlarged text (the column under 11em of body text: 200% text on a phone up to ~390; it never
+     matches at 100% or 150%): the counter takes its own line above the title, so the title gets the
+     whole column. Beside it, "Privacy" at 72px had 237px of a 280px column and broke as
+     "Privac / y" (Phase 4 R4-a11y-04). The same threshold stacks the other rows' side elements
+     (services, numbers, capabilities, the press meta line) in their own modules. */
+  @container (max-width: 11em) {
+    .head {
+      flex-wrap: wrap;
+    }
+
+    .title {
+      flex-basis: 100%;
+    }
   }
 
   /* The content row is a plain block at the full column width; the head's margin is the gap. */

@@ -586,6 +586,20 @@
     grid-column: 1 / -1;
   }
 
+  /* Enlarged text (SectionShell's 11em threshold): the number sits on its own line above the
+     title, so a 38px "Perpetuating" gets the full column instead of breaking mid-word beside the
+     number (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .serviceIndex {
+      grid-column: 1 / -1;
+    }
+
+    .serviceTitle {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+  }
+
   .servicePitch {
     margin-bottom: var(--s-3);
     max-width: none;

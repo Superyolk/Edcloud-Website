@@ -56,6 +56,15 @@ Unchanged: the home header transparency test, both contact form tests (the focus
 |---|---|---|
 | `mobile-lint.mjs` | New `find` check, run last on each page at 390 with every disclosure and Show-all list open: for each `[data-nowrap]` span in `main` and the footer, `window.find()` on the span's text plus the word either side must match. Findings are keyed by the phrase. | R3-a11y-01: while the glue spans were inline-blocks, all 60 such searches failed below 1024 (Chromium treats an atomic inline as a block boundary for find-in-page and `#:~:text=`). On the fixed build 80 of 80 spans pass at 320, 390 and 768; forcing the old `display: inline-block` back on fails 80 of 80. The existing checks and the 200% pass are unchanged, and the new pass runs after them, so it cannot change what they see. |
 
+## Phase 4 round 4 (QA harness)
+
+| File | Change | Reason |
+|---|---|---|
+| `mobile-lint.mjs` | New `dash` check at every sweep width: no visible text line may start with the spaced dash (" - "), the hero included. | R4-designer-02: the hero lead started a line with "-" at 356–364, 449–460, 468–487 and 600–1023, and nothing measured it. It fails on the pre-fix build and passes on the fixed one. |
+| `mobile-lint.mjs` | New `headline` check, Home only, from 366 up: the hero H1 sets in at most 3 lines. | R4-designer-01: the H1 fell to 4 lines at 737–1023 once the display size outgrew the fixed 459px column. The 4 lines accepted at 320–365 (judge ruling 6) are outside the check. |
+| `mobile-lint.mjs` | The 200% text pass runs at **320 and 390** (it was 320 only). Beside `overflow` and `margins`, it adds `clip` (a text-bearing header box, and the open menu sheet's bar, with `scrollWidth > clientWidth + 1`), `nowrapEdge` (a `[data-nowrap]` line box past its block's content edge) and `split` (a word on two lines although it is no wider than the column). The existing checks and their thresholds are unchanged. | R4-a11y-01 to -04: the clipped wordmark, the privacy date 17px into the gutter, "justificati / on" at 390 and the 11 mid-word breaks beside index numbers, figures and dates were invisible to the overflow check (an `overflow:hidden` box, or a break that stays inside the column). A word wider than the whole column ("Accessibility" at 72px) may still break, which WCAG 1.4.10 allows. With the round 4 fixes forced off (`container-type: normal`, glue re-forced), the checks report the wordmark `clip`, the date `nowrapEdge`, and `split` on "Privacy" and "Perpetuating". |
+| `content.mjs` | `<wbr>` elements are removed from the body copy (with the `data-nowrap` unwrap) before text-node segments are collected. | R4-a11y-03: `KeepCompounds` puts a `<wbr>` after a slash between words below 1024. It adds no character, but it splits "providers/contractors" into two text nodes, which read as a changed segment. Any real text change still fails. |
+
 ## Deliberate tablet (600–1023) changes to show in review
 
 - The nav collapses to Menu and the sheet below **1024**, not 820.

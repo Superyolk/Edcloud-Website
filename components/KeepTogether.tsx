@@ -12,6 +12,7 @@ import KeepCompounds from './KeepCompounds';
  */
 const MONTH = '(?:January|February|March|April|May|June|July|August|September|October|November|December)';
 const KEEP = new RegExp(`(K-12|long-term|Level AA|${MONTH} \\d{1,2}, \\d{4})`, 'g');
+const DATE = new RegExp(`^${MONTH} `);
 
 /**
  * Returns `text` with each protected phrase wrapped in `<span data-nowrap>`, and the rest in
@@ -26,7 +27,10 @@ export function keepTogether(text: string, { clauses = false }: { clauses?: bool
   if (parts.length === 1) return <KeepCompounds text={text} clauses={clauses} />;
   return parts.map((part, i) =>
     i % 2 === 1 ? (
-      <span key={i} data-nowrap="">
+      // A date is tagged: it is the one glued phrase too long for a 320px line at 200% text
+      // (297px in a 280px column), so the legal page releases it there (LegalPage.module.css;
+      // Phase 4 R4-a11y-02). The attribute value is never styled at >= 1024.
+      <span key={i} data-nowrap={DATE.test(part) ? 'date' : ''}>
         {part}
       </span>
     ) : (

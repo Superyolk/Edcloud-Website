@@ -180,6 +180,13 @@
     margin-top: var(--s-2);
   }
 
+  /* The glyph starts 3.13px into its 24px viewBox, so it sat 3px right of the column edge every
+     other footer line starts on (SPEC §18.1 rule 4; Phase 4 R4-client-02). Pulled back by exactly
+     that; the 44px target stays where it is. */
+  .linkedin svg {
+    margin-left: -3.13px;
+  }
+
   .barInner {
     max-width: var(--m-column);
     padding: var(--s-2) var(--gutter) calc(var(--s-2) + env(safe-area-inset-bottom, 0px));

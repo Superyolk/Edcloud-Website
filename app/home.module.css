@@ -699,6 +699,10 @@
   /* The desktop tab's green square is the only indicator (G10): outlined when closed, filled when
      open. No chevrons. */
   .tabDot {
+    /* On the title's first line, not the middle of a wrapped title ("Supercharged Product Market
+       Fit" at 320; Phase 4 R4-designer-03). The title's line box is --m-t-h3 at 1.3. */
+    align-self: start;
+    margin-top: calc((var(--m-t-h3) * 1.3 - 10px) / 2);
     opacity: 1;
     background: transparent;
     box-shadow: inset 0 0 0 1px var(--slate);
@@ -847,6 +851,14 @@
     grid-column: 1 / -1;
   }
 
+  /* Enlarged text (SectionShell's 11em threshold): the number sits alone above the title, so a
+     34px "Transformation" gets the full column (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .capabilityText > h3 {
+      grid-column: 1 / -1;
+    }
+  }
+
   /* ---------- Stairway figure: a full-bleed 39:14 band ---------- */
 
   .figureImg {
@@ -915,6 +927,14 @@
   .pressMeta > span:last-child {
     flex-shrink: 0;
     white-space: nowrap;
+  }
+
+  /* Enlarged text (SectionShell's 11em threshold): the date wraps under the source instead of
+     squeezing it until "CRUNCHBASE" broke mid-word (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .pressMeta {
+      flex-wrap: wrap;
+    }
   }
 
   .pressText {

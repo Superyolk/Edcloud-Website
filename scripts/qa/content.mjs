@@ -43,6 +43,9 @@ function extract() {
   // the text nodes back, so a sentence is still compared as the one segment it always was.
   const root = document.body.cloneNode(true);
   root.querySelectorAll('[data-nowrap]').forEach((el) => el.replaceWith(document.createTextNode(el.textContent || '')));
+  // A <wbr> after a slash between words (KeepCompounds, below 1024) adds a break opportunity and no
+  // character; it splits "workforce/enterprise" into two text nodes, so it is dropped the same way.
+  root.querySelectorAll('wbr').forEach((el) => el.remove());
   root.normalize();
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {

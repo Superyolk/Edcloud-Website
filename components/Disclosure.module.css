@@ -98,6 +98,12 @@
     width: 10px;
     height: 10px;
     background: var(--growth);
+    /* On the first line's centre, not the middle of the block: on a title that wraps the square
+       floated between its two lines, 11-12px under the first one, while the row's counter sat on
+       line 1 (Phase 4 R4-designer-03). 1lh is the heading's line height (the button inherits the
+       heading's font), so a one-line row keeps its square beside its line. */
+    align-self: flex-start;
+    margin-top: calc((1lh - 10px) / 2);
   }
 
   .group[data-js]:not([data-open]) .button::after {

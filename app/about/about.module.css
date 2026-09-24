@@ -378,6 +378,16 @@
     font-size: var(--m-t-body);
     line-height: var(--m-lh-body);
   }
+
+  /* Enlarged text (SectionShell's 11em threshold): the figure takes its own line and the title
+     runs the full column under it; beside the figure a 34px "Professionals" had 171px and broke
+     mid-word (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .stat,
+    .numberTitle {
+      grid-column: 1 / -1;
+    }
+  }
 }
 
 /* Tablets: the hero title keeps to the same centred column as the sections under it. The

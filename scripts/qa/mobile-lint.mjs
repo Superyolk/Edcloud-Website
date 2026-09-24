@@ -19,8 +19,23 @@
  *                   right <= viewport - gutter (gutter = the live --gutter). Collapsed ([hidden],
  *                   until-found), [inert], invisible, fixed-position and fully off-screen elements
  *                   are skipped; media is never checked, so full-bleed images are fine.
- *   (200% text)     after the sweep, each page once more at 320 with html { font-size: 200% } and
- *                   every disclosure open: the overflow and margins checks only (WCAG 1.4.4/1.4.10).
+ *   dash            SPEC §18.2 rule 3: no line starts with the site's spaced dash (" - "); the word
+ *                   before it is glued so the dash ends a line. Every visible text node, the hero
+ *                   included (Phase 4 R4-designer-02).
+ *   headline        Home only, from 366 up: the hero H1 sets in at most 3 lines (4 below 366 are
+ *                   accepted). It fell to 4 on every tablet when the display size outgrew the fixed
+ *                   459px column (Phase 4 R4-designer-01).
+ *   (200% text)     after the sweep, each page once more at 320 and at 390 with
+ *                   html { font-size: 200% } and every disclosure open: the overflow and margins
+ *                   checks, plus three only enlarged text can trip (WCAG 1.4.4/1.4.10):
+ *     clip          a text-bearing box in the header (and in the open menu sheet) whose scrollWidth
+ *                   passes its clientWidth: an overflow:hidden box hides the cut from the overflow
+ *                   check (the wordmark read "EDCLOU"; Phase 4 R4-a11y-01).
+ *     nowrapEdge    a glued span (<span data-nowrap>) whose line box runs past its block's content
+ *                   edge into the gutter (the privacy date, by 17px; Phase 4 R4-a11y-02).
+ *     split         a word broken across two lines by overflow-wrap although it is no wider than
+ *                   the column: a side element (an index, a figure, a date) took the width it
+ *                   needed (Phase 4 R4-a11y-03, -04). A word wider than the whole column may break.
  *   find            last, at 390 with every disclosure and Show-all list open: for each glued
  *                   phrase (<span data-nowrap>, components/KeepTogether.tsx) in main and the footer,
  *                   window.find() on "<word before> <phrase> <word after>" must match. An
@@ -39,7 +54,91 @@ import { OUT_DIR, PAGES, contextOptions, main, pageUrl, settlePage, startTarget,
 const PHONE_WIDTHS = Array.from({ length: 111 }, (_, i) => 320 + i);
 const TABLET_WIDTHS = [600, 700, 768, 800, 820, 900, 1000, 1023];
 const SWEEP = [...PHONE_WIDTHS.map((w) => ({ w, h: 844 })), ...TABLET_WIDTHS.map((w) => ({ w, h: 1024 }))];
-const CHECKS = ['overflow', 'tapSize', 'tapSpacing', 'textSize', 'bodyText', 'inputFont', 'mediaDims', 'safeArea', 'margins', 'find'];
+const CHECKS = [
+  'overflow',
+  'tapSize',
+  'tapSpacing',
+  'textSize',
+  'bodyText',
+  'inputFont',
+  'mediaDims',
+  'safeArea',
+  'margins',
+  'dash',
+  'headline',
+  'clip',
+  'nowrapEdge',
+  'split',
+  'find',
+];
+const BIG_WIDTHS = [320, 390];
+
+/** Runs in the page at 200% text: the checks only enlarged text can trip (see the header). */
+function bigAudit() {
+  const out = [];
+  const px = (v) => parseFloat(v) || 0;
+  const r1 = (n) => Math.round(n * 10) / 10;
+  const shown = (el) =>
+    !el.closest('[hidden], [inert]') && (!el.checkVisibility || el.checkVisibility({ checkVisibilityCSS: true }));
+  const label = (el) => `${el.tagName.toLowerCase()}${el.classList.length ? '.' + Array.from(el.classList).slice(0, 2).join('.') : ''}`;
+  const srOnly = (el) => {
+    for (let a = el; a; a = a.parentElement) if (getComputedStyle(a).clipPath === 'inset(50%)') return true;
+    return false;
+  };
+
+  // clip: the header bar and, while it is open, the menu sheet.
+  for (const el of Array.from(document.querySelectorAll('header *'))) {
+    if (!(el.textContent || '').trim() || !shown(el) || srOnly(el)) continue;
+    const cs = getComputedStyle(el);
+    if (cs.overflowX === 'visible' || cs.display.startsWith('inline') || cs.display === 'contents') continue;
+    if (el.scrollWidth > el.clientWidth + 1) {
+      out.push({ check: 'clip', selector: `header ${label(el)}`, detail: `scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth}` });
+    }
+  }
+
+  // nowrapEdge
+  for (const span of Array.from(document.querySelectorAll('[data-nowrap]'))) {
+    if (!shown(span)) continue;
+    let block = span.parentElement;
+    while (block && getComputedStyle(block).display.startsWith('inline')) block = block.parentElement;
+    if (!block) continue;
+    const b = block.getBoundingClientRect();
+    const cs = getComputedStyle(block);
+    const right = b.right - px(cs.borderRightWidth) - px(cs.paddingRight);
+    for (const q of Array.from(span.getClientRects())) {
+      if (q.width && q.right > right + 1) {
+        out.push({ check: 'nowrapEdge', selector: `"${span.textContent}"`, detail: `right ${r1(q.right)} > ${label(block)} content edge ${r1(right)}` });
+      }
+    }
+  }
+
+  // split: a word set on two lines that would have fit the column whole.
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;padding-left:var(--gutter)';
+  document.body.appendChild(probe);
+  const gutter = px(getComputedStyle(probe).paddingLeft);
+  probe.remove();
+  const column = document.documentElement.clientWidth - 2 * gutter;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const el = n.parentElement;
+    if (!el || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE'].includes(el.tagName) || !shown(el) || srOnly(el)) continue;
+    const text = n.textContent || '';
+    const re = /[^\s/-]{2,}/g;
+    for (let m = re.exec(text); m; m = re.exec(text)) {
+      const range = document.createRange();
+      range.setStart(n, m.index);
+      range.setEnd(n, m.index + m[0].length);
+      const rects = Array.from(range.getClientRects()).filter((q) => q.width > 0);
+      if (new Set(rects.map((q) => Math.round(q.top))).size < 2) continue;
+      const width = rects.reduce((sum, q) => sum + q.width, 0);
+      if (width <= column) {
+        out.push({ check: 'split', selector: `${label(el)} "${m[0]}"`, detail: `${r1(width)}px word in a ${r1(column)}px column` });
+      }
+    }
+  }
+  return out;
+}
 
 /** Runs in the page. Every glued phrase, with a word either side, must be findable. */
 function findAudit() {
@@ -217,6 +316,42 @@ function audit() {
     if (edges.length && !safeMatch(el)) out.push({ check: 'safeArea', selector: selectorOf(el), detail: `${pos} at ${edges.join('/')}` });
   }
 
+  // dash (SPEC §18.2 rule 3): the spaced dash never starts a line.
+  {
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      const t = n.textContent || '';
+      const el = n.parentElement;
+      if (!t.includes('- ') || !el || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE'].includes(el.tagName)) continue;
+      if (el.closest('[hidden], [inert]') || !visible(el)) continue;
+      for (let i = t.indexOf('- '); i >= 0; i = t.indexOf('- ', i + 1)) {
+        if (i < 2 || t[i - 1] !== ' ') continue; // a hyphen, or no ink before it in this node
+        const dash = document.createRange();
+        dash.setStart(n, i);
+        dash.setEnd(n, i + 1);
+        const before = document.createRange();
+        before.setStart(n, i - 2);
+        before.setEnd(n, i - 1);
+        const d = dash.getClientRects()[0];
+        const b = before.getClientRects()[0];
+        if (d && b && d.top > b.top + 2) {
+          out.push({ check: 'dash', selector: `${selectorOf(el)} "…${t.slice(Math.max(0, i - 16), i + 12).trim()}…"`, detail: 'a line starts with " - "' });
+        }
+      }
+    }
+  }
+
+  // headline: Home's hero H1 sets in at most 3 lines from 366 up.
+  if (location.pathname === '/' && vw >= 366) {
+    const h1 = document.querySelector('main h1');
+    if (h1) {
+      const r = document.createRange();
+      r.selectNodeContents(h1);
+      const lines = new Set(Array.from(r.getClientRects()).filter((q) => q.width > 0).map((q) => Math.round(q.top))).size;
+      if (lines > 3) out.push({ check: 'headline', selector: 'main h1', detail: `${lines} lines at ${getComputedStyle(h1).fontSize}` });
+    }
+  }
+
   // margins (SPEC §18.1 rules 1 and 2: equal left/right margins, no text in the gutter)
   const gutter = (() => {
     const probe = document.createElement('div');
@@ -326,23 +461,43 @@ main(async () => {
           if (s.w === 390) cur.instancesAt390 = n;
         }
       }
-      // Reflow at 200% text (WCAG 1.4.4 + 1.4.10, SPEC §18.1): once at 320 with the root font
-      // doubled and every disclosure opened, the overflow and margins checks must still pass. A
-      // grid item's min-width:auto let "workforce/enterprise" push About's text 10px past the
-      // screen here, which no 100% sweep could see (Phase 4 R2-a11y-02).
-      await page.setViewportSize({ width: 320, height: 844 });
+      // Reflow at 200% text (WCAG 1.4.4 + 1.4.10, SPEC §18.1): at 320 and 390 with the root font
+      // doubled and every disclosure opened, the overflow and margins checks must still pass, and
+      // so must bigAudit(). A grid item's min-width:auto let "workforce/enterprise" push About's
+      // text 10px past the screen here, which no 100% sweep could see (Phase 4 R2-a11y-02); the
+      // clipped wordmark, the privacy date and the mid-word breaks of R4-a11y-01..04 were all
+      // invisible to the overflow check.
       const big = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
       await page.evaluate(() => {
         for (const b of document.querySelectorAll('h3 button[aria-expanded="false"]')) b.click();
       });
-      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
-      for (const f of await page.evaluate(audit)) {
-        if (f.check !== 'overflow' && f.check !== 'margins') continue;
+      const record = (f, w) => {
         const key = `${f.check}|${f.selector} @200%`;
-        const cur = found.get(key) ?? { ...f, selector: `${f.selector} (text 200%)`, widths: [320], details: new Set(), maxInstances: 0, instancesAt390: 0 };
+        const cur = found.get(key) ?? { ...f, selector: `${f.selector} (text 200%)`, widths: [], details: new Set(), maxInstances: 0, instancesAt390: 0 };
+        if (!cur.widths.includes(w)) cur.widths.push(w);
         cur.maxInstances += 1;
+        if (w === 390) cur.instancesAt390 += 1;
         if (cur.details.size < 5) cur.details.add(f.detail);
         found.set(key, cur);
+      };
+      for (const w of BIG_WIDTHS) {
+        await page.setViewportSize({ width: w, height: 844 });
+        await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+        for (const f of await page.evaluate(audit)) if (f.check === 'overflow' || f.check === 'margins') record(f, w);
+        for (const f of await page.evaluate(bigAudit)) record(f, w);
+      }
+      // The menu sheet's bar at 200% text: its brand clipped exactly as the header's did.
+      const menu = page.locator('header nav button[aria-expanded]');
+      if (await menu.count()) {
+        for (const w of BIG_WIDTHS) {
+          await page.setViewportSize({ width: w, height: 844 });
+          await menu.first().click();
+          await page.waitForSelector('[role="dialog"]', { state: 'visible' });
+          await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+          for (const f of await page.evaluate(bigAudit)) if (f.check === 'clip') record({ ...f, selector: `menu sheet: ${f.selector}` }, w);
+          await page.keyboard.press('Escape');
+          await page.waitForSelector('[role="dialog"]', { state: 'detached' });
+        }
       }
       await big.evaluate((n) => n.remove());
       // Find-in-page across every glued phrase, at 390 with everything open (see the header).

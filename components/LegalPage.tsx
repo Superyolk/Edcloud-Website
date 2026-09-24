@@ -20,7 +20,17 @@ export default function LegalPage({ n, title, blocks }: Props) {
               // Top-level sections under the page title, so h2 — styled with the About page's
               // smaller heading rule to match the design.
               if (b.tag === 'h3') return <h2 key={i} className={styles.h2}>{b.text}</h2>;
-              if (b.tag === 'ul') return <ul key={i} className={styles.list}>{b.items.map((t) => <li key={t}>{keepTogether(t)}</li>)}</ul>;
+              // .fit: a short item balances below 1024; a long one keeps the prose wrap (no style at >= 1024).
+              if (b.tag === 'ul')
+                return (
+                  <ul key={i} className={styles.list}>
+                    {b.items.map((t) => (
+                      <li key={t} className={t.length < 90 ? styles.fit : undefined}>
+                        {keepTogether(t)}
+                      </li>
+                    ))}
+                  </ul>
+                );
               // keepTogether: dates and "Level AA" never split across lines below 1024.
               return <p key={i} className={styles.p}>{keepTogether(b.text)}</p>;
             })}
