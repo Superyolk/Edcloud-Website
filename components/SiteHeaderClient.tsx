@@ -18,14 +18,17 @@ type Props = {
 
 const MENU_LABELS = { closed: 'Menu', open: 'Close' } as const;
 
-/** The menu icons: 22px square, the same box as the "e" mark on the left. */
+/**
+ * The menu icons. The svg box is the ink box: 15 x 11, so the three lines end exactly on the
+ * gutter, mirroring the "e" mark on the left. The close cross sits centred in the same box.
+ */
 function MenuIcon({ open }: { open: boolean }) {
   return (
-    <svg className={styles.menuIcon} width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
+    <svg className={styles.menuIcon} width="15" height="11" viewBox="0 0 15 11" aria-hidden="true" focusable="false">
       {open ? (
-        <path d="M4 4 18 18M18 4 4 18" />
+        <path d="M3.2 0.7 11.8 10.3M11.8 0.7 3.2 10.3" />
       ) : (
-        <path d="M1 4h20M1 11h20M1 18h20" />
+        <path d="M0.7 0.7h13.6M0.7 5.5h13.6M0.7 10.3h13.6" />
       )}
     </svg>
   );

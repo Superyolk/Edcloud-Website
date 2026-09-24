@@ -52,16 +52,24 @@ test.describe('service tabs', () => {
 test.describe('service accordion (phones)', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  // New below 1024 (SPEC §7.1): tapping a row opens it exclusively and the one panel moves under it.
+  // New below 1024 (SPEC §7.1): tapping a row opens it exclusively, the one panel moves under it,
+  // and the row scrolls up to sit under the header.
   test('tapping a row opens it and moves the panel under it', async ({ page }) => {
     await ready(page, APP + '/');
     const tabs = page.locator('button[aria-controls="svc-panel"]');
     await tabs.nth(2).tap();
     await expect(tabs.nth(2)).toHaveAttribute('aria-expanded', 'true');
     await expect(tabs.nth(0)).toHaveAttribute('aria-expanded', 'false');
-    const rowBottom = await tabs.nth(2).evaluate((el) => el.getBoundingClientRect().bottom);
-    const panelTop = await page.locator('#svc-panel').evaluate((el) => el.getBoundingClientRect().top);
-    expect(panelTop).toBeGreaterThanOrEqual(rowBottom - 1);
+    // Both read in one frame: the tapped row is smooth-scrolling up to the header meanwhile.
+    const gap = () =>
+      tabs.nth(2).evaluate((el) => document.getElementById('svc-panel')!.getBoundingClientRect().top - el.getBoundingClientRect().bottom);
+    expect(await gap()).toBeGreaterThanOrEqual(-1);
+    // The tapped row comes to rest just under the sticky header.
+    await expect
+      .poll(() =>
+        tabs.nth(2).evaluate((el) => Math.abs(Math.round(el.getBoundingClientRect().top - document.querySelector('body > header')!.getBoundingClientRect().bottom))),
+      )
+      .toBe(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   });
 });
