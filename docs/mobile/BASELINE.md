@@ -328,3 +328,30 @@ Page heights (px):
 | services-and-results | **5,298** (≤ 7,000) | 5,772 | 6,481 | 6,191 |
 
 Line breaks (every page at 320, 375, 390, 430 and 768, every disclosure open): no line ends on a hard hyphen after hydration; before round 2 there were 21–25.
+
+## After Phase 4 round 3 (fixes on `mobile-redesign`, 2026-09-23)
+
+Fresh build (`QA_BUILD=1`), served on :4194.
+
+| Gate | Result |
+|---|---|
+| lint / typecheck / build | clean (0 errors; every lint warning is in gitignored scripts under `scripts/qa/output/`) |
+| qa:breakpoints, qa:content | PASS |
+| qa:desktop-parity | 15/15 at 0px |
+| qa:a11y | PASS (`color-contrast` waived) |
+| qa:mobile-lint | 0 findings on every page, including the new `find` check (TEST-CHANGES.md): 80 glued phrases, all findable at 320, 390 and 768 (0 of 60 before the fix) |
+| qa:matrix | PASS |
+| qa:bytes | PASS: Home 44.0% of baseline bytes; JS growth gz 3,927 B (Home), 4,372 B (About, Services), −2,626 B (legal), against 5,120 B |
+| qa:early | PASS, 7 cases |
+| qa:perf | PASS: Perf 100 on all five; LCP Home 1728, About 1428, Services 1728, legal 1278 ms; CLS 0.000; TBT 6–7 ms |
+| interactions.spec.ts | 13/13 |
+
+Page heights (px):
+
+| Page | 390×844 | 320×568 | 768×1024 | 844×390 |
+|---|---:|---:|---:|---:|
+| home | **7,413** (≤ 8,500) | 7,696 | 7,880 | 7,650 |
+| about | **4,147** (≤ 6,500) | 4,452 | 6,468 | 6,215 |
+| services-and-results | **5,298** (≤ 7,000) | 5,772 | 6,634 | 6,369 |
+
+Tablet and landscape pages grew 70–210px because the column is now 27em (459px). Tablet measure at 768 (full lines of 16–17px body copy): About median 56 cpl, max 63, 5 of 82 over 60 (was 59 / 68 / 37 of 90); Services median 56, max 61; Privacy median 55, max 60; Home median 55, max 62. The proof strip's widest figure, "10% → 90%", is 218px in a 230px cell.

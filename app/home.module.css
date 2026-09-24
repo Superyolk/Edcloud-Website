@@ -791,10 +791,14 @@
     white-space: nowrap;
   }
 
+  /* Capped at 14em (182px), the width tablets use, so every caption is the same 2-line block
+     beside its figure from 360 up; uncapped, one caption at 430-599 set as a single long line
+     (Phase 4 R3-designer-01). At 320 the column is already narrower than the cap. */
   .statLabel {
     order: -1;
     flex: 1 1 9em;
     min-width: 0;
+    max-inline-size: 14em;
     font-size: var(--m-t-meta);
     line-height: 1.35;
     text-wrap: balance;
@@ -1083,6 +1087,16 @@
   .contactPill[data-shown]:active {
     transform: scale(0.97);
     opacity: 0.85;
+  }
+}
+
+/* Phones: the pill's right edge is the column's, the same 20px (or safe-area) inset as the Menu
+   pill above it and every rule it passes; at 16px it stood 4px outside them (Phase 4
+   R3-designer-02, R3-client-01). Tablets keep the viewport-edge 16px: there the column is centred
+   well inside the screen, and a float outside it reads as intended. */
+@media (max-width: 599.98px) {
+  .contactPill {
+    right: var(--gutter);
   }
 }
 

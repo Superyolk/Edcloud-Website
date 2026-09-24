@@ -102,13 +102,15 @@ a:hover {
     overflow-wrap: break-word;
   }
 
-  /* Phrases keepTogether() and keepLastWords() glue (components/KeepTogether.tsx): "K-12", dates,
-     "Level AA", a heading's last two words. An inline-block moves to the next line whole rather
-     than breaking inside, like nowrap; unlike nowrap, max-width lets it wrap inside itself when
-     it is wider than the whole line, so enlarged text still reflows at 320px (WCAG 1.4.10). */
+  /* Phrases keepTogether(), KeepCompounds and keepLastWords() glue (components/KeepTogether.tsx):
+     "K-12", dates, "Level AA", hyphenated compounds, a word and its spaced dash, a heading's last
+     two words. nowrap on the inline span itself, never an inline-block: Chromium's find-in-page and
+     #:~:text= matching treat an atomic inline as a block boundary, so a search for "founder-led
+     selling" found nothing below 1024 while the span was an inline-block (Phase 4 R3-a11y-01).
+     Every prose phrase is short enough to fit a 320px line at 200% text; the heading-button spans,
+     which are not, are released by a container query in components/Disclosure.module.css. */
   [data-nowrap] {
-    display: inline-block;
-    max-width: 100%;
+    white-space: nowrap;
   }
 
   /* No stranded words: headings balance, prose avoids a lone last word (SPEC §18.2 rule 2). */

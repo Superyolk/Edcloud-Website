@@ -50,6 +50,12 @@ Unchanged: the home header transparency test, both contact form tests (the focus
 | `early.mjs` | Three more `#:~:text=` cases on Home Press: item 7 ("Zovio Sells Tutoring Services") and item 9 ("Now Valued at") throttled, and item 9 again unthrottled (after hydration). The pass rule for every fragment case is stricter: the matched text's top must sit below the 56px sticky header and at least 24px above the bottom edge (it was `top >= 0` and `< 844`). | R2-a11y-01: the browser scrolled to a deep Press item before items 4-6 were revealed, which pushed it 52-369px below the screen. On the pre-fix build all three new cases fail (text top 851, 1168 and 1167px); on the fixed build all pass (407-408px). The existing two cases pass under the stricter rule too. |
 | `mobile-lint.mjs` | After the width sweep, each page runs once more at 320px with `html { font-size: 200% }` and every disclosure open, and reports `overflow` and `margins` findings from that pass (selector suffixed "(text 200%)"). | R2-a11y-02: About's "workforce/enterprise" ran 10px past a 320px screen at 200% text (a grid item's `min-width: auto`), and no 100% sweep could see it. With the old rule forced back on, the page measures scrollWidth 330 and this pass fails; with the fix it is 320 on every page. |
 
+## Phase 4 round 3 (QA harness)
+
+| File | Change | Reason |
+|---|---|---|
+| `mobile-lint.mjs` | New `find` check, run last on each page at 390 with every disclosure and Show-all list open: for each `[data-nowrap]` span in `main` and the footer, `window.find()` on the span's text plus the word either side must match. Findings are keyed by the phrase. | R3-a11y-01: while the glue spans were inline-blocks, all 60 such searches failed below 1024 (Chromium treats an atomic inline as a block boundary for find-in-page and `#:~:text=`). On the fixed build 80 of 80 spans pass at 320, 390 and 768; forcing the old `display: inline-block` back on fails 80 of 80. The existing checks and the 200% pass are unchanged, and the new pass runs after them, so it cannot change what they see. |
+
 ## Deliberate tablet (600–1023) changes to show in review
 
 - The nav collapses to Menu and the sheet below **1024**, not 820.
@@ -59,9 +65,9 @@ Unchanged: the home header transparency test, both contact form tests (the focus
   - 4-column logos (24 visible)
   - the contact band sits inside the column
   - the hero is 640px
-- About: every chapter starts open, in the centred 29em column; By The Numbers is the single-column ledger; the byline keeps its phone shape with a 128×160 portrait.
+- About: every chapter starts open, in the centred 27em column; By The Numbers is the single-column ledger; the byline keeps its phone shape with a 128×160 portrait.
 - Services & Results:
   - all six services start open, in one column
   - the proof strip is **2×2, not 4-up** (judge ruling ACCEPT, Phase 4 R1): "300 → 1.5M" doesn't fit a quarter of the capped column at the tablet stat size
   - phases, the fit lists and the results stay stacked up to 1023 (previously phases 3-up and a 4-column table from 820)
-- Every page: the content column is capped at 29em plus gutters (493px at 17px, ~60 characters a line) and centred, so the margins are equal on both sides (SPEC §18; 34em in Phase 3 measured 71 cpl).
+- Every page: the content column is capped at 27em plus gutters (459px at 17px, median 56 characters a line) and centred, so the margins are equal on both sides (SPEC §18; 34em in Phase 3 measured 71 cpl, and 29em in round 1 still ran 41% of About's lines past 60).

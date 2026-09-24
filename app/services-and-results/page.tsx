@@ -159,7 +159,7 @@ export default function ServicesPage() {
                         {keepTogether(r.built)}
                       </td>
                       <td className={`${styles.td} ${styles.tdOutcome}`} data-label={SERVICES_COPY.tableHead[3]}>
-                        {keepTogether(r.outcome)}
+                        {keepTogether(r.outcome, { clauses: true })}
                       </td>
                     </tr>
                   ))}

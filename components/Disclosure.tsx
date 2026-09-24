@@ -183,22 +183,38 @@ export default function Disclosure({
 }
 
 /**
- * The last two words of a heading glued in one `<span data-nowrap>` (app/globals.css), so a
- * two-line title never ends on one word (SPEC §18.2 rule 2); balance alone chose "Smarter
- * Procurement / Pathways". "&" counts as a word, so "& Positioning" is the pair and balance can
- * set "GTM Strategy / & Positioning"; gluing three words ("Strategy & Positioning") left a
- * one-word first line, "GTM", at 320 (Phase 4 R2-designer-02). The DOM text is unchanged
- * (qa:content unwraps data-nowrap). Mobile button only: in desktop text an extra element moved
- * glyphs by a subpixel. Kept here, not in KeepTogether.tsx, so the client bundle stays small.
+ * A heading's glued phrases on the mobile button (SPEC §18.2 rules 2 and 3). The DOM text is
+ * unchanged (qa:content unwraps data-nowrap). Mobile button only: in desktop text an extra element
+ * moved glyphs by a subpixel. Kept here, not in KeepTogether.tsx, so the client bundle stays small.
+ *
+ *   - A parenthetical ("Our approach (operator first, not just advisory)") is one phrase, so it
+ *     drops to the next line whole instead of splitting "(operator / first, …)" (Phase 4
+ *     R3-designer-05). Every chapter title gets this.
+ *   - With `glue`, the last two words are one phrase, so a two-line title never ends on one word;
+ *     balance alone chose "Smarter Procurement / Pathways". "&" counts as a word, so
+ *     "& Positioning" is the pair and balance can set "GTM Strategy / & Positioning"; gluing
+ *     three words left a one-word first line, "GTM", at 320 (Phase 4 R2-designer-02).
+ *
+ * The spans are inline, and Disclosure.module.css holds each one only while the row can fit it.
  */
-function keepLastWords(text: string): ReactNode {
+const ASIDE = /(\([^()]+\))/;
+
+function glueHeading(text: string, lastWords: boolean): ReactNode {
+  const aside = text.split(ASIDE);
+  if (aside.length > 1) {
+    return (
+      <span>
+        {aside.map((part, i) => (i % 2 === 1 ? <span key={i} data-nowrap="aside">{part}</span> : part))}
+      </span>
+    );
+  }
   const words = text.split(' ');
-  if (words.length <= 2) return text;
+  if (!lastWords || words.length <= 2) return text;
   // One outer span, so the flex button still sees one item; the head and its space are one string.
   return (
     <span>
       {`${words.slice(0, -2).join(' ')} `}
-      <span data-nowrap="">{words.slice(-2).join(' ')}</span>
+      <span data-nowrap="pair">{words.slice(-2).join(' ')}</span>
     </span>
   );
 }
@@ -211,7 +227,7 @@ export type DisclosureHeadingProps = {
   /** The existing heading text. No new copy. */
   children: ReactNode;
   /**
-   * Glue the last two words of a string heading (keepLastWords above) on the mobile
+   * Glue the last two words of a string heading (glueHeading above) on the mobile
    * button, so a two-line title never ends on one word. Only the button gets the span: a span in
    * the desktop text moves its glyphs by a subpixel, and desktop is pixel-frozen.
    */
@@ -238,7 +254,7 @@ export function DisclosureHeading({ as: Tag = 'h3', className, children, keepLas
           onClick={toggle}
           data-row=""
         >
-          {glue && typeof children === 'string' ? keepLastWords(children) : children}
+          {typeof children === 'string' ? glueHeading(children, glue) : children}
         </button>
       ) : (
         // data-trigger: a tap here before hydration is replayed on the button once it exists

@@ -21,6 +21,11 @@
  *                   are skipped; media is never checked, so full-bleed images are fine.
  *   (200% text)     after the sweep, each page once more at 320 with html { font-size: 200% } and
  *                   every disclosure open: the overflow and margins checks only (WCAG 1.4.4/1.4.10).
+ *   find            last, at 390 with every disclosure and Show-all list open: for each glued
+ *                   phrase (<span data-nowrap>, components/KeepTogether.tsx) in main and the footer,
+ *                   window.find() on "<word before> <phrase> <word after>" must match. An
+ *                   inline-block span is a block boundary to Chromium's find-in-page and #:~:text=
+ *                   matching, so every search across one failed below 1024 (Phase 4 R3-a11y-01).
  *
  * Findings are deduped per page by (check, selector) and keep the list of widths they occur at.
  * Output: scripts/qa/output/mobile-lint.json and mobile-lint.md.
@@ -34,7 +39,27 @@ import { OUT_DIR, PAGES, contextOptions, main, pageUrl, settlePage, startTarget,
 const PHONE_WIDTHS = Array.from({ length: 111 }, (_, i) => 320 + i);
 const TABLET_WIDTHS = [600, 700, 768, 800, 820, 900, 1000, 1023];
 const SWEEP = [...PHONE_WIDTHS.map((w) => ({ w, h: 844 })), ...TABLET_WIDTHS.map((w) => ({ w, h: 1024 }))];
-const CHECKS = ['overflow', 'tapSize', 'tapSpacing', 'textSize', 'bodyText', 'inputFont', 'mediaDims', 'safeArea', 'margins'];
+const CHECKS = ['overflow', 'tapSize', 'tapSpacing', 'textSize', 'bodyText', 'inputFont', 'mediaDims', 'safeArea', 'margins', 'find'];
+
+/** Runs in the page. Every glued phrase, with a word either side, must be findable. */
+function findAudit() {
+  const out = [];
+  for (const span of Array.from(document.querySelectorAll('main [data-nowrap], body > footer [data-nowrap]'))) {
+    const text = span.parentElement?.textContent || '';
+    const own = span.textContent || '';
+    const i = text.indexOf(own);
+    if (i < 0) continue;
+    const before = text.slice(0, i).trimEnd().split(/\s+/).pop() || '';
+    const after = text.slice(i + own.length).split(/\s+/).filter(Boolean)[0] || '';
+    const phrase = (before + (text[i - 1] === ' ' ? ' ' : '') + own + (text[i + own.length] === ' ' ? ' ' : '') + after).trim();
+    if (phrase === own) continue;
+    getSelection()?.removeAllRanges();
+    const ok = window.find(phrase, true, false, true) || window.find(phrase, true, true, true);
+    if (!ok) out.push({ check: 'find', selector: `"${phrase}"`, detail: 'window.find() found no match' });
+  }
+  getSelection()?.removeAllRanges();
+  return out;
+}
 
 /** Runs in the page. Returns [{ check, selector, detail }]. */
 function audit() {
@@ -320,6 +345,19 @@ main(async () => {
         found.set(key, cur);
       }
       await big.evaluate((n) => n.remove());
+      // Find-in-page across every glued phrase, at 390 with everything open (see the header).
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.evaluate(() => {
+        for (const b of document.querySelectorAll('main button[aria-expanded="false"]')) b.click();
+      });
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      for (const f of await page.evaluate(findAudit)) {
+        const key = `${f.check}|${f.selector}`;
+        const cur = found.get(key) ?? { ...f, widths: [390], details: new Set([f.detail]), maxInstances: 0, instancesAt390: 0 };
+        cur.maxInstances += 1;
+        cur.instancesAt390 += 1;
+        found.set(key, cur);
+      }
       const findings = [...found.values()].map(({ details, widths, ...f }) => ({
         ...f,
         widths: ranges(widths),

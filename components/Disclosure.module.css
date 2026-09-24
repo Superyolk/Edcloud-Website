@@ -64,6 +64,32 @@
     color: var(--growth-ink);
   }
 
+  /* A heading's glued phrase (Disclosure.tsx: its last two words, or a parenthetical) holds only
+     while it fits the row: the button is the query container, and em here is the title's own size,
+     so the threshold follows the text when a reader enlarges it. Below it the words wrap freely
+     (at 200% text "Procurement Pathways" is 408px on a 320px screen; WCAG 1.4.10). The span stays
+     inline either way, so find-in-page matches across it (Phase 4 R3-a11y-01). 12em fits the
+     widest last pair, 16em the parenthetical, each plus the 10px square and its 12px gap. */
+  .button {
+    container-type: inline-size;
+  }
+
+  .button [data-nowrap] {
+    white-space: normal;
+  }
+
+  @container (min-width: 12em) {
+    .button [data-nowrap='pair'] {
+      white-space: nowrap;
+    }
+  }
+
+  @container (min-width: 16em) {
+    .button [data-nowrap='aside'] {
+      white-space: nowrap;
+    }
+  }
+
   /* The one indicator on the site (G10): the desktop tab's 10px square. Filled = open;
      an outlined square = closed. No chevrons, no plus/minus. */
   .button::after {

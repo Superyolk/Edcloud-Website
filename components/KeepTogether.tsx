@@ -17,19 +17,20 @@ const KEEP = new RegExp(`(K-12|long-term|Level AA|${MONTH} \\d{1,2}, \\d{4})`, '
  * Returns `text` with each protected phrase wrapped in `<span data-nowrap>`, and the rest in
  * <KeepCompounds>. The characters are untouched, so the DOM text is identical (qa:content unwraps
  * data-nowrap before comparing text nodes). The span is only styled below 1024 (app/globals.css:
- * an inline-block that moves to the next line whole), so desktop line breaks are unchanged;
- * qa:desktop-parity proves the pixels. The server markup is the same text nodes as before.
+ * white-space: nowrap on the inline span, so it moves to the next line whole and find-in-page still
+ * matches across it), so desktop line breaks are unchanged; qa:desktop-parity proves the pixels.
+ * The server markup is the same text nodes as before. `clauses` is passed on to KeepCompounds.
  */
-export function keepTogether(text: string): ReactNode {
+export function keepTogether(text: string, { clauses = false }: { clauses?: boolean } = {}): ReactNode {
   const parts = text.split(KEEP);
-  if (parts.length === 1) return <KeepCompounds text={text} />;
+  if (parts.length === 1) return <KeepCompounds text={text} clauses={clauses} />;
   return parts.map((part, i) =>
     i % 2 === 1 ? (
       <span key={i} data-nowrap="">
         {part}
       </span>
     ) : (
-      part && <KeepCompounds key={i} text={part} />
+      part && <KeepCompounds key={i} text={part} clauses={clauses} />
     ),
   );
 }

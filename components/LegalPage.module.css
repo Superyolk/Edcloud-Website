@@ -73,9 +73,12 @@
     gap: var(--s-3);
   }
 
+  /* Short items (at most five lines at 320): balance, not the prose default pretty, which left
+     "technologies." and "transaction." alone on a last line (Phase 4 R3-designer-04). */
   .list > li {
     position: relative;
     padding-left: var(--s-5);
+    text-wrap: balance;
   }
 
   .list > li::before {

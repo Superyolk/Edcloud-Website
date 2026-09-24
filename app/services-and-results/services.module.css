@@ -735,9 +735,12 @@
     line-height: var(--m-lh-body);
   }
 
+  /* Short items: balance, not the prose default pretty, which let "institutions." sit alone on a
+     third line at 320 (Phase 4 R3-designer-04). */
   .fitItem {
     gap: var(--s-3);
     padding: var(--s-3) 0;
+    text-wrap: balance;
   }
 
   /* Centres the 20px mark on the first 24px line. */
