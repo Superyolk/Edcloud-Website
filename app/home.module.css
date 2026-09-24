@@ -666,11 +666,14 @@
     display: contents;
   }
 
+  /* 16px above and below: a one-line title still centres in the 56px row, and a title that
+     wraps ("Supercharged Product Market Fit" at 320) keeps the same ~22px from the hairline to
+     its cap height as its one-line neighbours (Phase 4 R2-designer-01). */
   .tab {
     grid-template-columns: minmax(0, 1fr) 10px;
     gap: var(--s-3);
     min-height: var(--m-disclosure-h);
-    padding: var(--s-3) 0;
+    padding: var(--s-4) 0;
     color: var(--ink-2);
   }
 
@@ -1100,6 +1103,14 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  /* The figure's caption stays the phone's short block beside the figure, not a one-line footnote
+     on its baseline: ~14em (182px) sets each caption in two lines, and centred on the 53px figure
+     its first line starts at the figure's cap height (Phase 4 R2-designer-04). */
+  .statLabel {
+    flex: 0 1 14em;
+    align-self: center;
+  }
+
   /* The band stays inside the column here; full-bleed would outrun the capped text. */
   .contactPhotoWrap {
     margin-inline: 0;
@@ -1156,5 +1167,26 @@
 
   .submit:hover {
     background: var(--ink);
+  }
+}
+
+/* Windows High Contrast (forced colours) drops backgrounds and box-shadows: the accordion's
+   square and the filled pills would lose their shape. System colours draw them instead; the
+   palette tokens are untouched (WCAG 1.4.11, Phase 4 R2-a11y-04). */
+@media (max-width: 1023.98px) and (forced-colors: active) {
+  .tabDot {
+    forced-color-adjust: none;
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+
+  .tabActive .tabDot {
+    background: CanvasText;
+    box-shadow: none;
+  }
+
+  .contactPill,
+  .submit {
+    border: 1px solid ButtonText;
   }
 }

@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { MQ_MOBILE } from '@/app/breakpoints';
 import { HOME } from '@/content/content';
 import { HOME_COPY } from '@/content/copy';
+import KeepCompounds from '@/components/KeepCompounds';
 import LinkButton from '@/components/LinkButton';
 import styles from '@/app/home.module.css';
 
@@ -86,8 +87,12 @@ export default function ServicesTabs() {
           role="region": it added a landmark the frozen desktop never had. A labelled group
           keeps the panel named by its row without joining the landmark list. */}
       <div key={active} id={PANEL_ID} role="group" aria-labelledby={tabId(active)} className={styles.panel}>
-        <p className={styles.panelLead}>{current.lead}</p>
-        <p className={styles.body}>{current.rest}</p>
+        <p className={styles.panelLead}>
+          <KeepCompounds text={current.lead} />
+        </p>
+        <p className={styles.body}>
+          <KeepCompounds text={current.rest} />
+        </p>
         <div className={styles.panelFoot}>
           <LinkButton href="/services-and-results">{HOME_COPY.servicesLink}</LinkButton>
         </div>

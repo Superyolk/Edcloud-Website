@@ -40,7 +40,7 @@ function renderBlock(block: MissionBlock, key: number) {
                   <strong className={styles.strong}>{item.lead}</strong>{' '}
                 </>
               )}
-              {item.text}
+              {keepTogether(item.text)}
             </li>
           ))}
         </ul>
@@ -48,7 +48,7 @@ function renderBlock(block: MissionBlock, key: number) {
     default:
       return (
         <p key={key} className={styles.p}>
-          {'text' in block ? block.text : null}
+          {'text' in block ? keepTogether(block.text) : null}
         </p>
       );
   }

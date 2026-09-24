@@ -5,8 +5,9 @@
  * a second or more the page is drawn but React is not attached. On a throttled iPhone-like
  * context (CPU 4x, 150ms RTT, 1.6 Mbps) this checks that nothing in that gap is lost:
  *
- *   fragment  a #:~:text= link into a collapsed Show-all item (Home Press) and into a collapsed
- *             About chapter scrolls to it, and it is still open once the page has hydrated
+ *   fragment  a #:~:text= link into a collapsed Show-all item (Home Press, including items 7 and 9
+ *             deep in the list) and into a collapsed About chapter scrolls to it: the text is on
+ *             screen below the sticky header, and still open once the page has hydrated
  *   tap       a tap on Menu, and on a collapsed About chapter heading, 300ms after first paint
  *             (before React has attached its listeners) takes effect once the page hydrates
  *
@@ -21,11 +22,20 @@ const PHONE = { w: 390, h: 844, kind: 'phone' };
 const FRAGMENTS = [
   { path: '/', phrase: 'Austin ISD implements new yoga program' }, // Press, 5th story: behind "Show all press"
   { path: '/about', phrase: 'EdCloud started informally' }, // "A brief history", collapsed on phones
+  // Deep in the collapsed Press list (Phase 4 R2-a11y-01): items 4-6 sit above these, and must be
+  // revealed before the browser scrolls, or they push the match below the screen. Checked both
+  // throttled (the match lands before hydration) and unthrottled (after hydration).
+  { path: '/', phrase: 'Zovio Sells Tutoring Services' },
+  { path: '/', phrase: 'Now Valued at' },
+  { path: '/', phrase: 'Now Valued at', fast: true },
 ];
+/** The sticky header's height: a match under it is not on screen either. */
+const HEADER = 56;
 
-async function throttledPage(browser) {
+async function throttledPage(browser, fast = false) {
   const ctx = await browser.newContext(contextOptions(PHONE, { deviceScaleFactor: 3 }));
   const page = await ctx.newPage();
+  if (fast) return { ctx, page };
   const cdp = await ctx.newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
   await cdp.send('Network.enable');
@@ -45,7 +55,7 @@ main(async () => {
   const results = [];
   try {
     for (const f of FRAGMENTS) {
-      const { ctx, page } = await throttledPage(browser);
+      const { ctx, page } = await throttledPage(browser, f.fast);
       await page.goto(`${target.base}${f.path}#:~:text=${encodeURIComponent(f.phrase)}`, { waitUntil: 'commit' });
       await page.waitForFunction(hydrated, null, { timeout: 60_000 });
       await page.waitForTimeout(1000);
@@ -54,8 +64,9 @@ main(async () => {
         const q = el?.getBoundingClientRect();
         return { found: !!el, hidden: !!el?.closest('[hidden]'), top: q ? Math.round(q.top) : null, height: q ? Math.round(q.height) : null, scrollY: Math.round(scrollY) };
       }, f.phrase);
-      const pass = r.found && !r.hidden && r.height > 0 && r.top >= 0 && r.top < PHONE.h && r.scrollY > 0;
-      results.push({ check: 'fragment', path: f.path, phrase: f.phrase, ...r, pass });
+      // The matched text starts below the header and at least a line above the bottom edge.
+      const pass = r.found && !r.hidden && r.height > 0 && r.top >= HEADER && r.top < PHONE.h - 24 && r.scrollY > 0;
+      results.push({ check: 'fragment', path: f.path, phrase: f.phrase, throttled: !f.fast, ...r, pass });
       await ctx.close();
     }
 

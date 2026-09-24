@@ -43,6 +43,13 @@ Unchanged: the home header transparency test, both contact form tests (the focus
 
 `scripts/interactions.spec.ts`, **mobile menu › Menu opens a five-link sheet…**: "the open menu turns the home header solid" now reads the header's `::before` layer (white, opacity 1) instead of the header's own `background-color`. Below 1024 the solid state is that layer, which fades by opacity over 150ms, so the header itself stays transparent (SPEC §5.2; R1-client-08, R1-designer-10). The desktop transparency test is unchanged. Nothing else in the file changed.
 
+## Phase 4 round 2 (QA harness)
+
+| File | Change | Reason |
+|---|---|---|
+| `early.mjs` | Three more `#:~:text=` cases on Home Press: item 7 ("Zovio Sells Tutoring Services") and item 9 ("Now Valued at") throttled, and item 9 again unthrottled (after hydration). The pass rule for every fragment case is stricter: the matched text's top must sit below the 56px sticky header and at least 24px above the bottom edge (it was `top >= 0` and `< 844`). | R2-a11y-01: the browser scrolled to a deep Press item before items 4-6 were revealed, which pushed it 52-369px below the screen. On the pre-fix build all three new cases fail (text top 851, 1168 and 1167px); on the fixed build all pass (407-408px). The existing two cases pass under the stricter rule too. |
+| `mobile-lint.mjs` | After the width sweep, each page runs once more at 320px with `html { font-size: 200% }` and every disclosure open, and reports `overflow` and `margins` findings from that pass (selector suffixed "(text 200%)"). | R2-a11y-02: About's "workforce/enterprise" ran 10px past a 320px screen at 200% text (a grid item's `min-width: auto`), and no 100% sweep could see it. With the old rule forced back on, the page measures scrollWidth 330 and this pass fails; with the fix it is 320 on every page. |
+
 ## Deliberate tablet (600–1023) changes to show in review
 
 - The nav collapses to Menu and the sheet below **1024**, not 820.

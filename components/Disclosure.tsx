@@ -130,9 +130,16 @@ export default function Disclosure({
     group.setAttribute('data-js', '');
   }, [hydrated, mobile, open]);
 
-  // Find-in-page (and #:~:text= links) into a collapsed panel opens it.
+  // Find-in-page (and #:~:text= links) into a collapsed panel opens it. The group's other panels
+  // open here too, synchronously: beforematch fires before the browser scrolls to the match, so
+  // the scroll then targets the final layout. Revealing Services' pitch only in the next render
+  // would push a match in the For/How/When list below it out of view (Phase 4 R2-a11y-01).
   useEffect(() => {
-    const onMatch = () => setUserOpen(true);
+    const onMatch = () => {
+      for (const el of panels.current) el.removeAttribute('hidden');
+      groupRef.current?.setAttribute('data-open', '');
+      setUserOpen(true);
+    };
     const els = [...panels.current];
     for (const el of els) el.addEventListener('beforematch', onMatch);
     return () => {
@@ -176,21 +183,22 @@ export default function Disclosure({
 }
 
 /**
- * The last two words of a heading (three when the second-to-last is "&") glued in one
- * `<span data-nowrap>` (app/globals.css), so a two-line title never ends on one word (SPEC §18.2
- * rule 2); balance alone chose "Smarter Procurement / Pathways". The DOM text is unchanged
+ * The last two words of a heading glued in one `<span data-nowrap>` (app/globals.css), so a
+ * two-line title never ends on one word (SPEC §18.2 rule 2); balance alone chose "Smarter
+ * Procurement / Pathways". "&" counts as a word, so "& Positioning" is the pair and balance can
+ * set "GTM Strategy / & Positioning"; gluing three words ("Strategy & Positioning") left a
+ * one-word first line, "GTM", at 320 (Phase 4 R2-designer-02). The DOM text is unchanged
  * (qa:content unwraps data-nowrap). Mobile button only: in desktop text an extra element moved
  * glyphs by a subpixel. Kept here, not in KeepTogether.tsx, so the client bundle stays small.
  */
 function keepLastWords(text: string): ReactNode {
   const words = text.split(' ');
-  const n = words.length > 3 && words[words.length - 2] === '&' ? 3 : 2;
-  if (words.length <= n) return text;
+  if (words.length <= 2) return text;
   // One outer span, so the flex button still sees one item; the head and its space are one string.
   return (
     <span>
-      {`${words.slice(0, -n).join(' ')} `}
-      <span data-nowrap="">{words.slice(-n).join(' ')}</span>
+      {`${words.slice(0, -2).join(' ')} `}
+      <span data-nowrap="">{words.slice(-2).join(' ')}</span>
     </span>
   );
 }

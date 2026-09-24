@@ -108,8 +108,8 @@ export default function HomePage() {
         <SectionShell n={promise.n} title={promise.title}>
           <div className={styles.promise}>
             <p className={styles.lead}>{keepTogether(HOME_COPY.promise.lead)}</p>
-            <p className={styles.body}>{HOME_COPY.promise.p2}</p>
-            <p className={styles.body}>{HOME_COPY.promise.p3}</p>
+            <p className={styles.body}>{keepTogether(HOME_COPY.promise.p2)}</p>
+            <p className={styles.body}>{keepTogether(HOME_COPY.promise.p3)}</p>
             <div>
               {/* "Read More" alone failed Lighthouse link-text, which reads the link's text and ignores
                   aria-label, so the rest of the name is visually hidden text (SPEC §6.1 fallback,
@@ -132,7 +132,7 @@ export default function HomePage() {
               <article key={c.n} className={styles.case}>
                 <div className={styles.caseTop}>
                   <h3 className={styles.cardTitle}>{c.title}</h3>
-                  <p className={styles.cardBody}>{c.body}</p>
+                  <p className={styles.cardBody}>{keepTogether(c.body)}</p>
                 </div>
                 <div className={styles.rule} />
                 <div className={styles.caseStat}>
@@ -147,7 +147,7 @@ export default function HomePage() {
         <SectionShell n={deliverables.n} title={deliverables.title}>
           <div className={styles.deliverables}>
             <div className={styles.deliverablesIntro}>
-              <p className={styles.lead}>{HOME_COPY.deliverables.lead}</p>
+              <p className={styles.lead}>{keepTogether(HOME_COPY.deliverables.lead)}</p>
               <div className={styles.photoCard}>
                 <Picture
                   name="conference-room"
@@ -169,7 +169,7 @@ export default function HomePage() {
                   <span className={styles.capabilityIndex}>{c.n}</span>
                   <div className={styles.capabilityText}>
                     <h3 className={styles.cardTitle}>{c.label}</h3>
-                    <p className={styles.cardBody}>{c.desc}</p>
+                    <p className={styles.cardBody}>{keepTogether(c.desc)}</p>
                   </div>
                 </li>
               ))}

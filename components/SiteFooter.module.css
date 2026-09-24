@@ -134,8 +134,13 @@
     flex: 1.25 1 8.75em;
   }
 
+  /* Never narrower than its longest link: at 320 the 1.25 : 1 split left 117px and set
+     "Services & Results" on two lines, the only broken row in the list. The address column gives
+     up the difference, and keepTogether() keeps "CA 94108" whole there (Phase 4 R2-client-03).
+     With text enlarged the columns still stack, and then this column is the full width. */
   .col2 {
     flex: 1 1 7em;
+    min-width: max-content;
   }
 
   /* 8px between two stacked link targets (the brief's spacing rule; these rows have no

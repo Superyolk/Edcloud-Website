@@ -19,6 +19,8 @@
  *                   right <= viewport - gutter (gutter = the live --gutter). Collapsed ([hidden],
  *                   until-found), [inert], invisible, fixed-position and fully off-screen elements
  *                   are skipped; media is never checked, so full-bleed images are fine.
+ *   (200% text)     after the sweep, each page once more at 320 with html { font-size: 200% } and
+ *                   every disclosure open: the overflow and margins checks only (WCAG 1.4.4/1.4.10).
  *
  * Findings are deduped per page by (check, selector) and keep the list of widths they occur at.
  * Output: scripts/qa/output/mobile-lint.json and mobile-lint.md.
@@ -299,6 +301,25 @@ main(async () => {
           if (s.w === 390) cur.instancesAt390 = n;
         }
       }
+      // Reflow at 200% text (WCAG 1.4.4 + 1.4.10, SPEC §18.1): once at 320 with the root font
+      // doubled and every disclosure opened, the overflow and margins checks must still pass. A
+      // grid item's min-width:auto let "workforce/enterprise" push About's text 10px past the
+      // screen here, which no 100% sweep could see (Phase 4 R2-a11y-02).
+      await page.setViewportSize({ width: 320, height: 844 });
+      const big = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      await page.evaluate(() => {
+        for (const b of document.querySelectorAll('h3 button[aria-expanded="false"]')) b.click();
+      });
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      for (const f of await page.evaluate(audit)) {
+        if (f.check !== 'overflow' && f.check !== 'margins') continue;
+        const key = `${f.check}|${f.selector} @200%`;
+        const cur = found.get(key) ?? { ...f, selector: `${f.selector} (text 200%)`, widths: [320], details: new Set(), maxInstances: 0, instancesAt390: 0 };
+        cur.maxInstances += 1;
+        if (cur.details.size < 5) cur.details.add(f.detail);
+        found.set(key, cur);
+      }
+      await big.evaluate((n) => n.remove());
       const findings = [...found.values()].map(({ details, widths, ...f }) => ({
         ...f,
         widths: ranges(widths),

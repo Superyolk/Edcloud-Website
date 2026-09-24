@@ -301,3 +301,30 @@ Page heights (px):
 Tablet and landscape pages are taller than after Phase 3 because the 2-up/3-up grids became single-column ledgers inside a 29em (493px) column. That is the point of R1-designer-01/02: the prose there measured 71 characters a line, and the grid cells 5–35. There is no tablet length gate.
 
 Line breaks (a width sweep of every page at 320–430, 600, 700, 768, 820, 844 and 1000): "K-12" and "long-term" never split, and no heading ends on a single word except the two-word "Accessibility Statement" H1, which cannot share a line at the page-title size. No horizontal overflow at any width. At 320px with text enlarged 200%, `scrollWidth` is 320 on every page.
+
+## After Phase 4 round 2 (fixes on `mobile-redesign`, 2026-09-23)
+
+Fresh build (`QA_BUILD=1`), served on :4194.
+
+| Gate | Result |
+|---|---|
+| lint / typecheck / build | clean (0 errors; the 32 lint warnings are all in gitignored scripts under `scripts/qa/output/`) |
+| qa:breakpoints, qa:content | PASS |
+| qa:desktop-parity | 15/15 at 0px |
+| qa:a11y | PASS (0 violations at 390 and 1440, `color-contrast` waived) |
+| qa:mobile-lint | 0 findings on every page, including the new 200%-text pass at 320 (TEST-CHANGES.md) |
+| qa:matrix | PASS |
+| qa:bytes | PASS: Home 43.9% of baseline bytes; JS growth gz 3,690 B (Home), 4,012 B (About, Services), −2,863 B (legal), against 5,120 B. `SiteHeader` no longer ships `content/copy.ts` to the client, which pays for `KeepCompounds`. |
+| qa:early | PASS, 7 cases, including the new deep Press fragments (items 7 and 9, throttled and unthrottled) |
+| qa:perf | PASS: Perf 100 on all five; LCP Home 1728, About 1428, Services 1728, legal 1278 ms; CLS 0.000; TBT 5–6 ms |
+| interactions.spec.ts | 13/13 |
+
+Page heights (px):
+
+| Page | 390×844 | 320×568 | 768×1024 | 844×390 |
+|---|---:|---:|---:|---:|
+| home | **7,413** (≤ 8,500) | 7,696 | 7,813 | 7,557 |
+| about | **4,122** (≤ 6,500) | 4,452 | 6,261 | 6,008 |
+| services-and-results | **5,298** (≤ 7,000) | 5,772 | 6,481 | 6,191 |
+
+Line breaks (every page at 320, 375, 390, 430 and 768, every disclosure open): no line ends on a hard hyphen after hydration; before round 2 there were 21–25.

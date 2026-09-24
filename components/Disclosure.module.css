@@ -46,7 +46,11 @@
     width: 100%;
     min-height: var(--m-disclosure-h);
     margin: 0;
-    padding: 0;
+    /* A one-line title is centred in the 56px row either way; a title that wraps grows the row
+       and keeps the same ~22px from the hairline to its first line as its one-line neighbours,
+       instead of pressing against the hairlines (a two-line title had ~55% of their space,
+       Phase 4 R2-designer-01). */
+    padding: var(--s-4) 0;
     border: 0;
     background: none;
     font: inherit;
@@ -73,6 +77,13 @@
   .group[data-js]:not([data-open]) .button::after {
     background: transparent;
     box-shadow: inset 0 0 0 1px var(--slate);
+  }
+
+  /* A panel's children may shrink below their longest word, so the body's own
+     overflow-wrap: break-word can break "workforce/enterprise" at 200% text instead of the grid
+     item growing past the gutter (min-width: auto; WCAG 1.4.10, Phase 4 R2-a11y-02). */
+  .panel > * {
+    min-width: 0;
   }
 
   /* A collapsed panel takes no grid gap and draws no hairline (SPEC §5.5 A.4). */
@@ -111,5 +122,34 @@
   .collapseMobile:not([data-open]):not([data-js]) .button::after {
     background: transparent;
     box-shadow: inset 0 0 0 1px var(--slate);
+  }
+}
+
+/* Windows High Contrast (forced colours) drops backgrounds and box-shadows, which is all the
+   square is drawn with. Draw it in system colours instead: filled = open, outlined = closed
+   (WCAG 1.4.11, Phase 4 R2-a11y-04). The palette tokens are untouched. */
+@media (max-width: 1023.98px) and (forced-colors: active) {
+  .button::after {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .group[data-js]:not([data-open]) .button::after {
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+}
+
+@media (max-width: 1023.98px) and (scripting: enabled) and (forced-colors: active) {
+  .collapseMobile:not([data-open]):not([data-js]) .button::after {
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+}
+
+@media (max-width: 599.98px) and (scripting: enabled) and (forced-colors: active) {
+  .collapsePhone:not([data-open]):not([data-js]) .button::after {
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
   }
 }

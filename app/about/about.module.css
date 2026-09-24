@@ -230,8 +230,9 @@
     line-height: 1.2;
   }
 
-  /* The intro paragraph is the section's lead; chapter paragraphs are body copy. */
-  .h2 + .p {
+  /* The intro paragraph is the section's lead; chapter paragraphs are body copy. Scoped to
+     .mission: the partner bio is also an .h2 + .p and must read as body (R2-client-01). */
+  .mission .h2 + .p {
     margin-top: var(--s-3);
     font-size: var(--m-t-lead);
     line-height: var(--m-lh-lead);
@@ -314,9 +315,13 @@
     display: contents;
   }
 
+  /* The bio and the coda are both body copy (SPEC §6.2): one size and line-height, so the coda
+     differs only by weight and ink (Phase 4 R2-client-01; it had kept the desktop 17px/1.6). */
   .partnerText > p {
     grid-column: 1 / -1;
     margin: 0;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
   }
 
   /* The closing line is a short coda in ink. */

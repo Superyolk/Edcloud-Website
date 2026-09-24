@@ -193,6 +193,10 @@
     height: 100vh; /* engines without dynamic viewport units */
     height: 100dvh;
     display: grid;
+    /* One column the width of the screen, never of its widest row: with text enlarged the brand
+       and Close row's min-content otherwise widened it past the right gutter (Phase 4
+       R2-a11y-03). The brand already clips inside its own box. */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr) auto;
     background: var(--paper);
     --nav-ink: var(--ink);
@@ -377,5 +381,19 @@
 @media (max-width: 1023.98px) and (hover: none) {
   .brand:hover {
     opacity: 1;
+  }
+}
+
+/* Windows High Contrast (forced colours) drops backgrounds: the current page's square and the
+   filled Contact pill would vanish. System colours draw them instead (WCAG 1.4.11, Phase 4
+   R2-a11y-04); the palette tokens are untouched. */
+@media (max-width: 1023.98px) and (forced-colors: active) {
+  .sheetPage[aria-current='page']::after {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .sheetContact {
+    border: 1px solid ButtonText;
   }
 }

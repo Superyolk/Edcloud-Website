@@ -71,11 +71,18 @@ export default function ShowAllButton({ controls, label, count, limit, focusOnEx
     }
   }, [controls, hydrated, phone, tablet, open, focusOnExpand]);
 
-  // Find-in-page into a hidden item expands the list. beforematch bubbles to the list.
+  // Find-in-page into a hidden item expands the list. beforematch bubbles to the list. Every
+  // hidden item is revealed here, synchronously: beforematch fires before the browser scrolls to
+  // the match, so the scroll targets the final layout. Left to the next render, the items above
+  // the match (Press 4-6) arrive after the scroll and push it below the screen (Phase 4 R2-a11y-01).
   useEffect(() => {
     const list = document.getElementById(controls);
     if (!list) return;
-    const onMatch = () => setOpen(true);
+    const onMatch = () => {
+      for (const item of Array.from(list.getElementsByClassName(styles.item))) item.removeAttribute('hidden');
+      list.setAttribute('data-open', '');
+      setOpen(true);
+    };
     list.addEventListener('beforematch', onMatch);
     return () => list.removeEventListener('beforematch', onMatch);
   }, [controls]);

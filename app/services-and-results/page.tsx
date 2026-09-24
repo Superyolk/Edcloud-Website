@@ -8,6 +8,7 @@ import Picture from '@/components/Picture';
 import Disclosure, { DisclosureHeading, DisclosurePanel } from '@/components/Disclosure';
 import { MQ_PHONE } from '@/app/breakpoints';
 import JsonLd from '@/components/JsonLd';
+import { keepTogether } from '@/components/KeepTogether';
 import { breadcrumbLd, pageMeta, SEO_DESCRIPTION, servicesLd } from '@/content/seo';
 import styles from './services.module.css';
 
@@ -61,7 +62,7 @@ export default function ServicesPage() {
 
         <SectionShell n={engagement.n} title={engagement.title}>
           <div className={styles.engagement}>
-            <p className={styles.lead}>{SERVICES_COPY.engagementLead}</p>
+            <p className={styles.lead}>{keepTogether(SERVICES_COPY.engagementLead)}</p>
             <ol className={styles.phases}>
               {SERVICES.phases.map((ph) => (
                 <li key={ph.n} className={styles.phase}>
@@ -70,7 +71,7 @@ export default function ServicesPage() {
                     <span className={styles.phaseDuration}>{ph.duration}</span>
                   </div>
                   <h3 className={styles.phaseTitle}>{ph.title}</h3>
-                  <p className={styles.phaseBody}>{ph.body}</p>
+                  <p className={styles.phaseBody}>{keepTogether(ph.body)}</p>
                 </li>
               ))}
             </ol>
@@ -104,22 +105,22 @@ export default function ServicesPage() {
                         {s.title}
                       </DisclosureHeading>
                       <DisclosurePanel as="p" part="pitch" className={styles.servicePitch}>
-                        {s.pitch}
+                        {keepTogether(s.pitch)}
                       </DisclosurePanel>
-                      <p className={styles.serviceResult}>{s.result}</p>
+                      <p className={styles.serviceResult}>{keepTogether(s.result)}</p>
                     </div>
                     <DisclosurePanel as="dl" part="spec" className={styles.dl}>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{bestFor}</dt>
-                        <dd className={styles.dd}>{s.fit}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.fit)}</dd>
                       </div>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{youGet}</dt>
-                        <dd className={styles.dd}>{s.deliverables}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.deliverables)}</dd>
                       </div>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{timeline}</dt>
-                        <dd className={styles.dd}>{s.timeline}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.timeline)}</dd>
                       </div>
                     </DisclosurePanel>
                   </div>
@@ -128,12 +129,12 @@ export default function ServicesPage() {
             </ol>
           }
         >
-          <p className={styles.lead}>{SERVICES_COPY.whatWeDoLead}</p>
+          <p className={styles.lead}>{keepTogether(SERVICES_COPY.whatWeDoLead)}</p>
         </SectionShell>
 
         <SectionShell n={results.n} title={results.title}>
           <div className={styles.results}>
-            <p className={styles.lead}>{SERVICES_COPY.resultsLead}</p>
+            <p className={styles.lead}>{keepTogether(SERVICES_COPY.resultsLead)}</p>
             <div className={styles.tableWrap}>
               <table className={styles.table}>
                 {/* Below 1024 the rows stack; the header is clipped, not removed, so screen
@@ -152,13 +153,13 @@ export default function ServicesPage() {
                     <tr key={r.client}>
                       <td className={`${styles.td} ${styles.tdClient}`}>{r.client}</td>
                       <td className={styles.td} data-label={SERVICES_COPY.tableHead[1]}>
-                        {r.start}
+                        {keepTogether(r.start)}
                       </td>
                       <td className={styles.td} data-label={SERVICES_COPY.tableHead[2]}>
-                        {r.built}
+                        {keepTogether(r.built)}
                       </td>
                       <td className={`${styles.td} ${styles.tdOutcome}`} data-label={SERVICES_COPY.tableHead[3]}>
-                        {r.outcome}
+                        {keepTogether(r.outcome)}
                       </td>
                     </tr>
                   ))}
@@ -183,7 +184,7 @@ export default function ServicesPage() {
                             {yes ? <path d="M4 10.5l4 4 8-9" /> : <path d="M4.5 10h11" />}
                           </svg>
                         </span>
-                        <span>{item}</span>
+                        <span>{keepTogether(item)}</span>
                       </li>
                     ))}
                   </ul>

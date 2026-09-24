@@ -59,7 +59,10 @@ const PHONE = '(max-width: 599.98px)';
 //               after hydration. The browser's text-fragment and find-in-page search then reaches
 //               them before React runs (a display:none panel is never matched, and the search is
 //               not retried). A match the browser reveals is marked data-found (and its group
-//               data-open); the components read that when they hydrate and keep it open.
+//               or list data-open); the components read that when they hydrate and keep it open.
+//               The rest of that group or list is revealed at once, in the beforematch event:
+//               the browser scrolls after it, so the match lands where it will stay, rather
+//               than being pushed down when hydration reveals the items above it.
 //   early input below 1024, before React has attached its listeners: the first pointerdown, key
 //               or click starts the chunks at once, and a click on a control React will own (a
 //               non-submit <button>, or a disclosure heading's data-trigger stand-in) is replayed
@@ -81,7 +84,10 @@ const LOADER =
   "var l=d.getElementById(g[i].getAttribute('aria-controls')),n=+g[i].getAttribute(ph?'data-showall-phone':'data-showall-tablet');" +
   "if(!l||l.hasAttribute('data-open'))continue;c=l.children;for(j=n;j<c.length;j++)H(c[j]);l.setAttribute('data-js','')}" +
   "d.addEventListener('beforematch',function(e){var t=e.target;t.setAttribute('data-found','');" +
-  "var q=t.closest&&t.closest('[data-disclosure]');if(q)q.setAttribute('data-open','')},true)}" +
+  "var q=t.closest&&t.closest('[data-disclosure]'),l=t.parentNode,c,j;" +
+  "if(q){q.setAttribute('data-open','');c=q.querySelectorAll('[data-panel]')}" +
+  "else if(l&&l.id&&d.querySelector('button[data-showall-phone][aria-controls=\"'+l.id+'\"]')){l.setAttribute('data-open','');c=l.children}" +
+  "else return;for(j=0;j<c.length;j++)c[j].removeAttribute('hidden')},true)}" +
   // early input
   "function R(){var k=Object.keys(d);for(var i=0;i<k.length;i++)if(k[i].indexOf('_reactListening')==0)return 1;return 0}" +
   'var T=null;function P(n){var e=T&&(T.id?d.getElementById(T.id):d.querySelector(\'[aria-controls="\'+T.c+\'"]\')),k,i;' +
