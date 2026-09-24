@@ -246,12 +246,12 @@ export default function HomePage() {
           <div className={styles.contact}>
             <div className={styles.contactPhotoWrap}>
               <Picture
-                name="classroom-lecture"
+                name="classroom-hands-raised"
                 src={HOME_COPY.contact.imgSrc}
                 alt={HOME_COPY.contact.imgAlt}
                 className={styles.contactPhoto}
-                width={980}
-                height={653}
+                width={1200}
+                height={800}
                 loading="lazy"
                 decoding="async"
                 phoneSizes="100vw"

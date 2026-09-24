@@ -21,19 +21,19 @@ export const CROPS = {
       ],
     },
   },
-  'classroom-lecture': {
+  'classroom-hands-raised': {
     phone: {
       ratio: '39:14',
       files: [
-        { url: '/images/m/classroom-lecture-39x14-480.webp', w: 480, h: 172 },
-        { url: '/images/m/classroom-lecture-39x14-828.webp', w: 828, h: 297 },
-        { url: '/images/m/classroom-lecture-39x14-980.webp', w: 980, h: 352 },
+        { url: '/images/m/classroom-hands-raised-39x14-480.webp', w: 480, h: 172 },
+        { url: '/images/m/classroom-hands-raised-39x14-828.webp', w: 828, h: 297 },
+        { url: '/images/m/classroom-hands-raised-39x14-1170.webp', w: 1170, h: 420 },
       ],
     },
     tablet: {
       ratio: '21:9',
       files: [
-        { url: '/images/m/classroom-lecture-21x9-980.webp', w: 980, h: 420 },
+        { url: '/images/m/classroom-hands-raised-21x9-1200.webp', w: 1200, h: 514 },
       ],
     },
   },

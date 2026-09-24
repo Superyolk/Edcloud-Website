@@ -16,8 +16,8 @@
     { "src": "stairway.webp", "name": "stairway", "slots": ["phone"], "ratio": "39:14", "focusX": 0.5, "focusY": 0.5, "widths": [480, 828, 1170] },
     { "src": "stairway.webp", "name": "stairway", "slots": ["tablet"], "ratio": "21:9", "focusX": 0.5, "focusY": 0.5, "widths": [1450] },
 
-    { "src": "classroom-lecture.webp", "name": "classroom-lecture", "slots": ["phone"], "ratio": "39:14", "focusX": 0.5, "focusY": 0.5, "widths": [480, 828, 980] },
-    { "src": "classroom-lecture.webp", "name": "classroom-lecture", "slots": ["tablet"], "ratio": "21:9", "focusX": 0.5, "focusY": 0.5, "widths": [980] },
+    { "src": "classroom-hands-raised.webp", "name": "classroom-hands-raised", "slots": ["phone"], "ratio": "39:14", "focusX": 0.5, "focusY": 0.38, "widths": [480, 828, 1170] },
+    { "src": "classroom-hands-raised.webp", "name": "classroom-hands-raised", "slots": ["tablet"], "ratio": "21:9", "focusX": 0.5, "focusY": 0.4, "widths": [1200] },
 
     { "src": "aaron-sokol.webp", "name": "aaron-sokol", "slots": ["phone", "tablet"], "ratio": "4:5", "focusX": 0.5, "focusY": 0, "widths": [256, 360] }
   ]
