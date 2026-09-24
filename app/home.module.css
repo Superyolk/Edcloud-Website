@@ -876,14 +876,13 @@
   }
 
   /* ---------- 05 Select Clients: 2-column credits grid (G6) ----------
-     Hairlines between cells: the white cells sit on a --line ground with a 1px gap. Logos are sized
-     by --logo-w-m, the phone equal-area model from app/page.tsx. */
+     One uniform white ground, no rules between cells; every logo shows. Logos are sized by
+     --logo-w-m, the phone equal-area model from app/page.tsx. */
   .logos {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
+    gap: 0;
+    background: var(--white);
   }
 
   .logoTile {
@@ -894,13 +893,6 @@
 
   .logo {
     width: min(var(--logo-w-m), 100%);
-  }
-
-  /* A collapsed tile (ShowAll's hidden="until-found") still has a box; without this its fixed
-     height and white ground would paint over the first row. */
-  .logoTile[hidden] {
-    height: 0;
-    background: transparent;
   }
 
   /* ---------- 06 Press: the index (G5) ---------- */
@@ -1055,14 +1047,16 @@
     outline-offset: 2px;
   }
 
-  /* SUBMIT: a full-width 52px pill, the last control, in the thumb zone. */
+  /* SUBMIT: a 52px pill a third of the form's width, flush right under the last field. */
   .submitRow {
-    display: block;
+    display: flex;
+    justify-content: flex-end;
     margin-top: var(--s-2);
   }
 
   .submit {
-    width: 100%;
+    width: calc(100% / 3);
+    min-width: max-content;
     min-height: 52px;
     font-size: var(--m-t-ui);
   }

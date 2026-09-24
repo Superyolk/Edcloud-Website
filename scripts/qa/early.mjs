@@ -20,7 +20,7 @@ import { OUT_DIR, contextOptions, main, startTarget, writeJson } from './lib.mjs
 
 const PHONE = { w: 390, h: 844, kind: 'phone' };
 const FRAGMENTS = [
-  { path: '/', phrase: 'Austin ISD implements new yoga program' }, // Press, 5th story: behind "Show all press"
+  { path: '/', phrase: 'Austin ISD implements new yoga program' }, // Press, 5th story
   { path: '/about', phrase: 'EdCloud started informally' }, // "A brief history", collapsed on phones
   // Deep in the collapsed Press list (Phase 4 R2-a11y-01): items 4-6 sit above these, and must be
   // revealed before the browser scrolls, or they push the match below the screen. Checked both

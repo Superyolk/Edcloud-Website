@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore, type SyntheticEvent } from 'react';
-import { MQ_MOBILE, MQ_PHONE } from '@/app/breakpoints';
+import { MQ_MOBILE } from '@/app/breakpoints';
 import { useHydrated, useMediaQuery } from '@/components/useMediaQuery';
 
 type Props = { src: string; webmSrc?: string; className: string };
@@ -55,7 +55,6 @@ const FADE_IN = 'opacity var(--m-dur-sheet) var(--m-ease)';
  * Background loop for the home hero. The poster <picture> underneath is always there; this only
  * ever adds motion on top of it, on the client, and only when (SPEC §8.4, G12):
  * - the visitor has not asked for reduced motion or Save-Data;
- * - the screen is 600px or wider: phones never get a <video> element, so they fetch no video bytes;
  * - below 1024, the page has loaded and gone idle. At >= 1024 it mounts on hydration, as it always
  *   has (the desktop freeze).
  */
@@ -66,14 +65,13 @@ export default function HeroVideo({ src, webmSrc, className }: Props) {
   const [phase, setPhase] = useState<'hidden' | 'fading' | 'steady'>('hidden');
   const ref = useRef<HTMLVideoElement>(null);
   // Every one of these is false during SSR and the hydration pass, so the video only mounts on
-  // the client, and a phone re-renders straight to "no video" without ever creating one.
+  // the client.
   const hydrated = useHydrated();
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
   const saveData = useSaveData();
-  const phone = useMediaQuery(MQ_PHONE);
   const mobile = useMediaQuery(MQ_MOBILE);
   const settledNow = useSettled();
-  const show = hydrated && !reduced && !saveData && !phone && (!mobile || settledNow);
+  const show = hydrated && !reduced && !saveData && (!mobile || settledNow);
 
   useEffect(() => {
     const el = ref.current;
@@ -99,7 +97,7 @@ export default function HeroVideo({ src, webmSrc, className }: Props) {
       muted
       loop
       playsInline
-      // Tablets start with the headers only; autoplay then streams what it needs.
+      // Phones and tablets start with the headers only; autoplay then streams what it needs.
       preload={mobile ? 'metadata' : 'auto'}
       aria-hidden="true"
       tabIndex={-1}

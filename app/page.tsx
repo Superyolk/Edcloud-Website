@@ -16,7 +16,6 @@ import ContactPill from '@/components/home/ContactPill';
 import Picture from '@/components/Picture';
 import { keepTogether } from '@/components/KeepTogether';
 import ui from '@/components/ui.module.css';
-import ShowAll, { showAllItem, showAllList, type ShowAllLimit } from '@/components/ShowAll';
 import styles from './home.module.css';
 
 export const metadata: Metadata = pageMeta({
@@ -51,10 +50,6 @@ function logoStyle(w: number, h: number): CSSProperties {
   const widthM = Math.min(Math.sqrt(LOGO_AREA_M * ratio), 139, 52 * ratio);
   return { '--logo-w': `${Math.round(width)}px`, '--logo-w-m': `${Math.round(widthM)}px` } as CSSProperties;
 }
-
-// How many items stay visible below 1024 until "Show all" (SPEC §6.1 rows 05 and 06).
-const CLIENTS_LIMIT: ShowAllLimit = { phone: 16, tablet: 24 };
-const PRESS_LIMIT: ShowAllLimit = { phone: 3, tablet: 4 };
 
 const pressItems = [...HOME.press].sort((a, b) => pressDateKey(b.date) - pressDateKey(a.date));
 // Select Clients now runs before Press, so the two sections trade section numbers and the
@@ -197,9 +192,9 @@ export default function HomePage() {
         </figure>
 
         <SectionShell n={clientsSection.n} title={clientsSection.title} white>
-          <ul id="clients-list" className={`${styles.logos} ${showAllList}`}>
-            {HOME.logos.map((l, i) => (
-              <li key={l.src} className={`${styles.logoTile} ${showAllItem(i, CLIENTS_LIMIT)}`}>
+          <ul className={styles.logos}>
+            {HOME.logos.map((l) => (
+              <li key={l.src} className={styles.logoTile}>
                 <img
                   src={l.src}
                   alt={l.alt}
@@ -213,13 +208,12 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
-          <ShowAll controls="clients-list" label="Show all clients" count={HOME.logos.length} limit={CLIENTS_LIMIT} />
         </SectionShell>
 
         <SectionShell n={pressSection.n} title={pressSection.title}>
-          <ul id="press-list" className={`${styles.press} ${showAllList}`}>
-            {pressItems.map((p, i) => (
-              <li key={p.href} className={`${styles.pressRow} ${showAllItem(i, PRESS_LIMIT)}`}>
+          <ul className={styles.press}>
+            {pressItems.map((p) => (
+              <li key={p.href} className={styles.pressRow}>
                 <div className={styles.pressMeta}>
                   <span>{p.source}</span>
                   <span>{p.date}</span>
@@ -233,13 +227,6 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
-          <ShowAll
-            controls="press-list"
-            label="Show all press"
-            count={pressItems.length}
-            limit={PRESS_LIMIT}
-            focusOnExpand="first-revealed"
-          />
         </SectionShell>
 
         <SectionShell n={contact.n} title={contact.title} id="contact">
