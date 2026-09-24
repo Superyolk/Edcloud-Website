@@ -197,8 +197,8 @@
     display: none;
   }
 
-  /* A bare 22px hamburger (the "e" mark's size) in a 44px tap target; the negative margin keeps
-     the icon's right edge on the gutter, mirroring the mark on the left. */
+  /* A bare 15 x 11 hamburger in a 44px tap target. The negative margin puts the icon's right
+     edge on the gutter, mirroring the "e" mark's left edge; both are centred on the bar's row. */
   .menuButton {
     display: inline-flex;
     align-items: center;
@@ -207,7 +207,7 @@
     min-width: var(--m-tap);
     height: var(--m-tap);
     min-height: var(--m-tap);
-    margin-right: calc((22px - var(--m-tap)) / 2);
+    margin-right: calc((15px - var(--m-tap)) / 2);
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -217,11 +217,11 @@
 
   .menuIcon {
     display: block;
-    width: 22px;
-    height: 22px;
+    width: 15px;
+    height: 11px;
     fill: none;
     stroke: currentColor;
-    stroke-width: 2;
+    stroke-width: 1.4;
     stroke-linecap: round;
   }
 

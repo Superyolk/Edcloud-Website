@@ -79,10 +79,9 @@
 @media (max-width: 1023.98px) {
   :root {
     /* Type: fluid 320 -> 1023. Values in brackets: px at 320 / 390 / 768. */
-    /* The display size stops at 44px (from 700): from 600 the hero text sits in the fixed 459px
-       column, and past ~45px "Education Companies" no longer fits one line there, so the H1 fell
-       to four lines on every tablet (Phase 4 R4-designer-01). */
-    --m-t-display: clamp(2rem, 1.35rem + 3.2vw, 2.75rem);       /* 32 / 34.1 / 44    Home H1, lh 1.06, 600, ls -0.01em */
+    /* The display size stops at 38.4px, about 13% under the first cut (owner: "too big"); it
+       stays above the section titles (--m-t-h2) at every width. */
+    --m-t-display: clamp(1.75rem, 1.2rem + 2.8vw, 2.4rem);      /* 28 / 30.1 / 38.4  Home H1, lh 1.06, 600, ls -0.01em */
     --m-t-title: clamp(2.25rem, 1.5rem + 3.5vw, 3.5rem);        /* 36 / 37.7 / 50.9  About, Services and legal H1s, lh 1.05 */
     --m-t-h2: clamp(1.625rem, 1.3rem + 1.6vw, 2.25rem);         /* 26 / 27.0 / 33.1  section titles, lh 1.1, ls -0.01em */
     --m-t-accent: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);     /* 22 / 22.3 / 25.3  green service lead, contact H2 */

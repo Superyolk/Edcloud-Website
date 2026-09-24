@@ -31,16 +31,27 @@ const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)'
 export default function ServicesTabs() {
   const [active, setActive] = useState(0);
   const current = split(HOME.services[active].body);
-  // Below 1024, opening a row collapses the open panel ABOVE it, which would pull the row you
-  // just tapped ~260px up from under your thumb. The row's screen position is recorded before
-  // the change and restored in the same frame (before paint), so the tapped row stays put and
-  // its panel opens beneath it. Desktop layout never moves, so it is left alone.
+  // Below 1024, a tapped row scrolls up to sit just under the sticky header, its panel opening
+  // beneath it (owner request). Opening a row also collapses the open panel ABOVE it, which would
+  // yank the row ~260px before the scroll starts, so its screen position is recorded before the
+  // change and restored in the same frame (before paint); the smooth scroll then runs from where
+  // the reader's thumb was. Desktop layout never moves, so it is left alone.
   const anchor = useRef<{ index: number; top: number } | null>(null);
 
+  const scrollToRow = (el: HTMLElement) => {
+    const headerBottom = document.querySelector('body > header')?.getBoundingClientRect().bottom ?? 0;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - headerBottom, behavior: reduced ? 'auto' : 'smooth' });
+  };
+
   const open = (i: number) => {
-    if (i === active) return;
     const el = document.getElementById(tabId(i));
-    anchor.current = el && window.matchMedia(MQ_MOBILE).matches ? { index: i, top: el.getBoundingClientRect().top } : null;
+    const mobile = !!el && window.matchMedia(MQ_MOBILE).matches;
+    if (i === active) {
+      if (mobile) scrollToRow(el);
+      return;
+    }
+    anchor.current = mobile ? { index: i, top: el.getBoundingClientRect().top } : null;
     setActive(i);
   };
 
@@ -52,6 +63,7 @@ export default function ServicesTabs() {
     if (!el) return;
     const shift = el.getBoundingClientRect().top - a.top;
     if (Math.abs(shift) >= 1) window.scrollBy(0, shift);
+    scrollToRow(el);
   }, [active]);
 
   return (

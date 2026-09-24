@@ -41,8 +41,8 @@
 }
 
 /* ---------- Mobile layer (phones + tablets; SPEC §5.1). Never matches at >= 1024px. ----------
-   The desktop counter column becomes a rule header: a 1px ink rule across the full column, then
-   "01  Our Promise" on one line, then the content at the full column width. The old 72px (28px on
+   The desktop counter column becomes a head row: "01  Our Promise" on one line (no rule above it:
+   the owner found the black section rules crappy), then the content at the full column width. The old 72px (28px on
    phones) number column is gone, so the left and right margins are the same gutter on both
    sides (A-home-13, B-pages-05, C-cross-15). */
 @media (max-width: 1023.98px) {
@@ -61,8 +61,6 @@
     display: flex;
     align-items: baseline;
     gap: var(--s-3);
-    border-top: 1px solid var(--ink);
-    padding-top: var(--s-3);
     margin-bottom: var(--m-head-gap);
   }
 

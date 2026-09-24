@@ -617,7 +617,7 @@
   .heroTitle {
     margin: 0 0 var(--s-4);
     font-size: var(--m-t-display);
-    font-size: max(2rem, min(var(--m-t-display), 8.7vw));
+    font-size: max(1.75rem, min(var(--m-t-display), 7.6vw));
     line-height: 1.06;
   }
 
@@ -1190,9 +1190,9 @@
   }
 
   /* The width-driven display size (46px at 844) makes three lines 150px tall on a 390px-high
-     screen; the page-title floor (36px) keeps the H1 above the section titles and the page short. */
+     screen; 32px keeps the H1 above the section titles and the page short. */
   .heroTitle {
-    font-size: 2.25rem;
+    font-size: 2rem;
   }
 }
 
