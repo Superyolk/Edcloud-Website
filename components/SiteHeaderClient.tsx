@@ -18,6 +18,19 @@ type Props = {
 
 const MENU_LABELS = { closed: 'Menu', open: 'Close' } as const;
 
+/** The menu icons: 22px square, the same box as the "e" mark on the left. */
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg className={styles.menuIcon} width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false">
+      {open ? (
+        <path d="M4 4 18 18M18 4 4 18" />
+      ) : (
+        <path d="M1 4h20M1 11h20M1 18h20" />
+      )}
+    </svg>
+  );
+}
+
 // Owner decision: no Contact call to action on the Services & Results page.
 const NO_CONTACT_PATH = route('EdCloud Services.dc.html');
 
@@ -160,8 +173,9 @@ export default function SiteHeaderClient({ transparentOverHero = false, copy }: 
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuVisible}
           aria-controls="mobile-menu"
+          aria-label={menuOpen ? MENU_LABELS.open : MENU_LABELS.closed}
         >
-          {menuOpen ? MENU_LABELS.open : MENU_LABELS.closed}
+          <MenuIcon open={menuOpen} />
         </button>
       </nav>
       {menuVisible && (
@@ -175,12 +189,18 @@ export default function SiteHeaderClient({ transparentOverHero = false, copy }: 
           onKeyDown={onSheetKeyDown}
           onClickCapture={onSheetClickCapture}
         >
-          {/* Mirrors the header bar, so Close sits exactly where Menu was. */}
+          {/* Mirrors the header bar, so the close icon sits exactly where the hamburger was. */}
           <div className={styles.sheetBar}>
             <div className={styles.sheetBarInner}>
               <Brand className={styles.brand} markClassName={styles.mark} copy={copy} />
-              <button type="button" ref={closeRef} className={styles.menuButton} onClick={() => setMenuOpen(false)}>
-                {MENU_LABELS.open}
+              <button
+                type="button"
+                ref={closeRef}
+                className={styles.menuButton}
+                onClick={() => setMenuOpen(false)}
+                aria-label={MENU_LABELS.open}
+              >
+                <MenuIcon open />
               </button>
             </div>
           </div>

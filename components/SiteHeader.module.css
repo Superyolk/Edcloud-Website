@@ -116,8 +116,12 @@
     background: transparent;
     border-bottom: 0;
     transition: none;
+    /* The hamburger: white over the hero, like the wordmark; the "e" mark's grey once solid. */
+    --nav-icon: #918d8a;
   }
 
+  /* Fades in over the desktop's 540ms as the page scrolls off the hero; the wordmark and the
+     hamburger cross-fade their colour with it. */
   .header::before {
     content: '';
     position: absolute;
@@ -126,11 +130,15 @@
     background: var(--white);
     box-shadow: var(--m-elev-1);
     pointer-events: none;
-    transition: opacity var(--m-dur-press) var(--m-ease);
+    transition: opacity var(--dur-nav) var(--ease);
   }
 
   .transparent::before {
     opacity: 0;
+  }
+
+  .transparent {
+    --nav-icon: var(--white);
   }
 
   /* 56px bar plus the top safe area. The nav keeps its desktop content-box, so the inset is
@@ -165,6 +173,9 @@
        rather than run under the Menu pill. The full name stays the link's accessible name. The
        focus ring is drawn outside the box, so it is not clipped. */
     overflow: hidden;
+    transition:
+      opacity var(--dur) var(--ease),
+      color var(--dur-nav) var(--ease);
   }
 
   .wordmarkTail {
@@ -186,16 +197,32 @@
     display: none;
   }
 
+  /* A bare 22px hamburger (the "e" mark's size) in a 44px tap target; the negative margin keeps
+     the icon's right edge on the gutter, mirroring the mark on the left. */
   .menuButton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: var(--m-tap);
     min-width: var(--m-tap);
+    height: var(--m-tap);
     min-height: var(--m-tap);
-    padding: 0 14px;
-    font-size: var(--m-t-ui);
-    letter-spacing: 0;
-    line-height: 1;
+    margin-right: calc((22px - var(--m-tap)) / 2);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: var(--nav-icon);
+    transition: color var(--dur-nav) var(--ease);
+  }
+
+  .menuIcon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
   }
 
   /* No room for the two-line lockup (its tail is 9.3rem wide) beside the pill: the tail is
@@ -222,10 +249,6 @@
       gap: 6px;
       letter-spacing: 0.02em;
     }
-
-    .menuButton {
-      padding: 0 6px;
-    }
   }
 
   /* ---- The sheet ---- */
@@ -243,6 +266,7 @@
     grid-template-rows: auto minmax(0, 1fr) auto;
     background: var(--paper);
     --nav-ink: var(--ink);
+    --nav-icon: #918d8a;
     animation: sheetIn var(--m-dur-sheet) var(--m-ease) both;
   }
 

@@ -76,7 +76,7 @@ test.describe('mobile menu', () => {
     await ready(page, APP + '/');
     const button = page.locator('header nav button[aria-controls="mobile-menu"]');
     await expect(button).toBeVisible();
-    await expect(button).toHaveText('Menu');
+    await expect(button).toHaveAccessibleName('Menu');
     await expect(button).toHaveAttribute('aria-expanded', 'false');
     await button.click();
     await expect(button).toHaveAttribute('aria-expanded', 'true');

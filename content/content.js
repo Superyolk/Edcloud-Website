@@ -76,7 +76,7 @@ const logos = [
 const capabilities = [
       ['Rapid Testing and Evolution', 'Find the parts of your product that K12 and higher ed buyers actually pay for, and prove it in market fast.'],
       ['Revenue Transformation', "Rebuild the revenue team end to end, from first outreach to renewal. Find and fix what's slowing you down."],
-      ['Hypergrowth Strategy, Tactics, and Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
+      ['Hypergrowth Tactics & Execution', 'A plan built on playbooks that already worked, then run alongside your team until it sticks.'],
       ['Scaling from Local to National', 'Turn a regional foothold into a national footprint with territory plans, channels, and procurement paths.'],
       ['Growth Team Training and Evaluation', 'Hire, coach, and empower the people who will carry your business to the next level.'],
       ['Fundraising and Capital Performance', 'Raise on the strength of a repeatable engine, and put the capital where it compounds.']
