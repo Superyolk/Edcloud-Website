@@ -64,15 +64,11 @@
     margin-bottom: var(--m-head-gap);
   }
 
-  /* Numbered sections (owner request, phones and tablets only): the title, then its number on
-     the far right, flush with the column's right edge, so the heads stand apart from the
-     left-aligned body text. The DOM keeps number-then-title, so it still reads "01 Our Promise". */
+  /* Numbered sections (owner request, phones and tablets only): the number, then its title,
+     set flush with the column's right edge, so the heads stand apart from the left-aligned body
+     text. */
   .headEnd {
     justify-content: flex-end;
-  }
-
-  .headEnd .counter {
-    order: 1;
   }
 
   .headEnd .title {
