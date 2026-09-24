@@ -18,6 +18,18 @@
   align-items: baseline;
 }
 
+/* Desktop: the title, then its number on the far right, flush with the column's right edge, so
+   the heads stand apart from the left-aligned body text. The DOM keeps number-then-title, so it
+   still reads "01 Our Promise". The mobile layer below puts both back on the left. */
+.headEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.headEnd .counter {
+  order: 1;
+}
+
 .counter {
   font-size: var(--t-index);
   color: var(--slate);
@@ -62,6 +74,14 @@
     align-items: baseline;
     gap: var(--s-3);
     margin-bottom: var(--m-head-gap);
+  }
+
+  .headEnd {
+    justify-content: flex-start;
+  }
+
+  .headEnd .counter {
+    order: 0;
   }
 
   .counter {
