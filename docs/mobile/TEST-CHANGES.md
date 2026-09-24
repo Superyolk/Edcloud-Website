@@ -65,6 +65,13 @@ Unchanged: the home header transparency test, both contact form tests (the focus
 | `mobile-lint.mjs` | The 200% text pass runs at **320 and 390** (it was 320 only). Beside `overflow` and `margins`, it adds `clip` (a text-bearing header box, and the open menu sheet's bar, with `scrollWidth > clientWidth + 1`), `nowrapEdge` (a `[data-nowrap]` line box past its block's content edge) and `split` (a word on two lines although it is no wider than the column). The existing checks and their thresholds are unchanged. | R4-a11y-01 to -04: the clipped wordmark, the privacy date 17px into the gutter, "justificati / on" at 390 and the 11 mid-word breaks beside index numbers, figures and dates were invisible to the overflow check (an `overflow:hidden` box, or a break that stays inside the column). A word wider than the whole column ("Accessibility" at 72px) may still break, which WCAG 1.4.10 allows. With the round 4 fixes forced off (`container-type: normal`, glue re-forced), the checks report the wordmark `clip`, the date `nowrapEdge`, and `split` on "Privacy" and "Perpetuating". |
 | `content.mjs` | `<wbr>` elements are removed from the body copy (with the `data-nowrap` unwrap) before text-node segments are collected. | R4-a11y-03: `KeepCompounds` puts a `<wbr>` after a slash between words below 1024. It adds no character, but it splits "providers/contractors" into two text nodes, which read as a changed segment. Any real text change still fails. |
 
+## Phase 5 (merging main #34 and #35)
+
+| File | Change | Reason |
+|---|---|---|
+| `scripts/qa/content-snapshot/home.1440.json`, `home.390.json` | The Contact image alt changed from "Classroom Lecture" to "Students raising their hands in a classroom". These two files were re-snapshotted from a build of `origin/main` `1b6f6c9`, not from this branch. | Owner PR #34 changed the alt on main after the Phase 0 snapshot. Nothing else in the snapshot changed. |
+| `scripts/qa/golden/` | **Unchanged.** | The goldens predate #34 and #35, so `qa:desktop-parity` reports Home at 1024, 1280 and 1440 as different (179,434, 175,036 and 175,123 px). A build of `1b6f6c9` gives exactly the same counts against the goldens, and this branch against a build of `1b6f6c9` is 15/15 at 0 px (BASELINE.md, Phase 5). The Home goldens need re-capturing from main after merge. |
+
 ## Deliberate tablet (600–1023) changes to show in review
 
 - The nav collapses to Menu and the sheet below **1024**, not 820.

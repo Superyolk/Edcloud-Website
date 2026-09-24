@@ -355,3 +355,96 @@ Page heights (px):
 | services-and-results | **5,298** (≤ 7,000) | 5,772 | 6,634 | 6,369 |
 
 Tablet and landscape pages grew 70–210px because the column is now 27em (459px). Tablet measure at 768 (full lines of 16–17px body copy): About median 56 cpl, max 63, 5 of 82 over 60 (was 59 / 68 / 37 of 90); Services median 56, max 61; Privacy median 55, max 60; Home median 55, max 62. The proof strip's widest figure, "10% → 90%", is 218px in a 230px cell.
+
+## After (final, Phase 5, 2026-09-23)
+
+Measured on `mobile-redesign` after merging `origin/main` at `1b6f6c9` (owner PRs #34, the raised-hands Contact photo, and #35, the hairline frame on the three still photos). The build was fresh (`QA_BUILD=1`) and served on :4201, with the same machine, tools and capture conditions as the baseline.
+
+### Merging main (#34, #35)
+
+- The Contact band now uses `classroom-hands-raised.webp` through `Picture`. New crops are in `scripts/images/crops.json`: 39:14 for phones (focus y 0.38) and 21:9 for tablets (focus y 0.40), so the raised hands, the student in green and the teacher stay in frame. `build-crops.py` regenerated them. The four `classroom-lecture-*` crops were deleted because their source is gone.
+- The #35 frame (an inset 1px outline) applies at every width, as main has it.
+- `qa:content`: the only difference from the old snapshot was the Contact image alt ("Classroom Lecture" became "Students raising their hands in a classroom"), which is main's copy change. `home.1440.json` and `home.390.json` were re-snapshotted from a build of `1b6f6c9` itself, not from this branch. Everything else in the snapshot is unchanged.
+- **Desktop parity after the merge.** The committed Phase 0 goldens predate #34 and #35, so `qa:desktop-parity` now reports Home at 1024, 1280 and 1440 as different: 179,434, 175,036 and 175,123 px, all inside y 3059–9428 (the three framed photos and the Contact photo). About, Services and the legal pages still match at 0 px. The goldens were **not** regenerated. Instead:
+  - This branch against a fresh build of `origin/main` `1b6f6c9`, same harness and capture: **15/15 at 0 px** at 1024, 1280 and 1440.
+  - `1b6f6c9` against the Phase 0 goldens gives the **same pixel counts and bounding boxes** as this branch against the goldens. The whole diff is main's own change.
+  - The Home goldens should be re-captured from a build of `main` once this merges. That is the owner's call.
+
+### Gate status
+
+| Check | Baseline (95beb8d) | Final |
+|---|---|---|
+| lint / typecheck / build | clean | clean: `eslint .` 0 errors and 0 warnings outside gitignored `scripts/qa/output/`, `tsc --noEmit` 0 |
+| qa:breakpoints | n/a | PASS |
+| qa:content | PASS | PASS (0 failures, snapshot taken from main `1b6f6c9` as above) |
+| qa:desktop-parity | 15/15 at 0 px | 15/15 at 0 px against a build of main `1b6f6c9`. Against the Phase 0 goldens it is 12/15, with the 3 Home diffs caused by main's #34 and #35 (see above) |
+| qa:mobile-lint | FAIL: 21 / 12 / 12 / 11 / 11 unique findings | **0 findings on every page**, plus the margins, 200% text, find, dash and headline passes |
+| qa:a11y (axe, 390 + 1440) | FAIL: `color-contrast` only | **0 violations** (`color-contrast` waived by the owner, SPEC §1.4) |
+| qa:matrix | PASS | PASS (65 screenshots) |
+| qa:bytes | PASS | PASS: Home 44.0% of baseline bytes; JS growth gz +3,984 B (Home), +4,478 B (About, Services), −2,569 B (legal), under 5,120 B |
+| qa:early | n/a | PASS (7 cases) |
+| qa:perf | FAIL | **PASS** on all five pages |
+
+### Page heights at 390×844 (px)
+
+| Page | Before | After | Change | Gate |
+|---|---:|---:|---:|---:|
+| home | 12,065 | **7,413** | −38.6% | ≤ 8,500 |
+| about | 9,153 | **4,147** | −54.7% | ≤ 6,500 |
+| services-and-results | 9,867 | **5,298** | −46.3% | ≤ 7,000 |
+| privacy-policy | 3,841 | 3,293 | −14.3% | none |
+| accessibility-statement | 2,370 | 1,925 | −18.8% | none |
+
+All matrix sizes, after (px). The 1024, 1280 and 1440 columns equal the baseline:
+
+| Page | 320×568 | 360×780 | 375×667 | 393×852 | 414×896 | 430×932 | 844×390 | 768×1024 | 820×1180 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| home | 7,696 | 7,529 | 7,381 | 7,426 | 7,447 | 7,282 | 7,650 | 7,880 | 7,919 |
+| about | 4,452 | 4,275 | 4,138 | 4,128 | 4,039 | 3,990 | 6,215 | 6,468 | 6,476 |
+| services-and-results | 5,772 | 5,444 | 5,338 | 5,281 | 5,116 | 5,023 | 6,369 | 6,634 | 6,646 |
+| privacy-policy | 3,486 | 3,356 | 3,338 | 3,271 | 3,136 | 3,093 | 3,110 | 3,104 | 3,108 |
+| accessibility-statement | 2,149 | 1,991 | 1,946 | 1,926 | 1,837 | 1,817 | 1,883 | 1,876 | 1,881 |
+
+### First-load transfer at 390×844 (`qa:bytes`, cold cache)
+
+| Page | Before KiB (excl. video) | After KiB | Change | Requests before → after |
+|---|---:|---:|---:|---:|
+| home | 3,440.6 (621.0) | **273.3** (no video on phones) | −56.0% vs excl. video | 19 → 17 |
+| about | 712.6 | **252.3** | −64.6% | 21 → 18 |
+| services-and-results | 788.1 | **260.6** | −66.9% | 20 → 17 |
+| privacy-policy | 619.9 | **220.8** | −64.4% | 19 → 15 |
+| accessibility-statement | 619.1 | **220.0** | −64.5% | 19 → 15 |
+
+### Lighthouse mobile (median of 3, local `serve`, simulated throttling)
+
+| Page | Perf | A11y excl. contrast (raw) | BP | SEO | LCP ms | CLS | TBT ms |
+|---|---|---|---|---|---|---|---|
+| home | 90 → **100** | 96 → **100** (96) | 100 → 100 | 92 → **100** | 3,679 → **1,729** | 0 → 0 | 10 → 7 |
+| about | 98 → **100** | 96 → **100** (96) | 100 → 100 | 100 → 100 | 2,395 → **1,428** | 0 → 0 | 8 → 6 |
+| services-and-results | 98 → **100** | 96 → **100** (96) | 100 → 100 | 100 → 100 | 2,397 → **1,729** | 0 → 0 | 8 → 7 |
+| privacy-policy | 99 → **100** | 96 → **100** (96) | 100 → 100 | 100 → 100 | 2,167 → **1,279** | 0 → 0 | 7 → 6 |
+| accessibility-statement | 99 → **100** | 96 → **100** (96) | 100 → 100 | 100 → 100 | 2,168 → **1,279** | 0 → 0 | 7 → 6 |
+
+### axe-core (failing nodes; the only failing rule, before and after, is `color-contrast`, waived)
+
+| Page | 390 before → after | 1440 before → after | Violations after, other rules |
+|---|---:|---:|---:|
+| home | 41 → 23 (waived) | 42 → 42 (waived) | 0 |
+| about | 3 → 3 (waived) | 3 → 3 (waived) | 0 |
+| services-and-results | 30 → 30 (waived) | 34 → 34 (waived) | 0 |
+| privacy-policy | 1 → 1 (waived) | 1 → 1 (waived) | 0 |
+| accessibility-statement | 1 → 1 (waived) | 1 → 1 (waived) | 0 |
+
+The contrast node counts are from the Phase 3 measurement. Phase 4 did not change the palette.
+
+### Mobile lint (unique findings per page across the sweep)
+
+| Page | Before (overflow / tapSize / tapSpacing / textSize / bodyText / inputFont / mediaDims / safeArea) | After (every check) |
+|---|---|---:|
+| home | 0 / 15 / 0 / 2 / 3 / 0 / 0 / 1 = **21** | **0** |
+| about | 0 / 7 / 0 / 2 / 2 / 0 / 0 / 1 = **12** | **0** |
+| services-and-results | 0 / 7 / 0 / 2 / 2 / 0 / 0 / 1 = **12** | **0** |
+| privacy-policy | 0 / 7 / 0 / 2 / 1 / 0 / 0 / 1 = **11** | **0** |
+| accessibility-statement | 0 / 7 / 0 / 2 / 1 / 0 / 0 / 1 = **11** | **0** |
+
+Before/after contact sheets at 390 (50% scale): `docs/mobile/BEFORE-AFTER-<page>.png`. The "before" Home still shows the old Contact photo, because it was captured on 95beb8d.
