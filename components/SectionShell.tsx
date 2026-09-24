@@ -42,7 +42,7 @@ export default function SectionShell({
   return (
     <section id={id} data-screen-label={`${n} ${title}`} className={sectionClass}>
       <div className={styles.container}>
-        {/* Numbered sections set their head flush right at >= 1024 (owner request); the legal
+        {/* Numbered sections set their head flush right below 1024 (owner request); the legal
             pages' single page title keeps the left-aligned head. */}
         <div className={titleSize === 'page' ? styles.head : `${styles.head} ${styles.headEnd}`}>
           <span className={styles.counter}>{n}</span>
