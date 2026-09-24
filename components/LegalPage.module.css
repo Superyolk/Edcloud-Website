@@ -1,0 +1,111 @@
+/* Privacy Policy and Accessibility Statement body (SPEC §6.4, B-pages-19). The desktop rules are
+   copied verbatim from app/about/about.module.css (.mission, .h3, .p, .list), which these pages
+   used to borrow; they have their own module now so the About chapter-list styles below 1024
+   cannot leak into them. qa:desktop-parity proves the copy is exact. */
+
+.body {
+  max-width: 68ch;
+  display: grid;
+  gap: 20px;
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.h2 {
+  margin: 24px 0 0;
+  font-size: var(--t-h3);
+  line-height: 1.25;
+  letter-spacing: var(--ls-display);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+/* ---------- Mobile layer (phones + tablets). Never matches at >= 1024px. ----------
+   Long prose on a phone: 16px/1.5 copy at the full column, each section heading on a hairline
+   with 32px of air above it, and the site's green square bullets. The page title above is the
+   SectionShell H1 at --m-t-title, clearly larger than these headings (B-pages-10). */
+@media (max-width: 1023.98px) {
+  /* One track that can never grow past the column: an implicit auto track grew to its
+     min-content (338px in a 280px column at 200% text) and pushed every line off screen. */
+  .body {
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-4);
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  /* 16px margin + the 16px grid gap = 32px above the hairline; 16px between it and the words. */
+  .h2 {
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+  }
+
+  .h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Bullets hang in the indent, so every line of an item keeps the same left edge. */
+  /* One track that cannot grow past the column (an auto track grows to the longest word, e.g.
+     "providers/contractors" at 200% text). */
+  .list {
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    padding-left: 0;
+    gap: var(--s-3);
+  }
+
+  .list > li {
+    position: relative;
+    padding-left: var(--s-5);
+  }
+
+  /* Short items (under 90 characters, two or three lines on a phone) balance: the prose default,
+     pretty, left "technologies." and "transaction." alone on a last line (Phase 4
+     R3-designer-04). Longer items keep pretty, like the paragraphs around them: balance pulled
+     every line of a 4-line bullet in by 50-76px, so the lists looked set in a narrower column
+     than the body text (R4-client-01). Pretty leaves no one-word last line on any of them from
+     320 to 430. */
+  .list > .fit {
+    text-wrap: balance;
+  }
+
+  /* A date is glued so "September / 22, 2026" never splits, but at 200% text it is 297px, wider
+     than a 280px column: it ran 17px into the right gutter (3px margin against 20px; SPEC §18.1,
+     Phase 4 R4-a11y-02). Where the column (SectionShell's container, components/SectionShell.module.css)
+     is narrower than the date, 9.3em of body text, the glue lets go and the date wraps like any
+     other words. em is the column's own size, the body size, so this never matches at 100% text. */
+  @container (max-width: 9.5em) {
+    .body [data-nowrap='date'] {
+      white-space: normal;
+    }
+  }
+
+  .list > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--growth);
+  }
+}

@@ -1,6 +1,9 @@
 /**
  * Behavioural checks for the app (no reference involved): nav transparency, service tabs, mobile
  * menu, form validation, focus rings, hero video, and Lighthouse accessibility.
+ *
+ * Mobile redesign (Phase 3): selectors and expectations changed only where the mobile design
+ * deliberately changes behaviour. Each change is listed in docs/mobile/TEST-CHANGES.md.
  */
 import { test, expect, type Page } from '@playwright/test';
 
@@ -27,36 +30,108 @@ test.describe('home header', () => {
 test.describe('service tabs', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
+  // The rows now carry aria-expanded + aria-controls="svc-panel" instead of aria-pressed (SPEC §7.1:
+  // the same buttons are an exclusive accordion below 1024). Desktop behaviour is unchanged.
   test('hovering the second title switches the detail panel', async ({ page }) => {
     await ready(page, APP + '/');
-    const tabs = page.locator('button[aria-pressed]');
+    const tabs = page.locator('button[aria-controls="svc-panel"]');
     await expect(tabs).toHaveCount(3);
     await tabs.nth(1).hover();
-    await expect(tabs.nth(1)).toHaveAttribute('aria-pressed', 'true');
-    const lead = page.locator('button[aria-pressed]').locator('xpath=ancestor::ol[1]/following-sibling::div[1]/p[1]');
-    await expect(lead).toHaveText(/^Don't just adopt the gold standard\./);
+    await expect(tabs.nth(1)).toHaveAttribute('aria-expanded', 'true');
+    await expect(tabs.nth(0)).toHaveAttribute('aria-expanded', 'false');
+    const lead = page.locator('#svc-panel > p').first();
+    // Pre-existing stale expectation fixed: content.js has read "...gold standard - become one."
+    // since before Phase 0, so the old /gold standard\./ pattern could never match.
+    await expect(lead).toHaveText(/^Don't just adopt the gold standard - become one\.$/);
+    await expect(page.locator('#svc-panel')).toHaveAttribute('aria-labelledby', 'svc-tab-1');
     await expect(tabs.nth(0)).toHaveCSS('color', 'rgb(122, 132, 148)');
     await expect(tabs.nth(1)).toHaveCSS('color', 'rgb(27, 36, 49)');
+  });
+});
+
+test.describe('service accordion (phones)', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  // New below 1024 (SPEC §7.1): tapping a row opens it exclusively and the one panel moves under it.
+  test('tapping a row opens it and moves the panel under it', async ({ page }) => {
+    await ready(page, APP + '/');
+    const tabs = page.locator('button[aria-controls="svc-panel"]');
+    await tabs.nth(2).tap();
+    await expect(tabs.nth(2)).toHaveAttribute('aria-expanded', 'true');
+    await expect(tabs.nth(0)).toHaveAttribute('aria-expanded', 'false');
+    const rowBottom = await tabs.nth(2).evaluate((el) => el.getBoundingClientRect().bottom);
+    const panelTop = await page.locator('#svc-panel').evaluate((el) => el.getBoundingClientRect().top);
+    expect(panelTop).toBeGreaterThanOrEqual(rowBottom - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   });
 });
 
 test.describe('mobile menu', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  test('Menu toggles a five-link list and reads Close', async ({ page }) => {
+  // The menu is now a full-height role="dialog" sheet (SPEC §5.3): focus moves into it, the page
+  // behind is inert, and it closes from its own Close button or Esc (the Menu trigger is covered).
+  // The same five links are still in #mobile-menu.
+  test('Menu opens a five-link sheet that closes with Close and Esc', async ({ page }) => {
     await ready(page, APP + '/');
-    const button = page.locator('header button[aria-controls="mobile-menu"]');
+    const button = page.locator('header nav button[aria-controls="mobile-menu"]');
     await expect(button).toBeVisible();
     await expect(button).toHaveText('Menu');
     await expect(button).toHaveAttribute('aria-expanded', 'false');
     await button.click();
-    await expect(button).toHaveText('Close');
     await expect(button).toHaveAttribute('aria-expanded', 'true');
+    const sheet = page.locator('#mobile-menu[role="dialog"]');
+    await expect(sheet).toBeVisible();
     await expect(page.locator('#mobile-menu li a')).toHaveCount(5);
-    // The open menu turns the home header solid.
-    await expect(page.locator('header')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-    await button.click();
+    await expect(page.locator('main')).toHaveAttribute('inert', '');
+    const close = sheet.getByRole('button', { name: 'Close' });
+    await expect(close).toBeFocused();
+    // The open menu turns the home header solid. Below 1024 the solid white is the header's
+    // ::before layer, which fades in by opacity (SPEC §5.2, Phase 4 R1), not its own background.
+    await expect
+      .poll(() =>
+        page.locator('header').evaluate((h) => {
+          const s = getComputedStyle(h, '::before');
+          return `${s.backgroundColor} ${s.opacity}`;
+        }),
+      )
+      .toBe('rgb(255, 255, 255) 1');
+    await close.click();
     await expect(page.locator('#mobile-menu')).toHaveCount(0);
+    await expect(button).toBeFocused();
+    await button.click();
+    await expect(sheet).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#mobile-menu')).toHaveCount(0);
+    await expect(page.locator('main')).not.toHaveAttribute('inert', '');
+  });
+
+  // Deliberate tablet change (SPEC §3.1): the desktop links now collapse below 1024, not 820.
+  test('the nav collapses below 1024', async ({ page }) => {
+    await page.setViewportSize({ width: 1023, height: 900 });
+    await ready(page, APP + '/about');
+    await expect(page.locator('header nav button[aria-controls="mobile-menu"]')).toBeVisible();
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await expect(page.locator('header nav button[aria-controls="mobile-menu"]')).toBeHidden();
+  });
+});
+
+test.describe('contact pill', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  // New (SPEC §5.6, G17): the floating Contact pill exists on Home only, and Services & Results
+  // carries no Contact or booking call to action at all.
+  test('is on Home only', async ({ page }) => {
+    // The pill is the only link rendered directly in <main> (app/page.tsx).
+    const pill = page.locator('main > a[href$="#contact"]');
+    await ready(page, APP + '/');
+    await expect(pill).toHaveCount(1);
+    for (const route of ['/about', '/services-and-results', '/privacy-policy', '/accessibility-statement']) {
+      await ready(page, APP + route);
+      await expect(pill).toHaveCount(0);
+    }
+    await ready(page, APP + '/services-and-results');
+    await expect(page.locator('main').getByText(/book a meeting/i)).toHaveCount(0);
   });
 });
 

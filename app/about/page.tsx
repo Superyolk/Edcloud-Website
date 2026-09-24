@@ -1,10 +1,13 @@
-/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { ABOUT_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import Picture from '@/components/Picture';
+import Disclosure, { DisclosureHeading, DisclosurePanel } from '@/components/Disclosure';
+import { MQ_PHONE } from '@/app/breakpoints';
 import JsonLd from '@/components/JsonLd';
+import { keepTogether } from '@/components/KeepTogether';
 import { breadcrumbLd, pageMeta, personLd, SEO_DESCRIPTION } from '@/content/seo';
 import styles from './about.module.css';
 
@@ -16,6 +19,58 @@ export const metadata: Metadata = pageMeta({
 
 const [mission, partner, numbers] = ABOUT_COPY.titles;
 
+type MissionBlock = (typeof ABOUT_COPY.mission)[number];
+
+/** One Mission & History block, exactly as the page has always rendered it. */
+function renderBlock(block: MissionBlock, key: number) {
+  switch (block.tag) {
+    case 'h2':
+      return (
+        <h2 key={key} className={styles.h2}>
+          {block.text}
+        </h2>
+      );
+    case 'ul':
+      return (
+        <ul key={key} className={styles.list}>
+          {block.items.map((item) => (
+            <li key={item.text}>
+              {'lead' in item && (
+                <>
+                  <strong className={styles.strong}>{item.lead}</strong>{' '}
+                </>
+              )}
+              {keepTogether(item.text)}
+            </li>
+          ))}
+        </ul>
+      );
+    default:
+      return (
+        <p key={key} className={styles.p}>
+          {'text' in block ? keepTogether(block.text) : null}
+        </p>
+      );
+  }
+}
+
+/*
+ * The flat mission array grouped by h3 into chapters (SPEC §6.2, G3): the blocks before the first
+ * h3 are the intro; each h3 then owns the blocks up to the next one. On phones every chapter is a
+ * heading-button disclosure, so the eight collapsed titles read as the section's contents. The
+ * first two chapters ("Our mission", "How we think about scale") are the firm's thesis and start
+ * open. At >= 1024 both new wrappers are display: contents, so .mission lays out exactly the
+ * h2 / p / h3 / ul children it always had.
+ */
+const THESIS_CHAPTERS = 2;
+const missionIntro: { block: MissionBlock; i: number }[] = [];
+const chapters: { heading: string; i: number; body: { block: MissionBlock; i: number }[] }[] = [];
+ABOUT_COPY.mission.forEach((block, i) => {
+  if (block.tag === 'h3') chapters.push({ heading: block.text, i, body: [] });
+  else if (chapters.length) chapters[chapters.length - 1].body.push({ block, i });
+  else missionIntro.push({ block, i });
+});
+
 export default function AboutPage() {
   const { hero } = ABOUT_COPY;
   return (
@@ -24,7 +79,17 @@ export default function AboutPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="About hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={1920} height={1080} />
+          <Picture
+            name="hero-about"
+            src={hero.imgSrc}
+            alt={hero.imgAlt}
+            className={styles.heroImg}
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            phoneSizes="100vw"
+            tabletSizes="100vw"
+          />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -33,54 +98,42 @@ export default function AboutPage() {
 
         <SectionShell n={mission.n} title={mission.title}>
           <div className={styles.mission}>
-            {ABOUT_COPY.mission.map((block, i) => {
-              switch (block.tag) {
-                case 'h2':
-                  return (
-                    <h2 key={i} className={styles.h2}>
-                      {block.text}
-                    </h2>
-                  );
-                case 'h3':
-                  return (
-                    <h3 key={i} className={styles.h3}>
-                      {block.text}
-                    </h3>
-                  );
-                case 'ul':
-                  return (
-                    <ul key={i} className={styles.list}>
-                      {block.items.map((item) => (
-                        <li key={item.text}>
-                          {'lead' in item && (
-                            <>
-                              <strong className={styles.strong}>{item.lead}</strong>{' '}
-                            </>
-                          )}
-                          {item.text}
-                        </li>
-                      ))}
-                    </ul>
-                  );
-                default:
-                  return (
-                    <p key={i} className={styles.p}>
-                      {block.text}
-                    </p>
-                  );
-              }
-            })}
+            {missionIntro.map(({ block, i }) => renderBlock(block, i))}
+            {chapters.map((ch, c) => (
+              <Disclosure key={ch.i} className={styles.chapter} collapseQuery={MQ_PHONE} defaultOpen={c < THESIS_CHAPTERS} contentsOnDesktop>
+                <DisclosureHeading as="h3" className={styles.h3}>
+                  {ch.heading}
+                </DisclosureHeading>
+                {/* No role="region": eight chapter panels would flood the landmark list (APG
+                    limits region panels to about six), and the button's aria-controls already
+                    ties each panel to its heading. The landmarks match the desktop's. */}
+                <DisclosurePanel className={styles.chapterBody} contentsOnDesktop region={false}>
+                  {ch.body.map(({ block, i }) => renderBlock(block, i))}
+                </DisclosurePanel>
+              </Disclosure>
+            ))}
           </div>
         </SectionShell>
 
         <SectionShell n={partner.n} title={partner.title} white>
           <div className={styles.partner}>
-            <img src={ABOUT_COPY.partner.imgSrc} alt={ABOUT_COPY.partner.imgAlt} className={styles.headshot} width={486} height={450} />
+            <Picture
+              name="aaron-sokol"
+              src={ABOUT_COPY.partner.imgSrc}
+              alt={ABOUT_COPY.partner.imgAlt}
+              className={styles.headshot}
+              width={486}
+              height={450}
+              loading="lazy"
+              decoding="async"
+              phoneSizes="112px"
+              tabletSizes="128px"
+            />
             <div className={styles.partnerText}>
               <h2 className={styles.h2}>{ABOUT_COPY.partner.h2}</h2>
               {ABOUT_COPY.partner.paragraphs.map((text, i) => (
                 <p key={text} className={i === 0 ? styles.p : styles.partnerP}>
-                  {text}
+                  {keepTogether(text)}
                 </p>
               ))}
             </div>

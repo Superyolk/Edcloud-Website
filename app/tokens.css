@@ -1,4 +1,22 @@
-/* tokens.css — EdCloud site design tokens. Every value below is used verbatim in the reference. */
+/* tokens.css — EdCloud site design tokens. Every value below is used verbatim in the reference.
+
+   Breakpoints (docs/mobile/SPEC.md §3). These literal query strings are the ONLY width/height media
+   queries new CSS may use; app/breakpoints.ts exports the same strings for JS, and
+   `npm run qa:breakpoints` fails on anything else. Classic min/max-width syntax on purpose: iOS
+   Safari before 16.4 drops range syntax (`width < 1024px`), which would silently lose the whole
+   mobile layer.
+
+     MQ_MOBILE       (max-width: 1023.98px)                          phones + tablets; never matches >= 1024
+     MQ_PHONE        (max-width: 599.98px)                           320-599
+     MQ_XS           (max-width: 359.98px)                           320-359
+     MQ_TABLET       (min-width: 600px) and (max-width: 1023.98px)   600-1023
+     MQ_TABLET_WIDE  (min-width: 820px) and (max-width: 1023.98px)   820-1023
+     MQ_SHORT        (max-width: 1023.98px) and (orientation: landscape) and (max-height: 500px)
+     MQ_DESKTOP      (min-width: 1024px)                             ONLY for the SPEC §10.3(b) neutralisers
+                                                                     of new wrappers (display: contents)
+
+   Phones are the base of the mobile layer; tablet rules refine them. Every mobile rule in every
+   module sits in a block appended after the desktop rules, so desktop (>= 1024) never changes. */
 :root {
   /* Color */
   --ink: #1B2431;          /* headings, primary buttons, hero fallback bg */
@@ -44,7 +62,7 @@
   --section-pad: clamp(48px, 6vw, 64px);       /* vertical section padding */
   --head-gap: 32px;                            /* section header → content */
   --nav-h: 64px;
-  --nav-collapse: 820px;                       /* < 820px: "Menu"/"Close" button */
+  --nav-collapse: 820px;                       /* historical: the nav now collapses at MQ_MOBILE (< 1024); no rule reads it */
 
   /* Shape & effects */
   --radius: 0;                                 /* cards, inputs, images */
@@ -55,9 +73,110 @@
   --ease: cubic-bezier(.2,.7,.2,1);
 }
 
-/* Phones: a 72px number column left section text barely 180px wide, one or two words a line. */
-@media (max-width: 599px) {
+/* ---- Mobile layer tokens (phones + tablets). Never matches at >= 1024px. ----
+   The old `--counter-col: 28px` phone override is gone: below 1024 the section header puts the
+   counter inline on a rule instead of in a column, so nothing reads --counter-col there. */
+@media (max-width: 1023.98px) {
   :root {
-    --counter-col: 28px;
+    /* Type: fluid 320 -> 1023. Values in brackets: px at 320 / 390 / 768. */
+    /* The display size stops at 44px (from 700): from 600 the hero text sits in the fixed 459px
+       column, and past ~45px "Education Companies" no longer fits one line there, so the H1 fell
+       to four lines on every tablet (Phase 4 R4-designer-01). */
+    --m-t-display: clamp(2rem, 1.35rem + 3.2vw, 2.75rem);       /* 32 / 34.1 / 44    Home H1, lh 1.06, 600, ls -0.01em */
+    --m-t-title: clamp(2.25rem, 1.5rem + 3.5vw, 3.5rem);        /* 36 / 37.7 / 50.9  About, Services and legal H1s, lh 1.05 */
+    --m-t-h2: clamp(1.625rem, 1.3rem + 1.6vw, 2.25rem);         /* 26 / 27.0 / 33.1  section titles, lh 1.1, ls -0.01em */
+    --m-t-accent: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);     /* 22 / 22.3 / 25.3  green service lead, contact H2 */
+    --m-t-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);   /* 18 / 18.2 / 19.5  lead paragraphs, lh 1.45 */
+    --m-t-h3: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);          /* 17 / 17.2 / 18.3  row titles, lh 1.3 */
+    --m-t-body: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);       /* 16 / 16.2 / 17    ALL running copy, lh 1.5 */
+    --m-t-stat: clamp(2.5rem, 1.8rem + 3.5vw, 3.5rem);          /* 40 / 42.5 / 55.7  project + By The Numbers figures, lh .95 */
+    --m-t-stat-sm: clamp(1.375rem, 1rem + 1.8vw, 2rem);         /* 22 / 23.0 / 29.8  proof strip, nowrap */
+    --m-t-ui: 0.9375rem;                                        /* 15  buttons, row links, 600 only, never paragraphs */
+    --m-t-label: 0.875rem;                                      /* 14  form labels, proof labels, footer address */
+    --m-t-meta: 0.8125rem;                                      /* 13  counters, dates, sources, captions: THE FLOOR */
+    --m-lh-body: 1.5;
+    --m-lh-lead: 1.45;
+    --m-lh-head: 1.1;
+    /* Prose cap from 600. Instrument Sans sets about 0.47em a character. The 34em first shipped
+       in Phase 3 measured 71 cpl median (Phase 4 R1-designer-01); 29em still ran 41% of About's
+       lines past 60, up to 68 (R3-designer-03). 27em keeps the tablet lines inside 45-60
+       (SPEC §18.2 rule 1, §17). */
+    --m-measure: 27em;
+
+    /* Space: 4px base */
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 20px;
+    --s-6: 24px;
+    --s-8: 32px;
+    --s-10: 40px;
+    --s-12: 48px;
+    --s-14: 56px;
+    --s-16: 64px;
+
+    /* Semantic space (phone values; tablet values below) */
+    --m-gutter: var(--s-5);                                     /* 20 */
+    --m-section-top: var(--s-10);                               /* 40 */
+    --m-section-bottom: var(--s-12);                            /* 48 */
+    --m-head-gap: var(--s-6);                                   /* 24: rule header -> content */
+    --m-row-y: var(--s-4);                                      /* 16: ledger row padding */
+    --m-tap: 44px;                                              /* minimum target */
+    --m-control-h: 48px;                                        /* inputs, pills */
+    --m-disclosure-h: 56px;                                     /* disclosure rows */
+    /* The width of the capped, centred content column from 600 up (content box, gutters excluded).
+       It is --m-measure resolved at body size: --m-measure is in em, so it would come out narrower
+       in the 14px header and footer. One absolute width is what lets the header, every section
+       and the footer share one left and one right edge (SPEC §18.1 rule 4). On phones it is
+       `none`: the column is the screen minus the gutters. */
+    --m-column: none;
+
+    /* Shape, elevation */
+    --m-radius: 0;
+    --m-radius-pill: 999px;                                     /* buttons and pills only */
+    --m-elev-0: none;
+    --m-elev-1: 0 1px 0 var(--line);                            /* solid header bottom edge */
+    --m-elev-2: var(--shadow-card);                             /* floats only: the Contact pill */
+    --m-hero-scrim: linear-gradient(180deg, rgba(27,36,49,.30), rgba(27,36,49,.18) 34%, rgba(27,36,49,.80));
+                                                                /* --ink (#1B2431) at alpha, not a new colour */
+
+    /* Motion: ONE easing token */
+    --m-ease: var(--ease);                                      /* cubic-bezier(.2,.7,.2,1) */
+    --m-dur-press: 150ms;                                       /* :active */
+    --m-dur-open: 200ms;                                        /* disclosure, show-all, pill */
+    --m-dur-sheet: 240ms;                                       /* menu sheet */
+
+    /* Overrides of existing tokens, phones + tablets only.
+       --nav-h carries the top safe area, so everything that already reads it (the heroes' pull-up
+       under the transparent header, scroll-padding-top) stays right under a notch. */
+    --m-bar-h: 56px;                                            /* the header bar itself (SPEC §5.2: <= 56px) */
+    --nav-h: calc(var(--m-bar-h) + env(safe-area-inset-top, 0px));
+    /* Every existing var(--gutter) rule lines up with the header. The larger side inset is used on
+       BOTH sides, so a landscape notch can never make the two margins unequal. */
+    --gutter: max(var(--m-gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  :root {
+    --m-gutter: var(--s-8);                                     /* 32 */
+    --m-section-top: var(--s-14);                               /* 56 */
+    --m-section-bottom: var(--s-16);                            /* 64 */
+    --m-column: calc(27 * var(--m-t-body));                     /* = --m-measure at body size (459px at 17px) */
+  }
+}
+
+@media (max-width: 1023.98px) and (prefers-reduced-motion: reduce) {
+  :root {
+    --m-dur-press: 0.01ms;
+    --m-dur-open: 0.01ms;
+    --m-dur-sheet: 0.01ms;
+  }
+}
+
+@media (max-width: 1023.98px) and (prefers-contrast: more) {
+  :root {
+    --line: var(--ink-2); /* hairlines only; a swap inside a query, not a palette change */
   }
 }

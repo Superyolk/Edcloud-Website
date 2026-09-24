@@ -24,11 +24,21 @@ const PAGES = [
   { name: 'services', app: '/services-and-results', ref: '/EdCloud%20Services.dc.html' },
 ] as const;
 
+// Reference parity is asserted only at desktop widths (>= 1024). Below 1024 the site deliberately
+// diverges from the design reference: the mobile redesign (docs/mobile/SPEC.md, Phase 3) replaces
+// the squeezed desktop layout for phones (320-599) and tablets (600-1023) with rule headers,
+// accordions, show-all lists, art-directed crops, a menu sheet and a nav that collapses below 1024
+// instead of 820. Desktop itself is additionally frozen pixel for pixel against the Phase 0
+// goldens by `npm run qa:desktop-parity` (1024/1280/1440).
 const VIEWPORTS = [
-  [375, 812],
-  [820, 1180],
   [1024, 768],
   [1440, 900],
+] as const;
+
+// Recorded, not asserted: the widths the reference used to be checked at before the redesign.
+const MOBILE_DIVERGENCE = [
+  [375, 812],
+  [820, 1180],
 ] as const;
 
 const OUT = path.resolve(__dirname, 'visual-diff-output');
@@ -199,6 +209,14 @@ test.describe('visual parity with the design reference', () => {
 
         expect.soft(mismatchPct, `pixel mismatch for ${p.name} @ ${w}`).toBeLessThanOrEqual(MAX_MISMATCH_PCT);
         expect.soft(fpDefects, `layout fingerprint defects for ${p.name} @ ${w}`).toEqual([]);
+      });
+    }
+  }
+
+  for (const p of PAGES) {
+    for (const [w, h] of MOBILE_DIVERGENCE) {
+      test(`${p.name} @ ${w}x${h}`, () => {
+        test.skip(true, 'Intentional mobile divergence from the design reference (docs/mobile/SPEC.md); parity is asserted only at >= 1024.');
       });
     }
   }

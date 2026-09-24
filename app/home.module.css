@@ -67,13 +67,6 @@
   height: 92px;
 }
 
-/* The fixed box only holds at desktop widths; on narrower screens the copy wraps to more lines. */
-@media (max-width: 899px) {
-  .heroLead {
-    height: auto;
-  }
-}
-
 /* ---------- Shared text styles ---------- */
 
 .lead {
@@ -360,20 +353,6 @@
   border-bottom: 1px solid var(--line);
 }
 
-/* Phones: a side-by-side date column leaves the headline one word per line, so stack them. */
-@media (max-width: 599px) {
-  .pressRow {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-}
-
-@media (max-width: 599px) {
-  .capability {
-    grid-template-columns: 32px minmax(0, 1fr);
-  }
-}
-
 .pressMeta {
   font-size: var(--t-small);
   color: var(--slate);
@@ -457,22 +436,6 @@
   height: auto;
   max-height: 100%;
   object-fit: contain;
-}
-
-/* Phones: three narrow tiles a row. Less padding gives the logos the room, at half their desktop size. */
-@media (max-width: 599px) {
-  .logos {
-    --gap: 12px;
-  }
-
-  .logoTile {
-    height: 72px;
-    padding: 8px;
-  }
-
-  .logo {
-    width: min(calc(var(--logo-w) * 0.5), 100%);
-  }
 }
 
 /* ---------- 07 Contact Us ---------- */
@@ -592,3 +555,681 @@
 }
 .formStatusOk { color: var(--green, #17916b); }
 .formStatusErr { color: #b3261e; }
+
+/* The poster's <picture> is display: contents, which lets its <source> elements (Chromium renders
+   them as empty blocks) become grid items of .hero: two extra auto rows that share the free space
+   and push the text 95px down at 1440. They are new elements with nothing to show (SPEC §10.3a). */
+.hero source {
+  display: none;
+}
+
+/* ---------- Contact pill (new element; SPEC §5.6, §10.3a) ----------
+   No box at >= 1024. components/home/ContactPill.tsx only mounts it below 1024 anyway. */
+.contactPill {
+  display: none;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Mobile layer (phones + tablets; SPEC §6.1). Never matches at >= 1024px. ----------
+   Appended after every desktop rule so it also wins over the kept 1087 query by source order.
+   Phones are the base; the tablet, XS and landscape refinements follow. */
+@media (max-width: 1023.98px) {
+  /* Hero: about 72% of the screen, not all of it, so the "01 Our Promise" rule shows beneath it on
+     the first screen (A-home-09, C-cross-14). vh first for engines without svh. */
+  /* The bar has no bottom border below 1024 (--m-elev-1 is a shadow), so the pull-up is --nav-h. */
+  .hero {
+    margin-top: calc(-1 * var(--nav-h));
+    min-height: clamp(480px, 72vh, 640px);
+    min-height: clamp(480px, 72svh, 640px);
+    align-items: end;
+  }
+
+  .heroLayer {
+    object-position: 60% 50%;
+  }
+
+  .heroOverlay {
+    background: var(--m-hero-scrim);
+  }
+
+  /* Bottom-anchored text on the gutter. content-box + --m-column is the same capped, centred
+     column the sections use, so the hero text shares their edges on tablets (SPEC §18.1). */
+  .heroInner {
+    box-sizing: content-box;
+    width: auto;
+    max-width: var(--m-column);
+    padding: calc(var(--nav-h) + var(--s-8)) var(--gutter) var(--s-8);
+  }
+
+  /* --m-t-display, eased back by up to 1.5px between 360 and 400 (the 8.7vw term), which is what
+     lets "Education Companies" share a line at 375 so the H1 sets in 3 lines from 375 up (SPEC
+     §2.1). Never below the 32px floor. */
+  .heroTitle {
+    margin: 0 0 var(--s-4);
+    font-size: var(--m-t-display);
+    font-size: max(2rem, min(var(--m-t-display), 8.7vw));
+    line-height: 1.06;
+  }
+
+  /* The full column width: no ch cap on phones (SPEC §18.1 rule 3). */
+  .heroLead {
+    width: auto;
+    max-width: none;
+    height: auto;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+    opacity: 0.92;
+  }
+
+  /* ---------- Shared text ---------- */
+
+  .lead {
+    font-size: var(--m-t-lead);
+    line-height: var(--m-lh-lead);
+  }
+
+  .body,
+  .cardBody {
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  .cardTitle {
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+  }
+
+  .stat {
+    font-size: var(--m-t-stat);
+    line-height: 0.95;
+  }
+
+  /* ---------- 01 Our Promise ---------- */
+
+  .promise {
+    max-width: none;
+    gap: var(--s-4);
+  }
+
+  /* ---------- 02 Services & Results: exclusive accordion on the one panel (SPEC §7.1) ----------
+     The list and its items step aside (display: contents), so the three buttons become rows of
+     .services. ServicesTabs puts each button on an explicit row and the panel on --panel-row, the
+     row directly under the active button. */
+  .services {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .tabs,
+  .tabs > li {
+    display: contents;
+  }
+
+  /* 16px above and below: a one-line title still centres in the 56px row, and a title that
+     wraps ("Supercharged Product Market Fit" at 320) keeps the same ~22px from the hairline to
+     its cap height as its one-line neighbours (Phase 4 R2-designer-01). */
+  .tab {
+    grid-template-columns: minmax(0, 1fr) 10px;
+    gap: var(--s-3);
+    min-height: var(--m-disclosure-h);
+    padding: var(--s-4) 0;
+    color: var(--ink-2);
+  }
+
+  /* The list's top hairline, now that the list itself has no box. */
+  .tabs > li:first-child > .tab {
+    border-top: 1px solid var(--line);
+  }
+
+  .tabActive {
+    color: var(--ink);
+  }
+
+  .tab:active {
+    color: var(--growth-ink);
+  }
+
+  .tabTitle {
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  /* The desktop tab's green square is the only indicator (G10): outlined when closed, filled when
+     open. No chevrons. */
+  .tabDot {
+    /* On the title's first line, not the middle of a wrapped title ("Supercharged Product Market
+       Fit" at 320; Phase 4 R4-designer-03). The title's line box is --m-t-h3 at 1.3. */
+    align-self: start;
+    margin-top: calc((var(--m-t-h3) * 1.3 - 10px) / 2);
+    opacity: 1;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--slate);
+    transition:
+      opacity var(--m-dur-open) var(--m-ease),
+      transform var(--m-dur-open) var(--m-ease);
+  }
+
+  .tabActive .tabDot {
+    background: var(--growth);
+    box-shadow: none;
+    transform: scale(1.1);
+  }
+
+  /* No card on phones: the panel is the open row's body, closed off by a hairline. */
+  .panel {
+    grid-row: var(--panel-row);
+    min-height: 0;
+    padding: var(--s-4) 0 var(--s-5);
+    gap: var(--s-4);
+    align-content: start;
+    background: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid var(--line);
+    animation: panelIn var(--m-dur-open) var(--m-ease) both;
+  }
+
+  .panelLead {
+    font-size: var(--m-t-accent);
+    line-height: 1.2;
+  }
+
+  .panelFoot {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* ---------- 03 Featured Projects: stat-first scoreboard (G2) ----------
+     Each case is one ledger row under an ink rule: the figure and its caption first (order only,
+     the DOM is unchanged), then the title and body at the full width. The figure box has one
+     fixed width in every row, so the four figures read as one column. A wrapping flex row rather
+     than a two-column grid: when the reader enlarges text so far that the figure and caption no
+     longer fit side by side, the caption drops under the figure instead of being pushed off the
+     screen (WCAG 1.4.10). The same single-column ledger runs up to 1023: in the capped tablet
+     column a 2x2 grid left each body ~240px (Phase 4 R1-designer-02). */
+  .cases {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: 0;
+  }
+
+  .case {
+    grid-row: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    column-gap: var(--s-4);
+    row-gap: 0;
+    padding: var(--s-6) 0;
+    background: transparent;
+    box-shadow: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  /* The last row ends on the section's own bottom padding, like every other section (a 24px row
+     padding on top of it left the $500M row 26px airier than the rest). */
+  .case:last-child {
+    padding-bottom: 0;
+  }
+
+  .caseTop {
+    order: 1;
+    flex: 1 0 100%;
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+  }
+
+  .case > .rule {
+    display: none; /* the row's ink rule replaces the card's inner hairline */
+  }
+
+  .caseStat {
+    display: contents;
+  }
+
+  /* 3.25em of the figure fits the widest one, $500M. */
+  .case .stat {
+    order: -1;
+    flex: 0 0 3.25em;
+    white-space: nowrap;
+  }
+
+  /* Capped at 14em (182px), the width tablets use, so every caption is the same 2-line block
+     beside its figure from 360 up; uncapped, one caption at 430-599 set as a single long line
+     (Phase 4 R3-designer-01). At 320 the column is already narrower than the cap. */
+  .statLabel {
+    order: -1;
+    flex: 1 1 9em;
+    min-width: 0;
+    max-inline-size: 14em;
+    font-size: var(--m-t-meta);
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  /* ---------- 04 Deliverables: one photo, then the ledger ---------- */
+
+  .deliverables {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+
+  .deliverablesIntro {
+    gap: var(--s-6);
+  }
+
+  .photoCard {
+    box-shadow: none;
+  }
+
+  .photo {
+    aspect-ratio: 16 / 9;
+    object-position: 50% 50%;
+  }
+
+  /* The green number sits inline before the title and the description runs the full width under
+     both: no hanging index column, so the text keeps the section's edges. */
+  .capability {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+    align-content: start; /* in a 2-up tablet row the taller neighbour's slack stays underneath */
+    gap: var(--s-2);
+    padding: var(--s-4) 0;
+  }
+
+  .capabilityIndex {
+    padding-top: 0;
+    font-size: var(--m-t-meta);
+  }
+
+  .capabilityText {
+    display: contents;
+  }
+
+  .capabilityText > p {
+    grid-column: 1 / -1;
+  }
+
+  /* Enlarged text (SectionShell's 11em threshold): the number sits alone above the title, so a
+     34px "Transformation" gets the full column (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .capabilityText > h3 {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---------- Stairway figure: a full-bleed 39:14 band ---------- */
+
+  .figureImg {
+    height: auto;
+    aspect-ratio: 39 / 14;
+  }
+
+  /* ---------- 05 Select Clients: 2-column credits grid (G6) ----------
+     Hairlines between cells: the white cells sit on a --line ground with a 1px gap. Logos are sized
+     by --logo-w-m, the phone equal-area model from app/page.tsx. */
+  .logos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .logoTile {
+    height: 80px;
+    padding: var(--s-3);
+    background: var(--white);
+  }
+
+  .logo {
+    width: min(var(--logo-w-m), 100%);
+  }
+
+  /* A collapsed tile (ShowAll's hidden="until-found") still has a box; without this its fixed
+     height and white ground would paint over the first row. */
+  .logoTile[hidden] {
+    height: 0;
+    background: transparent;
+  }
+
+  /* ---------- 06 Press: the index (G5) ---------- */
+
+  /* The row is the positioning box for the stretched link below. */
+  .pressRow {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: var(--s-2);
+    padding: var(--s-5) 0 var(--s-2);
+  }
+
+  /* Source left, date flush right, on one meta line. */
+  .pressMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-3);
+    font-size: var(--m-t-meta);
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pressMeta > span:first-child {
+    min-width: 0;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .pressMeta > span:last-child {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Enlarged text (SectionShell's 11em threshold): the date wraps under the source instead of
+     squeezing it until "CRUNCHBASE" broke mid-word (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .pressMeta {
+      flex-wrap: wrap;
+    }
+  }
+
+  .pressText {
+    gap: 0;
+  }
+
+  .pressTitle {
+    font-size: calc(var(--m-t-h3) + 1px);
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .pressLink {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--m-tap);
+    font-size: var(--m-t-ui);
+  }
+
+  /* The whole row is the target, with a single tab stop (the link itself). */
+  .pressLink::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .pressLink:active {
+    color: var(--growth-ink);
+  }
+
+  /* ---------- 07 Contact Us ---------- */
+
+  .contact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+
+  /* A 39:14 band, full-bleed on phones: the negative gutter undoes the section's padding. */
+  .contactPhotoWrap {
+    min-height: 0;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+
+  .contactPhoto {
+    height: auto;
+    aspect-ratio: 39 / 14;
+    object-position: 50% 50%;
+    transform: none;
+  }
+
+  .contactCard {
+    align-self: stretch;
+    gap: var(--s-6);
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .contactTitle {
+    font-size: var(--m-t-accent);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  /* First and last name side by side; email, phone and message full width. */
+  .form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4) var(--s-3);
+  }
+
+  .label {
+    gap: var(--s-2);
+    font-size: var(--m-t-label);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .label:nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  /* 48px fields with 16px+ text (no iOS zoom on focus) and a visible --slate border (C-cross-12). */
+  /* scroll-margin-top: when validation or a jump scrolls a field to the top, its label (18px
+     plus the 8px gap above the field) lands below the sticky header with room to spare, instead
+     of under it. */
+  .input {
+    min-height: var(--m-control-h);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--m-t-body);
+    font-weight: 400;
+    line-height: 1.4;
+    border-color: var(--slate);
+    scroll-margin-top: var(--s-8);
+  }
+
+  .textarea {
+    min-height: 120px;
+  }
+
+  /* The site's 2px green ring in place of the desktop glow (C-cross-12). */
+  .input:focus {
+    border-color: var(--slate);
+    box-shadow: none;
+  }
+
+  .input:focus-visible {
+    outline: 2px solid var(--growth);
+    outline-offset: 2px;
+  }
+
+  /* SUBMIT: a full-width 52px pill, the last control, in the thumb zone. */
+  .submitRow {
+    display: block;
+    margin-top: var(--s-2);
+  }
+
+  .submit {
+    width: 100%;
+    min-height: 52px;
+    font-size: var(--m-t-ui);
+  }
+
+  .formStatusOk,
+  .formStatusErr {
+    font-size: var(--m-t-body);
+  }
+
+  /* ---------- Contact pill (Home only; SPEC §5.6) ----------
+     Hidden, and so out of the tab order, until ContactPill sets data-shown. z-index 9 keeps it
+     under the header (10), so the menu sheet covers it. */
+  .contactPill {
+    display: inline-flex;
+    align-items: center;
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 9;
+    min-height: var(--m-control-h);
+    padding: 0 var(--s-6);
+    border-radius: var(--m-radius-pill);
+    background: var(--ink);
+    color: var(--white);
+    font-size: var(--m-t-ui);
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: var(--m-elev-2);
+    opacity: 0;
+    transform: translateY(12px);
+    visibility: hidden;
+    /* visibility flips after the fade out, and at once on the way in. */
+    transition:
+      opacity var(--m-dur-open) var(--m-ease),
+      transform var(--m-dur-open) var(--m-ease),
+      visibility 0s linear var(--m-dur-open);
+  }
+
+  .contactPill[data-shown] {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .contactPill:hover,
+  .contactPill:active {
+    color: var(--white);
+  }
+
+  .contactPill[data-shown]:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+  }
+}
+
+/* Phones: the pill's right edge is the column's, the same 20px (or safe-area) inset as the Menu
+   pill above it and every rule it passes; at 16px it stood 4px outside them (Phase 4
+   R3-designer-02, R3-client-01). Tablets keep the viewport-edge 16px: there the column is centred
+   well inside the screen, and a float outside it reads as intended. */
+@media (max-width: 599.98px) {
+  .contactPill {
+    right: var(--gutter);
+  }
+}
+
+/* Tablets: the phone's single-column ledgers inside the centred column. The cases, the
+   capabilities and the press index each read at the column measure; 2-up cells in the capped
+   column were narrower than a phone's (273px, 22-35 characters a line; Phase 4 R1-designer-02).
+   Only the logo grid, which holds no running text, goes multi-column. */
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .photo {
+    aspect-ratio: 3 / 2;
+  }
+
+  .figureImg {
+    aspect-ratio: 21 / 9;
+  }
+
+  .logos {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* The figure's caption stays the phone's short block beside the figure, not a one-line footnote
+     on its baseline: ~14em (182px) sets each caption in two lines, and centred on the 53px figure
+     its first line starts at the figure's cap height (Phase 4 R2-designer-04). */
+  .statLabel {
+    flex: 0 1 14em;
+    align-self: center;
+  }
+
+  /* The band stays inside the column here; full-bleed would outrun the capped text. */
+  .contactPhotoWrap {
+    margin-inline: 0;
+  }
+
+  .contactPhoto {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+/* Phones: the H1's forced breaks fit only at 390+ ("Education Companies" is one line there) and
+   strand "Education" on a line of its own below that. Balance sets the lines instead; the space
+   before each <br> keeps the word boundary, so the DOM text is unchanged (SPEC §2.1). */
+@media (max-width: 599.98px) {
+  .heroTitle br {
+    display: none;
+  }
+}
+
+/* 320-359: shorter logo cells, and the two name fields stack. */
+@media (max-width: 359.98px) {
+  .logoTile {
+    height: 72px;
+  }
+
+  .form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Landscape phones: the hero sizes to its text, so the "01" rule peeks in at the bottom. */
+@media (max-width: 1023.98px) and (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .heroInner {
+    padding-top: calc(var(--nav-h) + var(--s-4));
+    padding-bottom: var(--s-6);
+  }
+
+  /* The width-driven display size (46px at 844) makes three lines 150px tall on a 390px-high
+     screen; the page-title floor (36px) keeps the H1 above the section titles and the page short. */
+  .heroTitle {
+    font-size: 2.25rem;
+  }
+}
+
+/* Touch screens keep :hover after a tap (C-cross-20): hold the resting colours. */
+@media (max-width: 1023.98px) and (hover: none) {
+  .pressLink:hover:not(:active) {
+    color: var(--growth);
+  }
+
+  .submit:hover {
+    background: var(--ink);
+  }
+}
+
+/* Windows High Contrast (forced colours) drops backgrounds and box-shadows: the accordion's
+   square and the filled pills would lose their shape. System colours draw them instead; the
+   palette tokens are untouched (WCAG 1.4.11, Phase 4 R2-a11y-04). */
+@media (max-width: 1023.98px) and (forced-colors: active) {
+  .tabDot {
+    forced-color-adjust: none;
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+
+  .tabActive .tabDot {
+    background: CanvasText;
+    box-shadow: none;
+  }
+
+  .contactPill,
+  .submit {
+    border: 1px solid ButtonText;
+  }
+}

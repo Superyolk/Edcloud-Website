@@ -1,11 +1,14 @@
-/* eslint-disable @next/next/no-img-element -- every photo and logo is self-hosted at a fixed, pre-sized crop; plain <img> keeps those exact boxes */
 import type { Metadata } from 'next';
 import { SERVICES } from '@/content/content';
 import { SERVICES_COPY } from '@/content/copy';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SectionShell from '@/components/SectionShell';
+import Picture from '@/components/Picture';
+import Disclosure, { DisclosureHeading, DisclosurePanel } from '@/components/Disclosure';
+import { MQ_PHONE } from '@/app/breakpoints';
 import JsonLd from '@/components/JsonLd';
+import { keepTogether } from '@/components/KeepTogether';
 import { breadcrumbLd, pageMeta, SEO_DESCRIPTION, servicesLd } from '@/content/seo';
 import styles from './services.module.css';
 
@@ -27,7 +30,17 @@ export default function ServicesPage() {
       <SiteHeader transparentOverHero />
       <main>
         <section data-screen-label="Services hero" className={styles.hero}>
-          <img src={hero.imgSrc} alt={hero.imgAlt} className={styles.heroImg} width={1920} height={1080} />
+          <Picture
+            name="hero-services"
+            src={hero.imgSrc}
+            alt={hero.imgAlt}
+            className={styles.heroImg}
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            phoneSizes="100vw"
+            tabletSizes="100vw"
+          />
           <div aria-hidden="true" className={styles.heroOverlay} />
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>{hero.h1}</h1>
@@ -49,7 +62,7 @@ export default function ServicesPage() {
 
         <SectionShell n={engagement.n} title={engagement.title}>
           <div className={styles.engagement}>
-            <p className={styles.lead}>{SERVICES_COPY.engagementLead}</p>
+            <p className={styles.lead}>{keepTogether(SERVICES_COPY.engagementLead)}</p>
             <ol className={styles.phases}>
               {SERVICES.phases.map((ph) => (
                 <li key={ph.n} className={styles.phase}>
@@ -58,7 +71,7 @@ export default function ServicesPage() {
                     <span className={styles.phaseDuration}>{ph.duration}</span>
                   </div>
                   <h3 className={styles.phaseTitle}>{ph.title}</h3>
-                  <p className={styles.phaseBody}>{ph.body}</p>
+                  <p className={styles.phaseBody}>{keepTogether(ph.body)}</p>
                 </li>
               ))}
             </ol>
@@ -72,43 +85,60 @@ export default function ServicesPage() {
           className={styles.bordered}
           containerExtra={
             <ol className={styles.serviceList}>
-              {SERVICES.services.map((s) => (
-                <li key={s.n} className={styles.service}>
+              {/* Each service is a disclosure row on phones (G7): the title is the button, the
+                  green result line stays visible, and the pitch and For/How/When open with it.
+                  The first row starts open; tablets start with all six open. At >= 1024 the
+                  heading is a plain <span> and nothing is ever hidden. */}
+              {SERVICES.services.map((s, i) => (
+                <Disclosure
+                  key={s.n}
+                  as="li"
+                  className={styles.service}
+                  collapseQuery={MQ_PHONE}
+                  defaultOpen={i === 0}
+                  parts={['pitch', 'spec']}
+                >
                   <span className={styles.serviceIndex}>{s.n}</span>
                   <div className={styles.serviceInner}>
                     <div className={styles.serviceText}>
-                      <h3 className={styles.serviceTitle}>{s.title}</h3>
-                      <p className={styles.servicePitch}>{s.pitch}</p>
-                      <p className={styles.serviceResult}>{s.result}</p>
+                      <DisclosureHeading as="h3" className={styles.serviceTitle} keepLastWords>
+                        {s.title}
+                      </DisclosureHeading>
+                      <DisclosurePanel as="p" part="pitch" className={styles.servicePitch}>
+                        {keepTogether(s.pitch)}
+                      </DisclosurePanel>
+                      <p className={styles.serviceResult}>{keepTogether(s.result)}</p>
                     </div>
-                    <dl className={styles.dl}>
+                    <DisclosurePanel as="dl" part="spec" className={styles.dl}>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{bestFor}</dt>
-                        <dd className={styles.dd}>{s.fit}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.fit)}</dd>
                       </div>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{youGet}</dt>
-                        <dd className={styles.dd}>{s.deliverables}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.deliverables)}</dd>
                       </div>
                       <div className={styles.dlRow}>
                         <dt className={styles.dt}>{timeline}</dt>
-                        <dd className={styles.dd}>{s.timeline}</dd>
+                        <dd className={styles.dd}>{keepTogether(s.timeline)}</dd>
                       </div>
-                    </dl>
+                    </DisclosurePanel>
                   </div>
-                </li>
+                </Disclosure>
               ))}
             </ol>
           }
         >
-          <p className={styles.lead}>{SERVICES_COPY.whatWeDoLead}</p>
+          <p className={styles.lead}>{keepTogether(SERVICES_COPY.whatWeDoLead)}</p>
         </SectionShell>
 
         <SectionShell n={results.n} title={results.title}>
           <div className={styles.results}>
-            <p className={styles.lead}>{SERVICES_COPY.resultsLead}</p>
+            <p className={styles.lead}>{keepTogether(SERVICES_COPY.resultsLead)}</p>
             <div className={styles.tableWrap}>
               <table className={styles.table}>
+                {/* Below 1024 the rows stack; the header is clipped, not removed, so screen
+                    readers still pair every cell with its column. */}
                 <thead>
                   <tr className={styles.thead}>
                     {SERVICES_COPY.tableHead.map((h) => (
@@ -123,13 +153,13 @@ export default function ServicesPage() {
                     <tr key={r.client}>
                       <td className={`${styles.td} ${styles.tdClient}`}>{r.client}</td>
                       <td className={styles.td} data-label={SERVICES_COPY.tableHead[1]}>
-                        {r.start}
+                        {keepTogether(r.start)}
                       </td>
                       <td className={styles.td} data-label={SERVICES_COPY.tableHead[2]}>
-                        {r.built}
+                        {keepTogether(r.built)}
                       </td>
                       <td className={`${styles.td} ${styles.tdOutcome}`} data-label={SERVICES_COPY.tableHead[3]}>
-                        {r.outcome}
+                        {keepTogether(r.outcome, { clauses: true })}
                       </td>
                     </tr>
                   ))}
@@ -154,7 +184,7 @@ export default function ServicesPage() {
                             {yes ? <path d="M4 10.5l4 4 8-9" /> : <path d="M4.5 10h11" />}
                           </svg>
                         </span>
-                        <span>{item}</span>
+                        <span>{keepTogether(item)}</span>
                       </li>
                     ))}
                   </ul>

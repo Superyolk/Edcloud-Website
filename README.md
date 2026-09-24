@@ -35,7 +35,7 @@ EdCloud Website/           the design handoff (reference prototypes, tokens, con
 ```sh
 npm install
 npm run dev                          # http://localhost:3000
-npm run build                        # static export → ./out
+npm run build                        # static export → ./out, then scripts/defer-hydration.mjs (phones run the JS after first paint)
 npx wrangler dev                     # the Worker serving ./out, with /api/* (needs .dev.vars for the form key)
 python3 scripts/single-file-preview.py   # after a build: one self-contained HTML file to open from disk
 npm run test:visual / test:interactions  # parity with the design reference; behaviour checks

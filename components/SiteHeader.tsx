@@ -1,80 +1,27 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useMediaQuery } from './useMediaQuery';
 import { SHARED } from '@/content/copy';
-import RouteLink from './RouteLink';
-import styles from './SiteHeader.module.css';
+import SiteHeaderClient from './SiteHeaderClient';
 
-type Props = {
-  /** Pages with a full-bleed hero: start transparent over it, fade to solid once scrollY > 40. */
-  transparentOverHero?: boolean;
+/**
+ * The site header (SPEC §5.2, §5.3). A server wrapper: it picks the header's copy out of SHARED
+ * and hands it to the client component as props, so the client bundle no longer carries the
+ * whole of content/copy.ts (every page's copy, ~2 KB gz) just for a dozen strings. That made room
+ * in the SPEC §9 JS budget for the Phase 4 R2 fixes on About and Services. Same DOM, same text.
+ */
+// The sheet foot reuses existing copy only: the header's Contact link and the footer's email and
+// phone line. Nothing is typed here.
+const HEADER_COPY = {
+  wordmark: SHARED.wordmark,
+  markSrc: SHARED.markSrc,
+  markAlt: SHARED.markAlt,
+  navLinks: SHARED.navLinks,
+  mobileMenu: SHARED.mobileMenu,
+  contact: SHARED.navLinks.find((l) => l.href === '#contact'),
+  email: SHARED.footer.col1.find((r) => r.tag === 'a' && r.href?.startsWith('mailto:')),
+  phone: SHARED.footer.col1.find((r) => r.tag === 'span' && r.text.startsWith('Tel')),
 };
 
-const MENU_LABELS = { closed: 'Menu', open: 'Close' } as const;
+export type HeaderCopy = typeof HEADER_COPY;
 
-// "EDCLOUD" always shows; "VENTURE PARTNERS" drops on the narrowest phones so Menu stays on screen.
-const [wordmarkHead, ...wordmarkRest] = SHARED.wordmark.split(' ');
-const wordmarkTail = wordmarkRest.join(' ');
-
-export default function SiteHeader({ transparentOverHero = false }: Props) {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  // Below --nav-collapse (820px). Crossing the breakpoint always closes the menu.
-  const mobile = useMediaQuery('(max-width: 819px)', () => setMenuOpen(false));
-
-  useEffect(() => {
-    if (!transparentOverHero) return;
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [transparentOverHero]);
-
-  const solid = !transparentOverHero || scrolled || (mobile && menuOpen);
-  const menuVisible = mobile && menuOpen;
-
-  return (
-    <header className={solid ? styles.header : `${styles.header} ${styles.transparent}`}>
-      <nav aria-label="Primary" className={styles.nav}>
-        <RouteLink href="/" className={styles.brand}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted brand mark, exact 22px box */}
-          <img src={SHARED.markSrc} alt={SHARED.markAlt} width={22} height={22} className={styles.mark} />
-          <span>
-            {wordmarkHead}
-            <span className={styles.wordmarkTail}> {wordmarkTail}</span>
-          </span>
-        </RouteLink>
-        <ul className={styles.links}>
-          {SHARED.navLinks.map((l) => (
-            <li key={l.label}>
-              <RouteLink href={l.href} className={styles.link}>
-                {l.label}
-              </RouteLink>
-            </li>
-          ))}
-        </ul>
-        <button
-          type="button"
-          className={styles.menuButton}
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-        >
-          {menuOpen ? MENU_LABELS.open : MENU_LABELS.closed}
-        </button>
-      </nav>
-      {menuVisible && (
-        <ul id="mobile-menu" className={styles.menu}>
-          {SHARED.mobileMenu.map((l) => (
-            <li key={l.label} className={styles.menuItem}>
-              <RouteLink href={l.href} className={styles.menuLink}>
-                {l.label}
-              </RouteLink>
-            </li>
-          ))}
-        </ul>
-      )}
-    </header>
-  );
+export default function SiteHeader({ transparentOverHero = false }: { transparentOverHero?: boolean }) {
+  return <SiteHeaderClient transparentOverHero={transparentOverHero} copy={HEADER_COPY} />;
 }

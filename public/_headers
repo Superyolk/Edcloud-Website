@@ -9,6 +9,9 @@
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Also covers the mobile crops in /images/m/ (scripts/images/build-crops.py). They get no rule of
+# their own on purpose: every matching rule applies, so a second Cache-Control would be joined onto
+# this one. And they are not immutable: a re-crop rewrites a file under the same name.
 /images/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
 

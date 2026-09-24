@@ -1,4 +1,5 @@
 import { SHARED } from '@/content/copy';
+import { keepTogether } from './KeepTogether';
 import RouteLink from './RouteLink';
 import styles from './SiteFooter.module.css';
 
@@ -23,7 +24,7 @@ export default function SiteFooter() {
               {email.text}
             </RouteLink>
             {address.map((a) => (
-              <span key={a.text}>{a.text}</span>
+              <span key={a.text}>{keepTogether(a.text)}</span>
             ))}
             {linkedin && (
               <RouteLink href={linkedin.href!} className={styles.linkedin} ariaLabel={linkedin.ariaLabel!}>

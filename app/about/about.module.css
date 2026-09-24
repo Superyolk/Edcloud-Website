@@ -98,6 +98,15 @@
   align-items: start;
 }
 
+/* Each <picture> here is display: contents, which promotes its <source> elements to grid items of
+   .hero and .partner (Chrome gives <source> no display: none of its own). In .partner the two empty
+   items pushed the headshot into a third auto-fit column. The sources are new elements that must
+   never make a box, at any width (SPEC §10.3a). */
+.hero source,
+.partner source {
+  display: none;
+}
+
 .headshot {
   display: block;
   width: 100%;
@@ -178,4 +187,236 @@
   font-size: var(--t-body-sm);
   line-height: 1.5;
   color: var(--ink-2);
+}
+
+/* ---------- Mobile layer (phones + tablets; SPEC §6.2). Never matches at >= 1024px. ----------
+   Every rule above is the frozen desktop. Below 1024 the page becomes a short photo hero, the
+   Mission & History chapter list (G3), a byline portrait (G4) and a By The Numbers ledger. Every
+   text block sits on the section column, so the two margins are equal (SPEC §18.1). */
+@media (max-width: 1023.98px) {
+  /* The first screen shows the title, the next rule header and the start of the copy (B-pages-12).
+     The hero is pulled up under the header, so this height includes the bar. vh first for old
+     engines. */
+  .hero {
+    margin-top: calc(-1 * var(--nav-h)); /* no 1px header border below 1024 */
+    min-height: clamp(320px, 44vh, 440px);
+    min-height: clamp(320px, 44svh, 440px);
+  }
+
+  /* --ink at alpha, darkest at the bottom where the white title sits. */
+  .heroOverlay {
+    background: var(--m-hero-scrim);
+  }
+
+  .heroInner {
+    padding: calc(var(--nav-h) + var(--s-8)) var(--gutter) var(--s-8);
+  }
+
+  .heroTitle {
+    font-size: var(--m-t-title);
+    text-wrap: balance;
+  }
+
+  /* 01 Mission & History: the intro, then the chapters stacked as ruled rows. */
+  .mission {
+    display: block;
+    max-width: none;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  .h2 {
+    font-size: var(--m-t-accent);
+    line-height: 1.2;
+  }
+
+  /* The intro paragraph is the section's lead; chapter paragraphs are body copy. Scoped to
+     .mission: the partner bio is also an .h2 + .p and must read as body (R2-client-01). */
+  .mission .h2 + .p {
+    margin-top: var(--s-3);
+    font-size: var(--m-t-lead);
+    line-height: var(--m-lh-lead);
+    color: var(--ink);
+  }
+
+  /* The chapter list opens on an ink rule, and every row after that on a hairline. The 4px above
+     and below each row keeps two closed rows' buttons 9px apart, over the 8px target spacing. */
+  .chapter {
+    padding-block: var(--s-1);
+    border-top: 1px solid var(--line);
+  }
+
+  .p + .chapter {
+    margin-top: var(--s-8);
+    border-top-color: var(--ink);
+  }
+
+  .chapter:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The row title; the heading button inside it is the 56px target. */
+  .h3 {
+    margin: 0;
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+  }
+
+  .chapterBody {
+    display: grid;
+    gap: var(--s-4);
+    padding-bottom: var(--s-6);
+  }
+
+  /* Bullets are the site's 6px green square, hung in the indent so the text keeps one edge. */
+  /* One track that cannot grow past the column (an auto track grows to the longest word, e.g.
+     "providers/contractors" at 200% text). */
+  .list {
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    padding-left: 0;
+    gap: var(--s-3);
+  }
+
+  .list > li {
+    position: relative;
+    padding-left: var(--s-5);
+  }
+
+  .list > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background: var(--growth);
+  }
+
+  /* 02 Managing Partner as a byline: the 4:5 portrait with the h2 centred beside it, then the
+     bio across the full column. .partnerText steps aside so its children join the portrait's
+     grid without a DOM change (G4). 112x140 with the name on its centre line leaves no more
+     than ~56px of empty paper above the name (a 128px portrait with the name at its foot left
+     a 206x133 blank beside the photo, Phase 4 R1-client-09). */
+  .partner {
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: var(--s-5) var(--s-4);
+    align-items: center;
+  }
+
+  .headshot {
+    width: 112px;
+    max-width: none;
+    aspect-ratio: 4 / 5;
+    box-shadow: none;
+  }
+
+  .partnerText {
+    display: contents;
+  }
+
+  /* The bio and the coda are both body copy (SPEC §6.2): one size and line-height, so the coda
+     differs only by weight and ink (Phase 4 R2-client-01; it had kept the desktop 17px/1.6). */
+  .partnerText > p {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  /* The closing line is a short coda in ink. */
+  .partnerP {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* 03 By The Numbers: a ledger on an ink rule, the Home scoreboard pattern. The figure and the
+     title share the first line (the title on the figure's foot); the description then runs the
+     full column under both, so it reads at the section measure instead of a 176-246px indented
+     strip (Phase 4 R1-designer-03). The rows share the list's columns (subgrid), so the figure
+     column is as wide as the widest figure, "22", and the four titles start on one edge; it
+     also grows with the text when the reader enlarges it. */
+  .numbers {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: 0;
+    margin-top: 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .numberCard {
+    grid-column: 1 / -1;
+    grid-template-columns: auto minmax(0, 1fr); /* engines without subgrid: per-row columns */
+    grid-template-columns: subgrid;
+    grid-template-rows: none;
+    grid-row: auto;
+    gap: var(--s-2) var(--s-4);
+    padding: var(--s-5) 0;
+    background: none;
+    box-shadow: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The title sits on the figure's baseline. */
+  .stat {
+    grid-row: auto;
+    align-self: last baseline;
+    font-size: var(--m-t-stat);
+    line-height: 0.95;
+  }
+
+  .numberTitle {
+    align-self: last baseline;
+    font-size: var(--m-t-h3);
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .numberBody {
+    grid-column: 1 / -1;
+    font-size: var(--m-t-body);
+    line-height: var(--m-lh-body);
+  }
+
+  /* Enlarged text (SectionShell's 11em threshold): the figure takes its own line and the title
+     runs the full column under it; beside the figure a 34px "Professionals" had 171px and broke
+     mid-word (Phase 4 R4-a11y-04). */
+  @container (max-width: 11em) {
+    .stat,
+    .numberTitle {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+/* Tablets: the hero title keeps to the same centred column as the sections under it. The
+   numbers stay the phone's single-column ledger: a 2x2 grid inside the capped column gave each
+   description ~240px (9-21 characters a line); one row each reads at the column measure
+   (Phase 4 R1-designer-02, SPEC §17). The byline keeps its phone shape at a 128x160 portrait. */
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .heroInner {
+    max-width: calc(var(--m-column) + 2 * var(--gutter));
+  }
+
+  .partner {
+    grid-template-columns: 128px minmax(0, 1fr);
+  }
+
+  .headshot {
+    width: 128px;
+  }
+}
+
+/* Landscape phones (844x390): the hero sizes to its title, so the first rule header shows on the
+   first screen rather than a 320px band on a 390px-tall viewport (B-pages-12). */
+@media (max-width: 1023.98px) and (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .heroInner {
+    padding-top: calc(var(--nav-h) + var(--s-10));
+    padding-bottom: var(--s-6);
+  }
 }
